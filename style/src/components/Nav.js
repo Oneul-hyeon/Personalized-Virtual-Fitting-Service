@@ -2,11 +2,14 @@ import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
+import './Nav.css'
+import logo from '../images/logo.png'
 
 function Navigation() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="white" variant="white">
-      <Container>
+      <Container className="navbar-custom">
+        <img src={logo} alt="Logo" />
         <Navbar.Brand href="/">메인페이지</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">

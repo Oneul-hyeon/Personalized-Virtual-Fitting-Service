@@ -1,7 +1,6 @@
-import './App.css'
-import Navigation from './components/Nav'
-import Footer from './components/Footer'
-import Content from './components/Content'
+import Navigation from './components/Nav.js'
+import Footer from './components/Footer.js'
+import Content from './components/Content.js'
 
 function App() {
   return (

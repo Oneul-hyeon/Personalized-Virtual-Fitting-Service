@@ -8,7 +8,7 @@ import photo5 from '../images/photo5.png'
 function Content() {
   return (
     <div>
-      <div className="container">
+      <div className="mainContainer">
         <div className="photo">
           <img src={photo1} alt="Photo 1" />
         </div>
@@ -18,7 +18,7 @@ function Content() {
           <p>당신의 AI 핏 어드바이저</p>
         </div>
       </div>
-      <div className="container">
+      <div className="mainContainer">
         <div className="text">
           <p>매장을 번거롭게 방문하지 마세요.</p>
           <p>집에서 편하게 입혀보세요.</p>
@@ -28,28 +28,32 @@ function Content() {
           <img src={photo2} alt="Photo 2" />
         </div>
       </div>
-      <div className="photo">
-        <img src={photo3} alt="Photo 3" />
+      <div className="mainContainer">
+        <div className="photo">
+          <img src={photo3} alt="Photo 3" />
+        </div>
+        <div className="text">
+          <p>사이즈,</p>
+          <p>더 이상 고민하지 마세요.</p>
+          <p>AI가 스마트하게 당신에게 최적의 사이즈를 추천합니다.</p>
+        </div>
       </div>
-      <div className="text">
-        <p>사이즈,</p>
-        <p>더 이상 고민하지 마세요.</p>
-        <p>AI가 스마트하게 당신에게 최적의 사이즈를 추천합니다.</p>
+      <div className="mainContainer">
+        <div className="text">
+          <p>무슨 옷을 살지 고민이신가요?</p>
+          <p>당신에게 맞는, 최적의 코디를 추천해드립니다.</p>
+        </div>
+        <div className="photo">
+          <img src={photo4} alt="Photo 4" />
+        </div>
       </div>
-
-      <div className="text">
-        <p>무슨 옷을 살지 고민이신가요?</p>
-        <p>당신에게 맞는, 최적의 코디를 추천해드립니다.</p>
-      </div>
-      <div className="photo">
-        <img src={photo4} alt="Photo 4" />
-      </div>
-
-      <div className="photo">
-        <img src={photo5} alt="Photo 5" />
-      </div>
-      <div className="text">
-        <p>당신의 멋진 감각을 공유하세요.</p>
+      <div className="mainContainer">
+        <div className="photo">
+          <img src={photo5} alt="Photo 5" />
+        </div>
+        <div className="text">
+          <p>당신의 멋진 감각을 공유하세요.</p>
+        </div>
       </div>
     </div>
   )
