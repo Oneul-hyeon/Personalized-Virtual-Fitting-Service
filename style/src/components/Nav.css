@@ -1,10 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+
 .navbar-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: white;
 }
-.navbar-custom img {
+
+.navbar-custom > img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
-  }
-  
+}
+
+.brand-name {
+    margin-right: 40px;
+    font-family: 'Caveat', cursive;
+    font-size: 48px;
+}

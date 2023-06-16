@@ -10,12 +10,14 @@ function Navigation() {
     <Navbar collapseOnSelect expand="lg" bg="white" variant="white">
       <Container className="navbar-custom">
         <img src={logo} alt="Logo" />
-        <Navbar.Brand href="/">메인페이지</Navbar.Brand>
+        <Navbar.Brand href="/" className="brand-name">
+          model.fit
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="#features">피팅</Nav.Link>
-            <Nav.Link href="#pricing">상품 조회</Nav.Link>
+            <Nav.Link href="#pricing">코디 추천</Nav.Link>
             <NavDropdown title="게시판" id="collasible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">QnA 게시판</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
