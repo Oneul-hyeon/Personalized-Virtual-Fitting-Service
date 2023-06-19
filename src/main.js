@@ -1,15 +1,13 @@
 // @ts-check
 
-const exp = require('constants')
 const express = require('express')
-
 const path = require('path')
 
 const app = express()
 
 app.use(express.json())
 var cors = require('cors')
-app.use(cors())
+app.use(cors({ origin: 'http://localhost:3000' }))
 
 app.listen(3000, () => {
   console.log('App Listening on port 3000')
