@@ -167,3 +167,22 @@
   .signup-modal .modal-footer .btn-secondary {
     order: 2;
   }
+
+  .error-message {
+    color: red;
+    white-space: pre-wrap;
+    word-wrap:-word;
+    max-width: 294px;
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+  }
+  
+  .signup-form.shake {
+    animation: shake 0.5s;
+  }
+  

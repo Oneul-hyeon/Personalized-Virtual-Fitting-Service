@@ -1,4 +1,5 @@
 import './Footer.css'
+import { Link } from 'react-router-dom'
 
 function Footer() {
   return (
@@ -11,8 +12,8 @@ function Footer() {
         </section>
         <section className="_1trxeqsf">
           <div className="_1trxeqsg">
-            <a href="https://www.daangn.com/policy/terms">이용 약관</a>
-            <a href="https://privacy.daangn.com/">개인정보처리방침</a>
+            <Link to="/policyterms">이용 약관</Link>
+            <Link to="/privacymain">개인정보처리방침</Link>
           </div>
         </section>
       </section>

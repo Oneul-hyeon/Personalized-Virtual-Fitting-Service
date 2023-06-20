@@ -6,14 +6,24 @@ import './Nav.css'
 import logo from '../images/logo.png'
 import { NavLink, Link } from 'react-router-dom'
 import { useState } from 'react'
+import SignupTerms from './SignupTerms'
 import SignupPage from './SignupPage'
 
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [showModal, setShowModal] = useState(false)
+  const [showTermsModal, setShowTermsModal] = useState(false)
+  const [showSignupModal, setShowSignupModal] = useState(false)
 
-  const toggleModal = () => {
-    setShowModal(!showModal)
+  const toggleTermsModal = () => {
+    setShowTermsModal(!showTermsModal)
+  }
+
+  const toggleSignupModal = () => {
+    setShowSignupModal(!showSignupModal)
+  }
+
+  const handleSignupClick = () => {
+    toggleTermsModal()
   }
 
   return (
@@ -57,7 +67,7 @@ function Navigation() {
           <Nav>
             {!isLoggedIn ? (
               <>
-                <Nav.Link onClick={toggleModal}>회원가입</Nav.Link>
+                <Nav.Link onClick={handleSignupClick}>회원가입</Nav.Link>
                 <Nav.Link eventKey={2} as={NavLink} to="login">
                   로그인
                 </Nav.Link>
@@ -71,7 +81,13 @@ function Navigation() {
         </Navbar.Collapse>
       </Container>
 
-      {showModal && <SignupPage toggleModal={toggleModal} />}
+      {showTermsModal && (
+        <SignupTerms
+          onClose={toggleTermsModal}
+          toggleModal={toggleSignupModal}
+        />
+      )}
+      {showSignupModal && <SignupPage onClose={toggleSignupModal} />}
     </Navbar>
   )
 }

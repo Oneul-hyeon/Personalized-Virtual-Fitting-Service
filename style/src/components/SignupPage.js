@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import ImageUploadBox from './ImageUploadBox'
 import './SignupPage.css'
 
-function SignupPage({ toggleModal }) {
+function SignupPage({ onClose }) {
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
@@ -21,12 +21,82 @@ function SignupPage({ toggleModal }) {
   const [colorListOpen, setColorListOpen] = useState(false)
   const [fitListOpen, setFitListOpen] = useState(false)
 
+  // 에러 메시지 states
+  const [nameError, setNameError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [confirmPasswordError, setConfirmPasswordError] = useState('')
+
+  // 오류 메시지 상태 저장 및 버튼 상태 변경
+  const formRef = useRef(null)
+  const hasSubmitted = useRef(false)
+
+  // 입력이 끝났을 때만 오류 메시지 표시
+  const onBlurHandler = (e, validationFunc, errorSetter) => {
+    if (validationFunc(e.target.value)) {
+      errorSetter('')
+    } else if (hasSubmitted) {
+      errorSetter(validationFunc(e.target.value))
+    }
+  }
+
+  // 에러 발생 시 회원가입 모달 진동
+  const handleInvalidForm = () => {
+    formRef.current.style.borderColor = 'red'
+    formRef.current.style.animation = 'shake 0.5s'
+    setTimeout(() => {
+      formRef.current.style.borderColor = ''
+      formRef.current.style.animation = ''
+    }, 500)
+  }
+
+  // 유효성 검사 함수들
+  const validateName = (name) => {
+    if (/^[가-힣a-zA-Z\s]+$/.test(name)) {
+      return true
+    } else {
+      setNameError('이름은 문자로만 구성되어야 합니다.')
+      return false
+    }
+  }
+
+  const validatePhoneNumber = (phoneNumber) => {
+    if (/^\d{3}\-\d{4}\-\d{4}$/.test(phoneNumber)) {
+      return true
+    } else {
+      setPhoneError('전화번호는 010-0000-0000 과 같은\n 양식이어야 합니다.')
+      return false
+    }
+  }
+
+  const validatePassword = (password) => {
+    if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
+      return true
+    } else {
+      setPasswordError(
+        '비밀번호는 영문과 숫자를 포함하여 8자리 이상 구성하여야 합니다.'
+      )
+      return false
+    }
+  }
+
+  const validateConfirmPassword = (password, confirmPassword) => {
+    if (password === confirmPassword) {
+      return true
+    } else {
+      setConfirmPasswordError('비밀번호가 다릅니다.')
+      return false
+    }
+  }
+
   const handleNameChange = (e) => {
     setName(e.target.value)
+    validateName(e.target.value)
   }
 
   const handlePhoneNumberChange = (e) => {
     setPhoneNumber(e.target.value)
+    validatePhoneNumber(e.target.value)
   }
 
   const handleEmailChange = (e) => {
@@ -35,10 +105,12 @@ function SignupPage({ toggleModal }) {
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value)
+    validatePassword(e.target.value)
   }
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value)
+    validateConfirmPassword(password, e.target.value)
   }
 
   const handleHeightChange = (e) => {
@@ -93,7 +165,13 @@ function SignupPage({ toggleModal }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // 회원가입 로직을 처리하는 함수 호출
+
+    const canSubmitted =
+      validateName(name) &&
+      validatePhoneNumber(phoneNumber) &&
+      validatePassword(password) &&
+      validateConfirmPassword(password, confirmPassword)
+
     console.log('Email:', email)
     console.log('Name:', name)
     console.log('Phone Number:', phoneNumber)
@@ -104,37 +182,50 @@ function SignupPage({ toggleModal }) {
     console.log('File:', file)
     console.log('Favorite Style:', favoriteStyle)
 
-    toggleModal()
+    if (canSubmitted) {
+      // 회원가입 로직을 처리하는 함수 호출
+      console.log('success')
+      onClose()
+    } else {
+      console.log('fail')
+      handleInvalidForm()
+    }
   }
 
   return (
-    <Modal show={true} onHide={toggleModal} fullscreen>
+    <Modal show={true} onHide={onClose} fullscreen>
       <Modal.Header closeButton>
         <Modal.Title>회원가입</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form className="signup-form" onSubmit={handleSubmit}>
+        <form className="signup-form" onSubmit={handleSubmit} ref={formRef}>
           <div className="form-group">
             <label className="form-label">이름</label>
             <input
-              className="form-input"
+              className={`form-input error ${nameError ? 'has-error' : ''}`}
               type="text"
               value={name}
               placeholder="예시 : 홍길동"
               onChange={handleNameChange}
+              onBlur={(e) => onBlurHandler(e, validateName, setNameError)}
               required
             />
+            {nameError && <div className="error-message">{nameError}</div>}
           </div>
           <div className="form-group">
             <label className="form-label">전화번호 ('-' 포함)</label>
             <input
-              className="form-input"
+              className={`form-input error ${phoneError ? 'has-error' : ''}`}
               type="text"
               value={phoneNumber}
               placeholder="예시 : 010-1234-5678"
               onChange={handlePhoneNumberChange}
+              onBlur={(e) =>
+                onBlurHandler(e, validatePhoneNumber, setPhoneError)
+              }
               required
             />
+            {phoneError && <div className="error-message">{phoneError}</div>}
           </div>
           <div className="form-group">
             <label className="form-label">이메일</label>
@@ -150,24 +241,42 @@ function SignupPage({ toggleModal }) {
           <div className="form-group">
             <label className="form-label">비밀번호</label>
             <input
-              className="form-input"
+              className={`form-input error ${passwordError ? 'has-error' : ''}`}
               type="password"
               value={password}
               placeholder="영문과 숫자로 구성된 8자리 이상"
               onChange={handlePasswordChange}
+              onBlur={(e) =>
+                onBlurHandler(e, validatePassword, setPasswordError)
+              }
               required
             />
+            {passwordError && (
+              <div className="error-message">{passwordError}</div>
+            )}
           </div>
           <div className="form-group">
             <label className="form-label">비밀번호 확인</label>
             <input
-              className="form-input"
+              className={`form-input error ${
+                confirmPasswordError ? 'has-error' : ''
+              }`}
               type="password"
               value={confirmPassword}
               placeholder="비밀번호를 한번 더 입력해주세요."
               onChange={handleConfirmPasswordChange}
+              onBlur={(e) =>
+                onBlurHandler(
+                  e,
+                  validateConfirmPassword,
+                  setConfirmPasswordError
+                )
+              }
               required
             />
+            {confirmPasswordError && (
+              <div className="error-message">{confirmPasswordError}</div>
+            )}
           </div>
           <div>
             <label className="form-label">고객 사진</label>
@@ -292,7 +401,7 @@ function SignupPage({ toggleModal }) {
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           회원가입
         </Button>
-        <Button variant="secondary" onClick={toggleModal}>
+        <Button variant="secondary" onClick={onClose}>
           닫기
         </Button>
       </Modal.Footer>
