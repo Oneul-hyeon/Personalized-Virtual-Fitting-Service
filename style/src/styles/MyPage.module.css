@@ -1,0 +1,61 @@
+.mainContainer {
+    --leftContiner-width : 466px;
+    --rightContiner-width : calc( 1920px - var(--leftContiner-width));
+    --height : calc(100vh - 56px);;
+
+    display: grid;
+    grid-template-columns: var(--leftContiner-width) var(--rightContiner-width);
+    height: var(--height);
+    overflow: hidden;
+}
+
+.subLeftContiner {
+    --title-width : 322px;
+
+    height: 100%;
+    background-color: #fbf7f2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-family: 'BMJUA';
+    color: #ff7f3f;
+    width: var(--title-width);
+    margin-top: 44px;
+    margin-bottom: 44px;
+    font-size: 48px;
+}
+
+.profileImage {
+    width: var(--title-width);
+    height: var(--title-width);
+    border-radius: 50%;
+    margin-bottom: 18px;
+}
+
+.transparentButton {
+    background: transparent;
+    border: none;
+    color: #8f8f8f;
+    font-family: 'NanumSquare';
+    font-weight: 600;
+    font-size: 20px;
+    margin-top: 28px;
+    padding: 0px;
+}
+
+.selected {
+    color: #ff7f3f;
+}
+
+.subRightContiner {
+    --rightContainer-column-width : calc(var(--rightContiner-width) / 2);
+
+    display: grid;
+    grid-template-columns: var(--rightContainer-column-width) var(--rightContainer-column-width);
+    background-color: lightgrey;
+    height: var(--height);
+    overflow: hidden;
+}
