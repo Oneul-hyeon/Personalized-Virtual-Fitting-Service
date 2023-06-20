@@ -6,6 +6,8 @@ import photo4 from '../images/photo4.png'
 import photo5 from '../images/photo5.png'
 import sizeListIcon1 from '../images/sizeListIcon1.png'
 import sizeListIcon2 from '../images/sizeListIcon2.png'
+import GrayButton from './GrayButton'
+import { Link } from 'react-router-dom'
 
 function Content() {
   return (
@@ -41,7 +43,9 @@ function Content() {
               <p>집에서 편하게 입혀보세요.</p>
               <p>가상 피팅으로 당신의 시간을 절약하세요.</p>
             </div>
-            <button className="mainButton">온라인 피팅</button>
+            <GrayButton as={Link} to="/fitting" className="mainButton">
+              온라인 피팅
+            </GrayButton>
           </div>
 
           <div className="mainPageImgReverse">
@@ -92,7 +96,9 @@ function Content() {
               <p>무슨 옷을 살지 고민이신가요?</p>
               <p>당신에게 맞는, 최적의 코디를 추천해드립니다.</p>
             </div>
-            <button className="mainButton">코디 추천</button>
+            <GrayButton as={Link} to="/recommend" className="mainButton">
+              코디 추천
+            </GrayButton>
           </div>
           <div className="mainPageImgReverse">
             <img src={photo4} alt="Img 4" />
@@ -111,7 +117,9 @@ function Content() {
             <div className="text">
               <p>당신의 멋진 감각을 공유하세요.</p>
             </div>
-            <button className="mainButton">코디 공유 게시판</button>
+            <GrayButton as={Link} to="outfitforum" className="mainButton">
+              코디 공유 게시판
+            </GrayButton>
           </div>
         </div>
       </section>

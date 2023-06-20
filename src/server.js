@@ -12,6 +12,7 @@ app.use(cors({ origin: 'http://localhost:3000' }))
 app.listen(3000, () => {
   console.log('App Listening on port 3000')
 })
+
 app.use(express.static(path.join(__dirname, '../style/build')))
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../style/build/index.html'))

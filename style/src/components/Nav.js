@@ -4,25 +4,51 @@ import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import './Nav.css'
 import logo from '../images/logo.png'
+import { NavLink, Link } from 'react-router-dom'
 import { useState } from 'react'
+import SignupPage from './SignupPage'
 
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+
+  const toggleModal = () => {
+    setShowModal(!showModal)
+  }
+
   return (
-    <Navbar collapseOnSelect expand="lg" bg="white" variant="white">
+    <Navbar collapseOnSelect expand="lg">
       <Container className="navbar-custom">
         <img src={logo} alt="Logo" />
-        <Navbar.Brand href="/" className="brand-name">
+        <Navbar.Brand as={Link} to="/" className="brand-name">
           model.fit
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="fitting">피팅</Nav.Link>
-            <Nav.Link href="recommend">코디 추천</Nav.Link>
+            <Nav.Link as={NavLink} to="/fitting" activeClassName="active-link">
+              피팅
+            </Nav.Link>
+            <Nav.Link
+              as={NavLink}
+              to="/recommend"
+              activeClassName="active-link"
+            >
+              코디 추천
+            </Nav.Link>
             <NavDropdown title="게시판" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="qna">QnA 게시판</NavDropdown.Item>
-              <NavDropdown.Item href="prideforum">
+              <NavDropdown.Item
+                as={Link}
+                to="qna"
+                activeClassName="active-link"
+              >
+                QnA 게시판
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                as={Link}
+                to="outfitforum"
+                activeClassName="active-link"
+              >
                 코디 공유 게시판
               </NavDropdown.Item>
               {/* <NavDropdown.Divider /> */}
@@ -31,19 +57,21 @@ function Navigation() {
           <Nav>
             {!isLoggedIn ? (
               <>
-                <Nav.Link href="join">회원가입</Nav.Link>
-                <Nav.Link eventKey={2} href="login">
+                <Nav.Link onClick={toggleModal}>회원가입</Nav.Link>
+                <Nav.Link eventKey={2} as={NavLink} to="login">
                   로그인
                 </Nav.Link>
               </>
             ) : (
-              <Nav.Link eventKey={2} href="mypage">
+              <Nav.Link eventKey={2} as={NavLink} to="mypage">
                 마이페이지
               </Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>
       </Container>
+
+      {showModal && <SignupPage toggleModal={toggleModal} />}
     </Navbar>
   )
 }
