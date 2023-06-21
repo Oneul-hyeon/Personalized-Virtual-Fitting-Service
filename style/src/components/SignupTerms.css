@@ -1,0 +1,38 @@
+.custom-modal .modal-dialog {
+    max-width: 90%;
+    max-height: calc(90vh - 100px);
+    margin-top: 50px;
+  }
+  
+  .custom-modal .modal-content {
+    overflow: auto;
+  }
+  
+  .custom-modal .modal-body {
+    max-height: calc(90vh - 200px);
+    overflow-y: auto;
+  }
+
+.custom-modal .modal-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.custom-modal .btnGroup {
+  align-items: center;
+  margin-top: 10px;
+}
+
+.custom-modal .btnGroup input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.custom-modal .btnGroup span {
+  white-space: nowrap;
+}
+  

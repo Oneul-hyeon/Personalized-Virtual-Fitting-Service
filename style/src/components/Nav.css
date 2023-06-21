@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+.navbar-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-family: 'GmarketSansMedium', sans-serif;
+    font-size: 18px;
+}
+
+.navbar-custom > img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.brand-name {
+    margin-right: 30px;
+    font-family: 'Caveat', sans-serif;
+    font-size: 36px !important;
+}
+
+.me-auto {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.nav-link {
+    margin-right: 10px;
+}
+
+.nav-link:last-child {
+    margin-right: 0;
+}
