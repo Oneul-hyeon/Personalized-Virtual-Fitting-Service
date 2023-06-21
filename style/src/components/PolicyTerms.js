@@ -1,6 +1,8 @@
+import './PolicyTerms.css'
+
 function PolicyTerms() {
   return (
-    <div>
+    <div className="policy-terms-container">
       <h1>이용 약관</h1>
       <p>
         본 이용 약관(이하 "약관")은 Aivle 5반 20조(이하 "회사")가 제공하는
@@ -33,7 +35,7 @@ function PolicyTerms() {
         회사는 회원이 서비스 이용 계약을 체결한 후 지속적으로 서비스를 제공할
         의무를 가지며, 회원은 회사가 제공하는 서비스를 이용할 권리를 가집니다.
       </p>
-      {/* 이용 약관 내용을 추가하거나 수정해주세요. */}
+      {/* 이용 약관 내용 추가 */}
     </div>
   )
 }

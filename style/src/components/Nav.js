@@ -1,18 +1,27 @@
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import NavDropdown from 'react-bootstrap/NavDropdown'
+
 import './Nav.css'
 import logo from '../images/logo.png'
 import { NavLink, Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import AuthenticationNav from './AuthenticationNav'
+import DropdownMenu from './DropdownMenu'
 import SignupTerms from './SignupTerms'
 import SignupPage from './SignupPage'
+import LoginPage from './Login'
 
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [showTermsModal, setShowTermsModal] = useState(false)
   const [showSignupModal, setShowSignupModal] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    setIsLoggedIn(!!token)
+  }, [])
 
   const toggleTermsModal = () => {
     setShowTermsModal(!showTermsModal)
@@ -22,8 +31,22 @@ function Navigation() {
     setShowSignupModal(!showSignupModal)
   }
 
+  const toggleLoginModal = () => {
+    setShowLoginModal(!showLoginModal)
+  }
+
   const handleSignupClick = () => {
     toggleTermsModal()
+  }
+
+  const handleLoginClick = () => {
+    toggleLoginModal()
+  }
+
+  const handleLogoutClick = () => {
+    localStorage.removeItem('token')
+    alert('로그아웃 되었습니다.')
+    setIsLoggedIn(false)
   }
 
   return (
@@ -46,38 +69,14 @@ function Navigation() {
             >
               코디 추천
             </Nav.Link>
-            <NavDropdown title="게시판" id="collasible-nav-dropdown">
-              <NavDropdown.Item
-                as={Link}
-                to="qna"
-                activeClassName="active-link"
-              >
-                QnA 게시판
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                as={Link}
-                to="outfitforum"
-                activeClassName="active-link"
-              >
-                코디 공유 게시판
-              </NavDropdown.Item>
-              {/* <NavDropdown.Divider /> */}
-            </NavDropdown>
+            <DropdownMenu />
           </Nav>
-          <Nav>
-            {!isLoggedIn ? (
-              <>
-                <Nav.Link onClick={handleSignupClick}>회원가입</Nav.Link>
-                <Nav.Link eventKey={2} as={NavLink} to="login">
-                  로그인
-                </Nav.Link>
-              </>
-            ) : (
-              <Nav.Link eventKey={2} as={NavLink} to="mypage">
-                마이페이지
-              </Nav.Link>
-            )}
-          </Nav>
+          <AuthenticationNav
+            isLoggedIn={isLoggedIn}
+            handleSignupClick={handleSignupClick}
+            handleLoginClick={handleLoginClick}
+            handleLogoutClick={handleLogoutClick}
+          />
         </Navbar.Collapse>
       </Container>
 
@@ -88,6 +87,7 @@ function Navigation() {
         />
       )}
       {showSignupModal && <SignupPage onClose={toggleSignupModal} />}
+      {showLoginModal && <LoginPage onClose={toggleLoginModal} />}
     </Navbar>
   )
 }

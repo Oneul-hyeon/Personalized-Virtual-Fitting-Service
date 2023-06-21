@@ -19,7 +19,7 @@ function SignupTerms({ onClose, toggleModal }) {
   return (
     <Modal show={true} onHide={onClose} dialogClassName="custom-modal">
       <Modal.Header closeButton>
-        <Modal.Title>작성정보 확인</Modal.Title>
+        <Modal.Title>회원가입 약관</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>

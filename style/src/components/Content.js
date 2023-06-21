@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom'
 
 function Content() {
   return (
-    <div>
+    <div className="mainPageContent">
       <section className="homeMainSection">
         <div className="homeMainContent">
           <div className="mainPageImg">
@@ -69,14 +69,16 @@ function Content() {
             </div>
             <ul className="sizeList">
               <li className="sizeListItem">
-                <div className="sizeListIcon1"></div>
-                <img src={sizeListIcon1} alt="Icon1" />
+                <div className="sizeListIcon1">
+                  <img src={sizeListIcon1} alt="Icon1" />
+                </div>
                 <div className="sizeListTitle">사이즈 조언</div>
                 <div className="sizeListText">최적의 사이즈를 추천합니다.</div>
               </li>
               <li className="sizeListItem">
-                <div className="sizeListIcon2"></div>
-                <img src={sizeListIcon2} alt="Icon2" />
+                <div className="sizeListIcon2">
+                  <img src={sizeListIcon2} alt="Icon2" />
+                </div>
                 <div className="sizeListTitle">핏 예측</div>
                 <div className="sizeListText">
                   사이즈 별 예상 핏을 알려드립니다.
@@ -118,7 +120,7 @@ function Content() {
               <p>당신의 멋진 감각을 공유하세요.</p>
             </div>
             <GrayButton as={Link} to="outfitforum" className="mainButton">
-              코디 공유 게시판
+              코디 공유
             </GrayButton>
           </div>
         </div>

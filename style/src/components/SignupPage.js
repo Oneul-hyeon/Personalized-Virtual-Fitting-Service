@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import ImageUploadBox from './ImageUploadBox'
 import './SignupPage.css'
+import registerUser from './Register'
 
 function SignupPage({ onClose }) {
   const [name, setName] = useState('')
@@ -9,6 +10,7 @@ function SignupPage({ onClose }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [gender, setGender] = useState('')
   const [height, setHeight] = useState('')
   const [weight, setWeight] = useState('')
   const [file, setFile] = useState(null)
@@ -24,6 +26,7 @@ function SignupPage({ onClose }) {
   // 에러 메시지 states
   const [nameError, setNameError] = useState('')
   const [phoneError, setPhoneError] = useState('')
+  const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
 
@@ -64,11 +67,22 @@ function SignupPage({ onClose }) {
     if (/^\d{3}\-\d{4}\-\d{4}$/.test(phoneNumber)) {
       return true
     } else {
-      setPhoneError('전화번호는 010-0000-0000 과 같은\n 양식이어야 합니다.')
+      setPhoneError('전화번호는 010-0000-0000 과 같은 양식이어야 합니다.')
       return false
     }
   }
-
+  const validateEmail = (email) => {
+    if (
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i.test(
+        email
+      )
+    ) {
+      return true
+    } else {
+      setEmailError('이메일 양식에 맞지 않습니다.')
+      return false
+    }
+  }
   const validatePassword = (password) => {
     if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
       return true
@@ -101,6 +115,7 @@ function SignupPage({ onClose }) {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
+    validateEmail(e.target.value)
   }
 
   const handlePasswordChange = (e) => {
@@ -111,6 +126,10 @@ function SignupPage({ onClose }) {
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value)
     validateConfirmPassword(password, e.target.value)
+  }
+
+  const handleGenderChange = (e) => {
+    setGender(e.currentTarget.value)
   }
 
   const handleHeightChange = (e) => {
@@ -163,12 +182,13 @@ function SignupPage({ onClose }) {
     setFitListOpen(false)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     const canSubmitted =
       validateName(name) &&
       validatePhoneNumber(phoneNumber) &&
+      validateEmail(email) &&
       validatePassword(password) &&
       validateConfirmPassword(password, confirmPassword)
 
@@ -177,17 +197,37 @@ function SignupPage({ onClose }) {
     console.log('Phone Number:', phoneNumber)
     console.log('Password:', password)
     console.log('Confirm Password:', confirmPassword)
+    console.log('gender', gender)
     console.log('Height:', height)
     console.log('Weight:', weight)
     console.log('File:', file)
     console.log('Favorite Style:', favoriteStyle)
 
     if (canSubmitted) {
-      // 회원가입 로직을 처리하는 함수 호출
-      console.log('success')
-      onClose()
+      const data = {
+        email,
+        name,
+        phoneNumber,
+        password,
+        gender,
+        height,
+        weight,
+        file,
+        favoriteStyle,
+      }
+
+      const registerResult = await registerUser(data)
+
+      if (registerResult.success) {
+        console.log('success')
+        localStorage.setItem('token', registerResult.result.token)
+        onClose()
+      } else {
+        console.log('registerfail')
+        handleInvalidForm()
+      }
     } else {
-      console.log('fail')
+      console.log('submitfail')
       handleInvalidForm()
     }
   }
@@ -230,14 +270,16 @@ function SignupPage({ onClose }) {
           <div className="form-group">
             <label className="form-label">이메일</label>
             <input
-              className="form-input"
+              className={`form-input error ${emailError ? 'has-error' : ''}`}
               type="email"
               value={email}
               placeholder="예시 : modelfit@modelfit.com"
               onChange={handleEmailChange}
+              onBlur={(e) => onBlurHandler(e, validateEmail, setEmailError)}
               required
             />
           </div>
+          {emailError && <div className="error-message">{emailError}</div>}
           <div className="form-group">
             <label className="form-label">비밀번호</label>
             <input
@@ -277,6 +319,33 @@ function SignupPage({ onClose }) {
             {confirmPasswordError && (
               <div className="error-message">{confirmPasswordError}</div>
             )}
+          </div>
+          <div className="form-group">
+            <label className="form-label">성별</label>
+            <div>
+              <div className="gender-select">
+                <button
+                  type="button"
+                  value="male"
+                  onClick={handleGenderChange}
+                  className={`gender-btn ${
+                    gender === 'male' ? 'selected' : ''
+                  }`}
+                >
+                  남자
+                </button>
+                <button
+                  type="button"
+                  value="female"
+                  onClick={handleGenderChange}
+                  className={`gender-btn ${
+                    gender === 'female' ? 'selected' : ''
+                  }`}
+                >
+                  여자
+                </button>
+              </div>
+            </div>
           </div>
           <div>
             <label className="form-label">고객 사진</label>

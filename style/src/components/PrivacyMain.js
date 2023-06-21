@@ -1,6 +1,8 @@
+import './PrivacyMain.css'
+
 function PrivacyMain() {
   return (
-    <div>
+    <div className="privacy-main-container">
       <h1>개인정보 처리 방침</h1>
       <p>쉽고 편리한 온라인 서비스를 제공하겠습니다.</p>
 

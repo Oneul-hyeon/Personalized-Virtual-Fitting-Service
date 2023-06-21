@@ -64,7 +64,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
     margin: 0;
   }
   
@@ -74,6 +73,45 @@
     cursor: pointer;
   }
   
+  .gender-select {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .gender-btn {
+    display: inline-block;
+    width: calc(50% - 10px);
+    height: auto;
+    padding: 10px;
+    margin-right: 20px;
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+    border-radius: 25px;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .gender-btn:last-child {
+    margin-left: 20px;
+    margin-right: 0;
+  }
+  .gender-btn.selected,
+  .gender-btn:hover {
+    background-color: #0b5ed7;
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+  }
+
   .image-upload-title {
     font-size: 0.9rem;
   }
