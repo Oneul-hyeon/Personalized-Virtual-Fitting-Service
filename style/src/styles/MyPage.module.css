@@ -1,10 +1,11 @@
 .mainContainer {
+    --nav-height : 95px;
     --max-width : 1920px;
     --max-height : 970px;
     --leftContiner-width : 466px;
     --rightContiner-width : calc( var(--max-width) - var(--leftContiner-width));
     /* --height : calc(100vh - 56px); */
-    --height : calc(var(--max-height) - 56px);
+    --height : calc(var(--max-height) - var(--nav-height));
 
 
     display: grid;
