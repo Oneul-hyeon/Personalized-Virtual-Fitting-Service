@@ -1,14 +1,16 @@
 import styles from '../../styles/MyPage.module.css'
 import profileImage from '../../images/profile.jpg'
 import Proptypes from 'prop-types'
+import ClassMerger from '../../tools/ClassNameGenerater'
 
 function TransButton({ context, option, page, onClick }) {
   return (
     <button
-      className={[
+      className={ClassMerger([
         styles.transparentButton,
+        styles.basicFont,
         page === option ? styles.selected : '',
-      ].join(' ')}
+      ])}
       onClick={() => onClick(option)}
     >
       {context}

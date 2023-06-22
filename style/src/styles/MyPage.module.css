@@ -1,12 +1,23 @@
 .mainContainer {
+    --max-width : 1920px;
+    --max-height : 970px;
     --leftContiner-width : 466px;
-    --rightContiner-width : calc( 1920px - var(--leftContiner-width));
-    --height : calc(100vh - 56px);;
+    --rightContiner-width : calc( var(--max-width) - var(--leftContiner-width));
+    /* --height : calc(100vh - 56px); */
+    --height : calc(var(--max-height) - 56px);
+
 
     display: grid;
     grid-template-columns: var(--leftContiner-width) var(--rightContiner-width);
     height: var(--height);
-    overflow: hidden;
+    /* overflow: hidden; */
+}
+
+.basicFont {
+    color: #8f8f8f;
+    font-family: 'NanumSquare';
+    font-weight: 600;
+    font-size: 20px;
 }
 
 .subLeftContiner {
@@ -38,12 +49,13 @@
 .transparentButton {
     background: transparent;
     border: none;
-    color: #8f8f8f;
-    font-family: 'NanumSquare';
-    font-weight: 600;
-    font-size: 20px;
     margin-top: 28px;
     padding: 0px;
+    transition: color 0.2s ease-out;
+}
+
+.transparentButton:hover {
+    color: #ff7f3f;;
 }
 
 .selected {
@@ -51,11 +63,60 @@
 }
 
 .subRightContiner {
-    --rightContainer-column-width : calc(var(--rightContiner-width) / 2);
+    --rightContainer-padding-left : 80px;
+    --rightContainer-padding-top : 64px;
+    --rightContainer-column-width : calc((var(--rightContiner-width) - var(--rightContainer-padding-left)) / 2);
 
     display: grid;
     grid-template-columns: var(--rightContainer-column-width) var(--rightContainer-column-width);
-    background-color: lightgrey;
-    height: var(--height);
+    grid-template-rows: repeat(4, minmax(160px, 160px));
     overflow: hidden;
+    padding-top: var(--rightContainer-padding-top);
+    padding-left: var(--rightContainer-padding-left);
+}
+
+.formGroup {
+    padding-right: var(--rightContainer-padding-left);
+}
+
+.formLabel {
+    margin: 0px;
+    padding: 0px;
+}
+
+.formControl {
+    height: 50px;
+    border-color: #d7d7d7;
+    border-width: 2px;
+    border-radius: 14px;
+
+    color: #6d6d6d;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.submitWarpper {
+    text-align: right;
+    padding-right: var(--rightContainer-padding-left);
+}
+
+.submitButton {
+    height: 60px;
+    width: 128px;
+    color: #606060;
+    font-weight: 800;
+    background-color: #ffa978;
+    background-color: cutom-color;
+    border-radius: 14px;
+    border-width: 0px;
+    transition: all 0.2s ease-out;
+}
+
+.submitButton:hover {
+    background-color: #ff9878;
+}
+
+.submitButton:active {
+    background-color: #ff8f4f;
 }
