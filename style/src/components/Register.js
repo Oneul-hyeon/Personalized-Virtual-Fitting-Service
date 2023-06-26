@@ -1,10 +1,13 @@
-import axios from 'axios'
+import authenticatedAxios from '../api/authenticatedAxios'
 
 const API_URL = 'http://localhost:3000'
 
 const registerUser = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/users/register`, data)
+    const response = await authenticatedAxios.post(
+      `${API_URL}/users/register`,
+      data
+    )
 
     console.log('API Response:', response.data)
 

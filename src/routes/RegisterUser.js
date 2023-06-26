@@ -3,10 +3,11 @@ const router = express.Router()
 const bcrypt = require('bcrypt')
 const User = require('../models/User')
 const passport = require('passport')
+const jwt = require('jsonwebtoken')
 
-router.post('/register', async (req, res, next) => {
+router.post('/register', async (req, res) => {
   const {
-    email,
+    email: userEmail,
     name,
     phoneNumber,
     password,
@@ -18,7 +19,7 @@ router.post('/register', async (req, res, next) => {
   } = req.body
 
   try {
-    const userExists = await User.findOne({ email })
+    const userExists = await User.findOne({ email: userEmail })
 
     if (userExists) {
       return res.status(400).json({ msg: '이미 가입된 이메일입니다.' })
@@ -29,7 +30,7 @@ router.post('/register', async (req, res, next) => {
 
     // 새로운 사용자 생성 및 저장
     const newUser = new User({
-      email,
+      email: userEmail,
       name,
       phoneNumber,
       password: hashedPassword,
@@ -39,24 +40,19 @@ router.post('/register', async (req, res, next) => {
       file,
       favoriteStyle,
     })
+
     await newUser.save()
 
-    passport.authenticate('local', (err, user, info) => {
-      if (err) {
-        console.error(`로그인 에러: ${err}`)
-        return next(err)
-      }
-      if (!user) {
-        return res.status(401).json({ success: false, message: info.message })
-      }
-      req.login(user, (err) => {
-        if (err) {
-          console.error(`login 에러: ${err}`)
-          return next(err)
-        }
-        return res.status(201).json({ success: true, message: '로그인 성공!' })
-      })
-    })(req, res, next)
+    const { _id, email } = newUser
+    const jwt_secret = process.env.JWT_SECRET
+    const token = jwt.sign({ _id, email }, jwt_secret, { expiresIn: '1h' })
+
+    return res.status(201).json({
+      success: true,
+      message: '가입 및 로그인 성공!',
+      user: { _id, email },
+      token: token,
+    })
   } catch (error) {
     console.error('Registration Error:', error)
     res.status(500).json({ success: false, error: 'Registration failed.' })

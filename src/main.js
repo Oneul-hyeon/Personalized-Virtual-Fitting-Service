@@ -7,7 +7,6 @@ const express = require('express')
 const mongoose = require('mongoose')
 const path = require('path')
 const passport = require('passport')
-const session = require('express-session')
 const app = express()
 const cors = require('cors')
 
@@ -29,15 +28,7 @@ mongoose
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
-app.use(
-  session({
-    secret: secretkey,
-    resave: false,
-    saveUninitialized: false,
-  })
-)
 app.use(passport.initialize())
-app.use(passport.session())
 require('./config/passport')(passport)
 
 app.listen(3000, () => {
