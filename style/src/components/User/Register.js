@@ -1,6 +1,5 @@
-import authenticatedAxios from '../api/authenticatedAxios'
-
-const API_URL = 'http://localhost:3000'
+import authenticatedAxios from '../../api/authenticatedAxios'
+import { API_URL } from '../../api/apiConfig'
 
 const registerUser = async (data) => {
   try {

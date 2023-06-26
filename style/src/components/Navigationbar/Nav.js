@@ -3,15 +3,15 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
 import './Nav.css'
-import logo from '../images/logo.png'
+import logo from '../../images/logo.png'
 import { NavLink, Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import AuthenticationNav from './AuthenticationNav'
 import DropdownMenu from './DropdownMenu'
-import SignupTerms from './SignupTerms'
-import SignupPage from './SignupPage'
-import LoginPage from './Login'
+import SignupTerms from '../User/SignupTerms'
+import SignupPage from '../User/SignupPage'
+import LoginPage from '../User/Login'
 
 function Navigation() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)

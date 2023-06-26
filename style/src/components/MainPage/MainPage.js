@@ -1,5 +1,5 @@
-import Navigation from './Nav.js'
-import Footer from './Footer.js'
+import Navigation from '../Navigationbar/Nav.js'
+import Footer from '../Footer.js'
 import Content from './Content.js'
 
 function MainPage() {

@@ -12,6 +12,9 @@ const cors = require('cors')
 
 const uri = process.env.MONGODB_URI
 const secretkey = process.env.JWT_SECRET
+const port = process.env.PORT || 3000
+
+const allowedOrigins = ['http://localhost:3000', 'http://www.model-fit.kro.kr']
 
 if (!uri) {
   throw new Error('MONGODB_URI is not defined in .env file')
@@ -27,12 +30,24 @@ mongoose
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true)
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = '다음 도메인은 허용되지 않습니다: ' + origin
+        return callback(new Error(msg), false)
+      }
+      return callback(null, true)
+    },
+    credentials: true,
+  })
+)
 app.use(passport.initialize())
 require('./config/passport')(passport)
 
-app.listen(3000, () => {
-  console.log('App Listening on port 3000')
+app.listen(port, () => {
+  console.log(`App Listening on port ${port}`)
 })
 
 app.use(express.static(path.join(__dirname, '../style/build')))
