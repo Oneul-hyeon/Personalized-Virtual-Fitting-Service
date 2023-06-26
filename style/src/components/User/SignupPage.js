@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap'
 import ImageUploadBox from './ImageUploadBox'
 import './SignupPage.css'
 import registerUser from './Register'
-import { login } from '../features/authSlices'
+import { login } from '../../features/authSlices'
 import { useDispatch } from 'react-redux'
 
 function SignupPage({ onClose }) {

@@ -12,8 +12,8 @@ function Footer() {
         </section>
         <section className="_1trxeqsf">
           <div className="_1trxeqsg">
-            <Link to="/policyterms">이용 약관</Link>
-            <Link to="/privacymain">개인정보처리방침</Link>
+            <Link to="./Terms/policyterms">이용 약관</Link>
+            <Link to="./Terms/privacymain">개인정보처리방침</Link>
           </div>
         </section>
       </section>

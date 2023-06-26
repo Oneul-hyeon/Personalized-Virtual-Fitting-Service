@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import './Login.css'
 import { useDispatch } from 'react-redux'
-import { login } from '../features/authSlices'
-import authenticatedAxios from '../api/authenticatedAxios'
-
-const API_URL = 'http://localhost:3000'
+import { login } from '../../features/authSlices'
+import authenticatedAxios from '../../api/authenticatedAxios'
+import { API_URL } from '../../api/apiConfig'
 
 function LoginPage({ onClose }) {
   const [email, setEmail] = useState('')
