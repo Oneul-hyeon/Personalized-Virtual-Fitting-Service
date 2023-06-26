@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import './Login.css'
-import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { login } from '../features/authSlices'
+import authenticatedAxios from '../api/authenticatedAxios'
 
 const API_URL = 'http://localhost:3000'
 
 function LoginPage({ onClose }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
@@ -21,12 +24,13 @@ function LoginPage({ onClose }) {
     e.preventDefault()
 
     try {
-      const response = await axios.post(`${API_URL}/users/login`, {
+      const response = await authenticatedAxios.post(`${API_URL}/users/login`, {
         email,
         password,
       })
       if (response.status === 200 || response.status === 201) {
         localStorage.setItem('token', response.data.token)
+        dispatch(login(response.data.user))
         onClose()
       }
     } catch (error) {

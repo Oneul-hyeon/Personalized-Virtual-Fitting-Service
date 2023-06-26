@@ -5,7 +5,8 @@ import Navbar from 'react-bootstrap/Navbar'
 import './Nav.css'
 import logo from '../images/logo.png'
 import { NavLink, Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import AuthenticationNav from './AuthenticationNav'
 import DropdownMenu from './DropdownMenu'
 import SignupTerms from './SignupTerms'
@@ -13,15 +14,10 @@ import SignupPage from './SignupPage'
 import LoginPage from './Login'
 
 function Navigation() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const [showTermsModal, setShowTermsModal] = useState(false)
   const [showSignupModal, setShowSignupModal] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    setIsLoggedIn(!!token)
-  }, [])
 
   const toggleTermsModal = () => {
     setShowTermsModal(!showTermsModal)
@@ -41,12 +37,6 @@ function Navigation() {
 
   const handleLoginClick = () => {
     toggleLoginModal()
-  }
-
-  const handleLogoutClick = () => {
-    localStorage.removeItem('token')
-    alert('로그아웃 되었습니다.')
-    setIsLoggedIn(false)
   }
 
   return (
@@ -72,10 +62,9 @@ function Navigation() {
             <DropdownMenu />
           </Nav>
           <AuthenticationNav
-            isLoggedIn={isLoggedIn}
+            isLoggedIn={isAuthenticated}
             handleSignupClick={handleSignupClick}
             handleLoginClick={handleLoginClick}
-            handleLogoutClick={handleLogoutClick}
           />
         </Navbar.Collapse>
       </Container>

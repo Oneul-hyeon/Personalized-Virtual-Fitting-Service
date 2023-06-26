@@ -11,7 +11,6 @@ authenticatedAxios.interceptors.request.use(
     return config
   },
   (error) => {
-    // Handle any error from setting the headers.
     return Promise.reject(error)
   }
 )

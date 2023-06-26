@@ -3,8 +3,11 @@ import { Modal, Button } from 'react-bootstrap'
 import ImageUploadBox from './ImageUploadBox'
 import './SignupPage.css'
 import registerUser from './Register'
+import { login } from '../features/authSlices'
+import { useDispatch } from 'react-redux'
 
 function SignupPage({ onClose }) {
+  const dispatch = useDispatch()
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
@@ -220,7 +223,9 @@ function SignupPage({ onClose }) {
 
       if (registerResult.success) {
         console.log('success')
-        localStorage.setItem('token', registerResult.result.token)
+        const { token, user } = registerResult.result
+        localStorage.setItem('token', token)
+        dispatch(login({ token, user }))
         onClose()
       } else {
         console.log('registerfail')
