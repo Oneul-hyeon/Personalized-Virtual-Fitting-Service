@@ -11,9 +11,9 @@ const userSchema = new Schema({
   weight: { type: Number, required: true },
   file: { type: String },
   favoriteStyle: {
-    style: { type: String },
-    color: { type: String },
-    fit: { type: String },
+    style: { type: String, default: '' },
+    color: { type: String, default: '' },
+    fit: { type: String, default: '정핏' },
   },
   sizeProfile: { type: Schema.Types.ObjectId, ref: 'SizeProfile' },
 })

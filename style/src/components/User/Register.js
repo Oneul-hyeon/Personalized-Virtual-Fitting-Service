@@ -1,5 +1,4 @@
 import authenticatedAxios from '../../api/authenticatedAxios'
-import axios from 'axios'
 import { API_URL } from '../../api/apiConfig'
 
 async function registerUser(userData) {
