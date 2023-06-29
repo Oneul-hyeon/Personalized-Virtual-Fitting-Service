@@ -14,8 +14,13 @@ const multer = require('multer')
 const uri = process.env.MONGODB_URI
 const secretkey = process.env.JWT_SECRET
 const port = process.env.PORT || 3000
+const aiAPI = process.env.AI_API
 
-const allowedOrigins = ['http://localhost:3000', 'http://www.model-fit.kro.kr']
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://www.model-fit.kro.kr',
+  aiAPI,
+]
 
 if (!uri) {
   throw new Error('MONGODB_URI is not defined in .env file')
@@ -65,22 +70,3 @@ const logoutRouter = require('./routes/LogoutUser')
 app.use('/users', usersRouter)
 app.use('/users', loginRouter)
 app.use('/users', logoutRouter)
-
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/') // 이미지를 저장할 폴더 경로
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '_' + file.originalname) // 저장될 파일 이름 설정
-  },
-})
-
-const upload = multer({ storage })
-const fs = require('fs')
-
-const UPLOADS_DIRECTORY = 'uploads'
-
-if (!fs.existsSync(UPLOADS_DIRECTORY)) {
-  fs.mkdirSync(UPLOADS_DIRECTORY)
-}

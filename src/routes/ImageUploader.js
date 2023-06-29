@@ -31,7 +31,8 @@ const ImageUploader = multer({
       if (!allowedExtensions.includes(extension)) {
         return callback(new Error('wrong extension'))
       }
-      callback(null, `${uploadDirectory}/${Date.now()}_${file.originalname}`)
+      const userId = req.query.userId
+      callback(null, `${uploadDirectory}/${userId}/userimage${extension}`)
     },
     acl: 'public-read-write',
   }),
