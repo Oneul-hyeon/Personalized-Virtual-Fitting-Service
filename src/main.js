@@ -9,6 +9,7 @@ const path = require('path')
 const passport = require('passport')
 const app = express()
 const cors = require('cors')
+const multer = require('multer')
 
 const uri = process.env.MONGODB_URI
 const secretkey = process.env.JWT_SECRET
@@ -64,3 +65,22 @@ const logoutRouter = require('./routes/LogoutUser')
 app.use('/users', usersRouter)
 app.use('/users', loginRouter)
 app.use('/users', logoutRouter)
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/') // 이미지를 저장할 폴더 경로
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '_' + file.originalname) // 저장될 파일 이름 설정
+  },
+})
+
+const upload = multer({ storage })
+const fs = require('fs')
+
+const UPLOADS_DIRECTORY = 'uploads'
+
+if (!fs.existsSync(UPLOADS_DIRECTORY)) {
+  fs.mkdirSync(UPLOADS_DIRECTORY)
+}

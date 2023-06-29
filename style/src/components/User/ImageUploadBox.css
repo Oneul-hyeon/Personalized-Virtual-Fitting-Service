@@ -83,3 +83,37 @@
     display: none;
   }
   
+  .tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltip .tooltip_text {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%; 
+    left: 50%; 
+    margin-left: -60px; 
+    opacity: 0; 
+    transition: opacity 0.3s;
+  }
+  
+  .tooltip:hover .tooltip_text {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .info_button {
+    color: grey;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  

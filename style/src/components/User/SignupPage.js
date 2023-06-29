@@ -1,10 +1,19 @@
 import React, { useState, useRef } from 'react'
+import { Tooltip } from 'react-tooltip'
 import { Modal, Button } from 'react-bootstrap'
-import ImageUploadBox from './ImageUploadBox'
+import ImageUploader from './ImageUploader'
 import './SignupPage.css'
 import registerUser from './Register'
 import { login } from '../../features/authSlices'
 import { useDispatch } from 'react-redux'
+import {
+  validateName,
+  validatePhoneNumber,
+  validateEmail,
+  validatePassword,
+  validateConfirmPassword,
+  validateInteger,
+} from './Validations'
 
 function SignupPage({ onClose }) {
   const dispatch = useDispatch()
@@ -26,24 +35,22 @@ function SignupPage({ onClose }) {
   const [colorListOpen, setColorListOpen] = useState(false)
   const [fitListOpen, setFitListOpen] = useState(false)
 
-  // 에러 메시지 states
+  // 오류 메시지 상태 변수
   const [nameError, setNameError] = useState('')
   const [phoneError, setPhoneError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
+  const [heightError, setHeightError] = useState('')
+  const [weightError, setWeightError] = useState('')
 
   // 오류 메시지 상태 저장 및 버튼 상태 변경
   const formRef = useRef(null)
   const hasSubmitted = useRef(false)
 
-  // 입력이 끝났을 때만 오류 메시지 표시
+  // 유효성 검사 후 에러메시지 세팅
   const onBlurHandler = (e, validationFunc, errorSetter) => {
-    if (validationFunc(e.target.value)) {
-      errorSetter('')
-    } else if (hasSubmitted) {
-      errorSetter(validationFunc(e.target.value))
-    }
+    validationFunc(e.target.value, errorSetter)
   }
 
   // 에러 발생 시 회원가입 모달 진동
@@ -56,95 +63,51 @@ function SignupPage({ onClose }) {
     }, 500)
   }
 
-  // 유효성 검사 함수들
-  const validateName = (name) => {
-    if (/^[가-힣a-zA-Z\s]+$/.test(name)) {
-      return true
-    } else {
-      setNameError('이름은 문자로만 구성되어야 합니다.')
-      return false
-    }
-  }
-
-  const validatePhoneNumber = (phoneNumber) => {
-    if (/^\d{3}\-\d{4}\-\d{4}$/.test(phoneNumber)) {
-      return true
-    } else {
-      setPhoneError('전화번호는 010-0000-0000 과 같은 양식이어야 합니다.')
-      return false
-    }
-  }
-  const validateEmail = (email) => {
-    if (
-      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i.test(
-        email
-      )
-    ) {
-      return true
-    } else {
-      setEmailError('이메일 양식에 맞지 않습니다.')
-      return false
-    }
-  }
-  const validatePassword = (password) => {
-    if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
-      return true
-    } else {
-      setPasswordError(
-        '비밀번호는 영문과 숫자를 포함하여 8자리 이상 구성하여야 합니다.'
-      )
-      return false
-    }
-  }
-
-  const validateConfirmPassword = (password, confirmPassword) => {
-    if (password === confirmPassword) {
-      return true
-    } else {
-      setConfirmPasswordError('비밀번호가 다릅니다.')
-      return false
-    }
-  }
-
   const handleNameChange = (e) => {
     setName(e.target.value)
-    validateName(e.target.value)
+    onBlurHandler(e, validateName, setNameError)
   }
 
   const handlePhoneNumberChange = (e) => {
     setPhoneNumber(e.target.value)
-    validatePhoneNumber(e.target.value)
+    onBlurHandler(e, validatePhoneNumber, setPhoneError)
   }
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
-    validateEmail(e.target.value)
+    onBlurHandler(e, validateEmail, setEmailError)
   }
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value)
-    validatePassword(e.target.value)
+    onBlurHandler(e, validatePassword, setPasswordError)
   }
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value)
-    validateConfirmPassword(password, e.target.value)
+    onBlurHandler(
+      e,
+      (value, setError) => validateConfirmPassword(value, password, setError),
+      setConfirmPasswordError
+    )
+  }
+
+  const handleHeightChange = (e) => {
+    setHeight(e.target.value)
+    onBlurHandler(e, validateInteger, setHeightError)
+  }
+
+  const handleWeightChange = (e) => {
+    setWeight(e.target.value)
+    onBlurHandler(e, validateInteger, setWeightError)
   }
 
   const handleGenderChange = (e) => {
     setGender(e.currentTarget.value)
   }
 
-  const handleHeightChange = (e) => {
-    setHeight(e.target.value)
-  }
-
-  const handleWeightChange = (e) => {
-    setWeight(e.target.value)
-  }
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0]
-    setFile(selectedFile)
+  const handleFileChange = (file) => {
+    setFile(file)
   }
   const handleStyleChange = (e) => {
     setFavoriteStyle({ ...favoriteStyle, style: e.target.value })
@@ -188,12 +151,26 @@ function SignupPage({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const isNameValid = validateName(name, setNameError)
+    const isPhoneNumberValid = validatePhoneNumber(phoneNumber, setPhoneError)
+    const isEmailValid = validateEmail(email, setEmailError)
+    const isPasswordValid = validatePassword(password, setPasswordError)
+    const isConfirmPasswordValid = validateConfirmPassword(
+      password,
+      confirmPassword,
+      setConfirmPasswordError
+    )
+    const isHeightValid = validateInteger(height, setHeightError)
+    const isWeightValid = validateInteger(weight, setWeightError)
+
     const canSubmitted =
-      validateName(name) &&
-      validatePhoneNumber(phoneNumber) &&
-      validateEmail(email) &&
-      validatePassword(password) &&
-      validateConfirmPassword(password, confirmPassword)
+      isNameValid &&
+      isPhoneNumberValid &&
+      isEmailValid &&
+      isPasswordValid &&
+      isConfirmPasswordValid &&
+      isHeightValid &&
+      isWeightValid
 
     console.log('Email:', email)
     console.log('Name:', name)
@@ -207,32 +184,34 @@ function SignupPage({ onClose }) {
     console.log('Favorite Style:', favoriteStyle)
 
     if (canSubmitted) {
-      const data = {
-        email,
-        name,
-        phoneNumber,
-        password,
-        gender,
-        height,
-        weight,
-        file,
-        favoriteStyle,
-      }
+      try {
+        const userData = {
+          email,
+          name,
+          phoneNumber,
+          password,
+          gender,
+          height,
+          weight,
+          file,
+          favoriteStyle,
+        }
+        const registerResult = await registerUser(userData)
 
-      const registerResult = await registerUser(data)
-
-      if (registerResult.success) {
-        console.log('success')
-        const { token, user } = registerResult.result
-        localStorage.setItem('token', token)
-        dispatch(login({ token, user }))
-        onClose()
-      } else {
+        if (registerResult.success) {
+          console.log('success')
+          const { token, user } = registerResult.result
+          localStorage.setItem('token', token)
+          dispatch(login({ token, user }))
+          onClose()
+        }
+      } catch (error) {
         console.log('registerfail')
         handleInvalidForm()
       }
     } else {
       console.log('submitfail')
+      hasSubmitted.current = true
       handleInvalidForm()
     }
   }
@@ -247,7 +226,7 @@ function SignupPage({ onClose }) {
           <div className="form-group">
             <label className="form-label">이름</label>
             <input
-              className={`form-input error ${nameError ? 'has-error' : ''}`}
+              className={`form-input ${nameError ? 'has-error' : ''}`}
               type="text"
               value={name}
               placeholder="예시 : 홍길동"
@@ -260,7 +239,7 @@ function SignupPage({ onClose }) {
           <div className="form-group">
             <label className="form-label">전화번호 ('-' 포함)</label>
             <input
-              className={`form-input error ${phoneError ? 'has-error' : ''}`}
+              className={`form-input ${phoneError ? 'has-error' : ''}`}
               type="text"
               value={phoneNumber}
               placeholder="예시 : 010-1234-5678"
@@ -275,7 +254,7 @@ function SignupPage({ onClose }) {
           <div className="form-group">
             <label className="form-label">이메일</label>
             <input
-              className={`form-input error ${emailError ? 'has-error' : ''}`}
+              className={`form-input ${emailError ? 'has-error' : ''}`}
               type="email"
               value={email}
               placeholder="예시 : modelfit@modelfit.com"
@@ -288,7 +267,7 @@ function SignupPage({ onClose }) {
           <div className="form-group">
             <label className="form-label">비밀번호</label>
             <input
-              className={`form-input error ${passwordError ? 'has-error' : ''}`}
+              className={`form-input ${passwordError ? 'has-error' : ''}`}
               type="password"
               value={password}
               placeholder="영문과 숫자로 구성된 8자리 이상"
@@ -305,7 +284,7 @@ function SignupPage({ onClose }) {
           <div className="form-group">
             <label className="form-label">비밀번호 확인</label>
             <input
-              className={`form-input error ${
+              className={`form-input ${
                 confirmPasswordError ? 'has-error' : ''
               }`}
               type="password"
@@ -315,7 +294,8 @@ function SignupPage({ onClose }) {
               onBlur={(e) =>
                 onBlurHandler(
                   e,
-                  validateConfirmPassword,
+                  (value, setError) =>
+                    validateConfirmPassword(value, password, setError),
                   setConfirmPasswordError
                 )
               }
@@ -355,8 +335,27 @@ function SignupPage({ onClose }) {
           <div>
             <label className="form-label">고객 사진</label>
             <div>
-              <p> * 전신 이미지 업로드</p>
-              <ImageUploadBox onChange={handleFileChange} />
+              <ImageUploader
+                onChange={handleFileChange}
+                onFileChange={handleFileChange}
+              />
+              <div data-tooltip-id="tooltipGuidelines">유의사항(보기)</div>
+              <Tooltip
+                id="tooltipGuidelines"
+                place="top"
+                effect="solid"
+                multiline
+              >
+                <p> * 이미지 업로드 가이드라인</p>
+                <p>
+                  (1) 사용자 전신 사진 촬영 시,
+                  <br /> 사용자의 무릎 위 부터 머리 끝까지
+                  <br />
+                  화면에 꽉 찰 수 있도록 촬영해주세요.
+                </p>
+                <p>(2) 상의, 하의 색이 다르게 해주세요.</p>
+                <p>(3) 한 장만 업로드 해주세요.</p>
+              </Tooltip>
             </div>
           </div>
           <div className="form-group size-input-group">
@@ -364,27 +363,41 @@ function SignupPage({ onClose }) {
             <div className="size-input-container">
               <label className="form-label">키</label>
               <input
-                className="form-input size-input"
+                className={`form-input ${heightError ? 'has-error' : ''}`}
                 type="text"
                 value={height}
-                placeholder="cm"
+                placeholder="숫자만 입력, 단위 : cm"
                 onChange={handleHeightChange}
+                onBlur={(e) =>
+                  onBlurHandler(e, validateInteger, setHeightError)
+                }
+                required
               />
+              {heightError && (
+                <div className="error-message">{heightError}</div>
+              )}
             </div>
             <div className="size-input-container">
               <label className="form-label">몸무게</label>
               <input
-                className="form-input size-input"
+                className={`form-input ${weightError ? 'has-error' : ''}`}
                 type="text"
                 value={weight}
-                placeholder="kg"
+                placeholder="숫자만 입력, 단위 : kg"
                 onChange={handleWeightChange}
+                onBlur={(e) =>
+                  onBlurHandler(e, validateInteger, setWeightError)
+                }
+                required
               />
+              {weightError && (
+                <div className="error-message">{weightError}</div>
+              )}
             </div>
           </div>
           <div className="form-group style-input-group">
             <div className="style-input-container">
-              <label className="form-label">스타일</label>
+              <label className="form-label">스타일 (직접입력 가능)</label>
               <input
                 className="form-input style-input"
                 type="text"
@@ -406,7 +419,6 @@ function SignupPage({ onClose }) {
                   <li onClick={() => handleStyleItemClick('스포츠')}>스포츠</li>
                   <li onClick={() => handleStyleItemClick('캐주얼')}>캐주얼</li>
                   <li onClick={() => handleStyleItemClick('클래식')}>클래식</li>
-                  {/* 다른 스타일 추가 */}
                 </ul>
               )}
             </div>
@@ -435,7 +447,9 @@ function SignupPage({ onClose }) {
                   <li onClick={() => handleColorItemClick('검정')}>검정</li>
                   <li onClick={() => handleColorItemClick('파랑')}>파랑</li>
                   <li onClick={() => handleColorItemClick('빨강')}>빨강</li>
-                  {/* 다른 색상 추가 */}
+                  <li onClick={() => handleColorItemClick('노랑')}>노랑</li>
+                  <li onClick={() => handleColorItemClick('하양')}>하양</li>
+                  <li onClick={() => handleColorItemClick('초록')}>초록</li>
                 </ul>
               )}
             </div>
@@ -446,7 +460,7 @@ function SignupPage({ onClose }) {
               <input
                 className="form-input style-input"
                 type="text"
-                placeholder="예시 : 슬림핏, 오버핏"
+                placeholder="예시 : 정핏, 슬림핏, 오버핏"
                 value={favoriteStyle.fit}
                 onChange={handleFitChange}
               />
@@ -461,9 +475,9 @@ function SignupPage({ onClose }) {
               </div>
               {fitListOpen && (
                 <ul className="style-list">
+                  <li onClick={() => handleFitItemClick('정핏')}>정핏</li>
                   <li onClick={() => handleFitItemClick('슬림핏')}>슬림핏</li>
                   <li onClick={() => handleFitItemClick('오버핏')}>오버핏</li>
-                  {/* 다른 핏 추가 */}
                 </ul>
               )}
             </div>

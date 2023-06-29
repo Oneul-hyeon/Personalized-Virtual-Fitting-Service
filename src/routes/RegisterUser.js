@@ -2,10 +2,10 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const User = require('../models/User')
-const passport = require('passport')
 const jwt = require('jsonwebtoken')
+const ImageUploader = require('./ImageUploader')
 
-router.post('/register', async (req, res) => {
+router.post('/register', ImageUploader.single('file'), async (req, res) => {
   const {
     email: userEmail,
     name,
@@ -14,9 +14,9 @@ router.post('/register', async (req, res) => {
     gender,
     height,
     weight,
-    file,
     favoriteStyle,
   } = req.body
+  const file = req.file ? req.file.location : undefined
 
   try {
     const userExists = await User.findOne({ email: userEmail })
