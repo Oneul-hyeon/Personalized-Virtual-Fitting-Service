@@ -125,6 +125,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    margin-top:10px;
   }
   
   .style-input {
@@ -223,4 +224,3 @@
   .signup-form.shake {
     animation: shake 0.5s;
   }
-  

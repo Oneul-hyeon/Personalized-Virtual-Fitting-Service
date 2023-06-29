@@ -1,14 +1,32 @@
 import authenticatedAxios from '../../api/authenticatedAxios'
+import axios from 'axios'
 import { API_URL } from '../../api/apiConfig'
 
-const registerUser = async (data) => {
+async function registerUser(userData) {
+  const formData = new FormData()
+  formData.append('email', userData.email)
+  formData.append('name', userData.name)
+  formData.append('phoneNumber', userData.phoneNumber)
+  formData.append('password', userData.password)
+  formData.append('gender', userData.gender)
+  formData.append('height', userData.height)
+  formData.append('weight', userData.weight)
+  formData.append('favoriteStyle', userData.favoriteStyle)
+
+  if (userData.file) {
+    formData.append('file', userData.file)
+  }
+
   try {
     const response = await authenticatedAxios.post(
       `${API_URL}/users/register`,
-      data
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
     )
-
-    console.log('API Response:', response.data)
 
     if (response.status === 200 || response.status === 201) {
       return { success: true, result: response.data }
@@ -16,7 +34,11 @@ const registerUser = async (data) => {
       return { success: false, error: 'Registration failed.' }
     }
   } catch (error) {
-    return { success: false, error: error.message }
+    if (error.response && error.response.status >= 500) {
+      return { success: false, error: 'Server error occurred.' }
+    } else {
+      return { success: false, error: error.message }
+    }
   }
 }
 

@@ -12,7 +12,7 @@ function ImagePreview({ image, deleteFunc }) {
   )
 }
 
-function ImageUploadBox({ max = 10 }) {
+function ImageUploadBox({ max = 1, onChange }) {
   const [uploadedImages, setUploadedImages] = useState([])
   const [previewImages, setPreviewImages] = useState([])
   const uploadBoxRef = useRef()
@@ -86,7 +86,6 @@ function ImageUploadBox({ max = 10 }) {
       <label className="drag_or_click" htmlFor="imageInput" ref={uploadBoxRef}>
         <div className="text_box">
           <h3>드래그 또는 클릭하여 업로드</h3>
-          <span>권장사항: oooMB 이하 고화질</span>
         </div>
         <div className="icon_box">
           <i className="fas fa-arrow-circle-up"></i>
