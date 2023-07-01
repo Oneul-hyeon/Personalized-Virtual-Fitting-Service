@@ -38,7 +38,6 @@ function MySize({ userId }) {
       }
     }
     const fetchSize2 = async () => {
-      console.log('fet2')
       try {
         const response = await authenticatedAxios.get(
           `${API_URL}/userInfo/api/info?userId=${userId}`

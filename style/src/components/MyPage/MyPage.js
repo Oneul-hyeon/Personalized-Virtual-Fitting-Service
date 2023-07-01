@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import styles from './MyPage.module.css'
 import LeftSubMyPage from './LeftSubMyPage'
 import RightSubMyPage from './RightSubMyPage'
 import Navigation from '../Navigationbar/Nav.js'
-import { useSelector } from 'react-redux'
 
 function MyPage() {
   const [page, setPage] = useState('privacy')
