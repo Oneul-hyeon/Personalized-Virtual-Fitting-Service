@@ -28,8 +28,11 @@ function LoginPage({ onClose }) {
         password,
       })
       if (response.status === 200 || response.status === 201) {
-        localStorage.setItem('token', response.data.token)
-        dispatch(login(response.data.user))
+        // 수정함 : login이 제대로 초기화 되지 않음
+        // console.log(response.data)
+        // localStorage.setItem('token', response.data.token)
+        // dispatch(login(response.data.user))
+        dispatch(login(response.data))
         onClose()
       }
     } catch (error) {
