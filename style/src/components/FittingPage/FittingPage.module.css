@@ -1,0 +1,340 @@
+@font-face {
+    font-family: 'BMJUA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
+
+.mainContainer {
+    --nav-height: 95px;
+    --max-width: 1920px;
+    --max-height: 970px;
+    --leftContiner-width: 466px;
+    --rightContiner-width: calc(var(--max-width) - var(--leftContiner-width));
+    /* --height : calc(100vh - 56px); */
+    --height: calc(var(--max-height) - var(--nav-height));
+
+
+    display: grid;
+    grid-template-columns: 6% 42% 4% 42% 6%;
+    height: var(--height);
+    /* overflow: hidden; */
+}
+
+.cardButton {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    width: 140px;
+    height: 100px;
+    border-radius: 12px;
+    border-width: 0px;
+    background-color: #fbf7f2;
+    margin: 24px;
+}
+
+.cardButton:hover {
+    background-color: #f1ede9;
+}
+
+.cardButton .btnImage {
+    width: 60px;
+    height: 60px;
+}
+
+.cardButton .btnText {
+    font-family: 'NanumSquare';
+    color: #909090;
+    font-weight: 600;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.imageContainer {
+    place-items: center;
+    text-align: center;
+    margin-top: 5%;
+}
+
+.fittingImage {
+    height: 650px;
+}
+
+.rightFitContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.closetContainer {
+    display: inline-block;
+    background-color: #eae7e1;
+    width: 775px;
+    height: 805px;
+    border: 1px solid black;
+    border-radius: 4%;
+    overflow-y: hidden;
+}
+
+.closetNavbar {
+    height: 26%;
+    width: 100%;
+    background-color: grey;
+}
+
+.searchBarContainer {
+    background-color: #f0f0f0;
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    padding-top: 2.2%;
+}
+
+.searchBar {
+    display: inline-block;
+    width: 92%;
+    height: 40px;
+    border: 1.6px solid #b0b0b0;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.searchImage {
+    margin-left: 1.8%;
+}
+
+.searchInput {
+    width: 91%;
+    margin-left: 1%;
+    background: transparent;
+    border: 0px;
+    color: #6d6d6d;
+    font-family: 'NanumSquare';
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.searchInput::placeholder {
+    color: #aaaaaa;
+}
+
+.searchInput:focus {
+    outline: none;
+}
+
+.mainMenuContainer {
+    background-color: #f0f0f0;
+    width: 100%;
+    height: 24%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainMenu {
+    display: inline-block;
+    width: 92%;
+    /* border: 1px solid black; */
+}
+
+.mainMenuBtn {
+    height: 30px;
+    width: 80px;
+    border-radius: 15px;
+    border: 0px;
+
+    color: #6d6d6d;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.mainMenuBtn:hover {
+    color: #ff7e36;
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.3s ease-out;
+}
+
+.mainMenuBtn_selected {
+    height: 30px;
+    width: 80px;
+    border-radius: 15px;
+    border: 0px;
+    background-color: #323232;
+    color: #ff7e36;
+
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+    padding-top: 2px;
+}
+
+.menuControlBtn {
+    background: transparent;
+    border: 0px;
+    font-size: 20px;
+    color: #505d6f;
+    margin: 0 1.5%;
+}
+
+.subMenu1Container {
+    background-color: #eae7e1;
+    width: 100%;
+    height: 23%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subMenu1 {
+    display: inline-block;
+    width: 92%;
+}
+
+.subMenu1Btn,
+.subMenu1Btn_selected {
+    background: transparent;
+    border: 0px;
+    width: 72px;
+    position: relative;
+
+    color: #6d6d6d;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.subMenu1Btn::after{
+    content: '';
+    display: block;
+    position: absolute;
+    box-sizing: border-box;
+    bottom: -12px;
+    left: 16px;
+    width: 60%;
+    height: 5px;
+    transition: all 0.3s ease-out;
+}
+
+.subMenu1Btn:hover::after,
+.subMenu1Btn_selected::after {
+    content: '';
+    display: block;
+    position: absolute;
+    box-sizing: border-box;
+    bottom: -10px;
+    left: 15px;
+    width: 60%;
+    height: 5px;
+    background-color: #ff7e36;
+}
+
+.subMenu2Container {
+    background-color: #f0f0f0;
+    width: 100%;
+    height: 23%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subMenu2Btn {
+    background: transparent;
+    border: 0px;
+    width: 100px;
+    color: #aaaaaa;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.subMenu2Btn_selected {
+    background: transparent;
+    border: 0px;
+    width: 100px;
+    color: #ff7e36;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.subMenu2Btn:hover {
+    color: #ff7e36;
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.3s ease-out;
+}
+
+.filterBtn {
+    background: transparent;
+    border: 0px;
+    font-size: 18px;
+    margin-right: 1.6%;
+}
+
+.closet {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-auto-rows: minmax(250px, 1fr);
+    grid-gap: 20px;
+    overflow-y: auto;
+    max-height: 72%;
+}
+
+.clothesElement {
+    width: 242px;
+    height: 264px;
+    display: inline-block;
+    /* border: 1px solid black; */
+}
+
+.clothesInner {
+    /* display: flex; */
+    display: block;
+    text-align: center;
+}
+
+.clothesImage {
+    display: block;
+    margin: 0 auto;
+    width: 180px;
+    height: 200px;
+}
+
+.favoriteBtn {
+    background: transparent;
+    border: 0px;
+
+    color: #aaaaaa;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.wearingBtn {
+    background: transparent;
+    border: 0px;
+
+    color: #aaaaaa;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.removeBtn {
+    background: transparent;
+    border: 0px;
+
+    color: #aaaaaa;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}

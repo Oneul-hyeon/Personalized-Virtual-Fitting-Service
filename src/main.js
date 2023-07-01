@@ -18,6 +18,7 @@ const aiAPI = process.env.AI_API
 
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:3001',
   'http://www.model-fit.kro.kr',
   aiAPI,
 ]
@@ -60,9 +61,6 @@ app.use(express.static(path.join(__dirname, '../style/build')))
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../style/build/index.html'))
 })
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../style/build/index.html'))
-})
 
 const usersRouter = require('./routes/RegisterUser')
 const loginRouter = require('./routes/LoginUser')
@@ -70,3 +68,11 @@ const logoutRouter = require('./routes/LogoutUser')
 app.use('/users', usersRouter)
 app.use('/users', loginRouter)
 app.use('/users', logoutRouter)
+
+// userInfo 조회
+const infoRouter = require('./routes/UserInfo')
+app.use('/userInfo', infoRouter)
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../style/build/index.html'))
+})
