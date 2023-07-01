@@ -14,7 +14,6 @@ function MyPrivacy({ userId }) {
   // 신체 정보 fetch
   useEffect(() => {
     const fetchSize = async () => {
-      console.log('fet2')
       try {
         const response = await authenticatedAxios.get(
           `${API_URL}/userInfo/api/info?userId=${userId}`

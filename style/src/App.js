@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { login } from './features/authSlices'
 import MainPage from './components/MainPage/MainPage'
 import FittingPage from './components/FittingPage/FittingPage.js'
@@ -13,12 +13,13 @@ import MyPage from './components/MyPage/MyPage.js'
 function App() {
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    const user = JSON.parse(localStorage.getItem('user'))
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const lsUser = JSON.parse(localStorage.getItem('user'))
+  const lsToken = localStorage.getItem('token')
 
-    if (user && token) {
-      dispatch(login(user))
+  useEffect(() => {
+    if (!isAuthenticated && lsUser && lsToken) {
+      dispatch(login({ user: lsUser, token: lsToken }))
     }
   }, [dispatch])
 
@@ -27,7 +28,7 @@ function App() {
       <Route path="/" element={<MainPage />} />
       <Route path="/fitting" element={<FittingPage />} />
       <Route path="/recommend" element={<RecommendPage />} />
-      <Route path="/myPage" element={<MyPage />} />
+      <Route path="/mypage" element={<MyPage />} />
       <Route exact path="/policyterms" element={<PolicyTerms />} />
       <Route exact path="/privacymain" element={<PrivacyMain />} />
     </Routes>
