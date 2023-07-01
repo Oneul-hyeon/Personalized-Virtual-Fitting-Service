@@ -28,10 +28,15 @@ function LoginPage({ onClose }) {
         password,
       })
       if (response.status === 200 || response.status === 201) {
+<<<<<<< HEAD
         // 수정함 : login이 제대로 초기화 되지 않음
         // console.log(response.data)
         // localStorage.setItem('token', response.data.token)
         // dispatch(login(response.data.user))
+=======
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+>>>>>>> 03b405bd8157f7740cbe7e3e4071007e068fb133
         dispatch(login(response.data))
         onClose()
       }

@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { login } from './features/authSlices'
 import MainPage from './components/MainPage/MainPage'
 import FittingPage from './components/FittingPage/FittingPage.js'
 import RecommendPage from './components/RecommendPage.js'
@@ -9,6 +11,17 @@ import { Routes, Route } from 'react-router-dom'
 import MyPage from './components/MyPage/MyPage.js'
 
 function App() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    if (user && token) {
+      dispatch(login(user))
+    }
+  }, [dispatch])
+
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
