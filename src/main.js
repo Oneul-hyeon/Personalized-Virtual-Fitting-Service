@@ -18,7 +18,6 @@ const aiAPI = process.env.AI_API
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://localhost:3001',
   'http://www.model-fit.kro.kr',
   aiAPI,
 ]
@@ -72,6 +71,9 @@ app.use('/users', logoutRouter)
 // userInfo 조회
 const infoRouter = require('./routes/UserInfo')
 app.use('/userInfo', infoRouter)
+
+const clothRouter = require('./routes/Clothes')
+app.use('/cloth', clothRouter)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../style/build/index.html'))

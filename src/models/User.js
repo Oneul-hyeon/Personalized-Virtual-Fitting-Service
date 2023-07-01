@@ -16,6 +16,7 @@ const userSchema = new Schema({
     fit: { type: String, default: '정핏' },
   },
   sizeProfile: { type: Schema.Types.ObjectId, ref: 'SizeProfile' },
+  clothes: [{ type: Schema.Types.ObjectId, ref: 'Clothes' }],
 })
 
 module.exports = mongoose.model('User', userSchema)
