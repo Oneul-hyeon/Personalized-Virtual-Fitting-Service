@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 
 function FittingPage() {
   const user = useSelector((state) => state.auth.user)
-
   return (
     <div>
       <Navigation></Navigation>
