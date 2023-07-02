@@ -2,6 +2,7 @@ import Navigation from '../Navigationbar/Nav'
 
 import LeftFitContainer from './LeftFitContainer'
 import RightFitContainer from './RightFitContainer'
+import AlertMessage from '../common/AlertMessage'
 
 import styles from './FittingPage.module.css'
 
@@ -10,32 +11,57 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import shoppingImage from '../../images/shopping-mall.png'
+import { Navigate } from 'react-router-dom'
+import FittingPageAlert from './FittingPageAlert'
 
 function FittingPage() {
-  const user = useSelector((state) => state.auth.user)
+  // const user = useSelector((state) => state.auth.user)
   const [fittingImage, setFittingImage] = useState('')
   const [isDefaultPage, setIsDefaultPage] = useState(true)
+  const [isShowAlert, setIsShowAlert] = useState(false)
+  const [errorCode, setErrorCode] = useState(null)
 
-  return (
-    <>
-      <Navigation />
-      <div
-        className={styles.mainContainer}
-        style={{ backgroundImage: `url(${shoppingImage})` }}
-      >
-        <div className="empty-space" />
-        <LeftFitContainer
-          fittingImage={fittingImage}
-          isDefaultPage={isDefaultPage}
+  const lsUser = JSON.parse(localStorage.getItem('user'))
+  const lsToken = localStorage.getItem('token')
+
+  const showAlert = (time = 3000) => {
+    setIsShowAlert(true)
+    setTimeout(() => {
+      setIsShowAlert(false)
+    }, 3000)
+  }
+
+  if (lsUser && lsToken) {
+    return (
+      <>
+        <Navigation />
+        <div
+          className={styles.mainContainer}
+          style={{ backgroundImage: `url(${shoppingImage})` }}
+        >
+          <div className="empty-space" />
+          <LeftFitContainer
+            fittingImage={fittingImage}
+            isDefaultPage={isDefaultPage}
+            setErrorCode={setErrorCode}
+            showAlert={showAlert}
+          />
+          <div className="empty-space" />
+          <RightFitContainer
+            setFittingImage={setFittingImage}
+            setIsDefaultPage={setIsDefaultPage}
+          />
+          <div className="empty-space" />
+        </div>
+        <FittingPageAlert
+          errorCode={errorCode}
+          isShowAlert={isShowAlert}
+          setIsShowAlert={setIsShowAlert}
         />
-        <div className="empty-space" />
-        <RightFitContainer
-          setFittingImage={setFittingImage}
-          setIsDefaultPage={setIsDefaultPage}
-        />
-        <div className="empty-space" />
-      </div>
-    </>
-  )
+      </>
+    )
+  } else {
+    return <Navigate to={'/'} />
+  }
 }
 export default FittingPage

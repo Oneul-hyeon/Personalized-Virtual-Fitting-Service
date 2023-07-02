@@ -4,7 +4,7 @@ import LeftSubMyPage from './LeftSubMyPage'
 import RightSubMyPage from './RightSubMyPage'
 import Navigation from '../Navigationbar/Nav.js'
 import { Navigate } from 'react-router-dom'
-import AlertMessage from './AlertMessage'
+import AlertMessage from '../common/AlertMessage'
 
 function MyPage({ currPage = 'privacy' }) {
   const [page, setPage] = useState(currPage)
@@ -22,7 +22,6 @@ function MyPage({ currPage = 'privacy' }) {
   if (lsUser && lsToken) {
     return (
       <>
-        <div className={styles.myPageRoot}></div>
         <Navigation />
         <div className={styles.mainContainer}>
           <LeftSubMyPage page={page} onClickHandler={changePage} />

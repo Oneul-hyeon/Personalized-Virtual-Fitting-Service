@@ -7,7 +7,14 @@ import styles from './FittingPage.module.css'
 import axios from 'axios'
 import { API_URL } from '../../api/apiConfig'
 
-function LeftFitContainer({ fittingImage, isDefaultPage }) {
+// import peopleTest from '../../images/people-test.png'
+
+function LeftFitContainer({
+  setErrorCode,
+  showAlert,
+  fittingImage,
+  isDefaultPage,
+}) {
   const [image, setImage] = useState('')
 
   useEffect(() => {
@@ -36,7 +43,7 @@ function LeftFitContainer({ fittingImage, isDefaultPage }) {
 
   return (
     <div>
-      <ButtonBar />
+      <ButtonBar setErrorCode={setErrorCode} showAlert={showAlert} />
       <div className={styles.imageContainer}>
         <img
           className={styles.mainImage}

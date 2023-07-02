@@ -1,7 +1,7 @@
 import styles from './MyPage.module.css'
 import profileImage from '../../images/profile.jpg'
 import Proptypes from 'prop-types'
-import ClassMerger from '../tools/ClassNameGenerater'
+import ClassMerger from '../common/ClassNameGenerater'
 
 // 선택된 버튼에 주황색 넣어주는 함수
 function TransButton({ context, option, page, onClick }) {

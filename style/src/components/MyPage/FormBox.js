@@ -1,4 +1,4 @@
-import ClassMerger from '../tools/ClassNameGenerater'
+import ClassMerger from '../common/ClassNameGenerater'
 // import Proptypes from 'prop-types'
 import { Form } from 'react-bootstrap'
 import styles from './MyPage.module.css'
