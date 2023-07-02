@@ -3,7 +3,12 @@ import MyPrivacy from './MyPrivacy'
 import MySize from './MySize'
 import { useSelector } from 'react-redux'
 
-function RightSubMyPage({ page, setIsShowAlert, setIsSaveComplete }) {
+function RightSubMyPage({
+  page,
+  setIsShowAlert,
+  setIsSaveComplete,
+  setErrorCode,
+}) {
   // 새로고침 or 제출 버튼 누르면 웹 페이지 리프레쉬 되면서 redux 초기화 됨
   // redux 초기화 되면서 user에 저장된 데이터 없어져서 오류 발생.
   const user = useSelector((state) => state.auth.user)
@@ -15,6 +20,7 @@ function RightSubMyPage({ page, setIsShowAlert, setIsSaveComplete }) {
           userId={user._id}
           setIsShowAlert={setIsShowAlert}
           setIsSaveComplete={setIsSaveComplete}
+          setErrorCode={setErrorCode}
         />
       )
     case 'size':
@@ -23,6 +29,7 @@ function RightSubMyPage({ page, setIsShowAlert, setIsSaveComplete }) {
           userId={user._id}
           setIsShowAlert={setIsShowAlert}
           setIsSaveComplete={setIsSaveComplete}
+          setErrorCode={setErrorCode}
         />
       )
     // case 'closet':

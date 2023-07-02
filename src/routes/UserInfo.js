@@ -37,7 +37,7 @@ router.get('/api/info', async (req, res) => {
   const { userId } = req.query
 
   try {
-    const user = await User.findById(userId)
+    const user = await User.findById({ _id: userId })
     if (!user) {
       return res
         .status(404)
@@ -50,6 +50,35 @@ router.get('/api/info', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'An error occurred during user lookup.',
+    })
+  }
+})
+
+router.put('/api/privacy', async (req, res) => {
+  //   const user = JSON.parse(req.body)
+  const user = req.body
+  const userId = user.userId
+  console.log(user)
+
+  const update = {
+    $set: user,
+  }
+
+  try {
+    const result = await User.findByIdAndUpdate({ _id: userId }, update)
+
+    // if (result) {}
+    res.status(201).json({ success: true, code: 0, user: result })
+  } catch (error) {
+    // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    // console.log(error.code)
+    // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    // console.error(error.code, error.message)
+    res.status(500).json({
+      success: false,
+      code: error.code,
+      // message: 'An error occurred while updating the document.',
+      message: 'An',
     })
   }
 })

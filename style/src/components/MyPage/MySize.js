@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import authenticatedAxios from '../../api/authenticatedAxios'
 import { API_URL } from '../../api/apiConfig'
 
-function MySize({ userId, setIsShowAlert, setIsSaveComplete }) {
+function MySize({ userId, setIsShowAlert, setIsSaveComplete, setErrorCode }) {
   const [height, setHeight] = useState(0)
   const [weight, setWeight] = useState(0)
   const [shoulderWidth, SetshoulderWidth] = useState(0)
