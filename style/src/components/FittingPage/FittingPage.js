@@ -6,7 +6,9 @@ import AlertMessage from '../common/AlertMessage'
 
 import styles from './FittingPage.module.css'
 
-import React, { useState } from 'react'
+import React from 'react'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import shoppingImage from '../../images/shopping-mall.png'
 import { Navigate } from 'react-router-dom'
@@ -14,6 +16,8 @@ import FittingPageAlert from './FittingPageAlert'
 
 function FittingPage() {
   // const user = useSelector((state) => state.auth.user)
+  const [fittingImage, setFittingImage] = useState('')
+  const [isDefaultPage, setIsDefaultPage] = useState(true)
   const [isShowAlert, setIsShowAlert] = useState(false)
   const [errorCode, setErrorCode] = useState(null)
 
@@ -36,9 +40,17 @@ function FittingPage() {
           style={{ backgroundImage: `url(${shoppingImage})` }}
         >
           <div className="empty-space" />
-          <LeftFitContainer setErrorCode={setErrorCode} showAlert={showAlert} />
+          <LeftFitContainer
+            fittingImage={fittingImage}
+            isDefaultPage={isDefaultPage}
+            setErrorCode={setErrorCode}
+            showAlert={showAlert}
+          />
           <div className="empty-space" />
-          <RightFitContainer />
+          <RightFitContainer
+            setFittingImage={setFittingImage}
+            setIsDefaultPage={setIsDefaultPage}
+          />
           <div className="empty-space" />
         </div>
         <FittingPageAlert

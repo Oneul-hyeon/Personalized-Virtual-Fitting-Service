@@ -9,7 +9,12 @@ import { API_URL } from '../../api/apiConfig'
 
 // import peopleTest from '../../images/people-test.png'
 
-function LeftFitContainer({ setErrorCode, showAlert }) {
+function LeftFitContainer({
+  setErrorCode,
+  showAlert,
+  fittingImage,
+  isDefaultPage,
+}) {
   const [image, setImage] = useState('')
 
   useEffect(() => {
@@ -33,17 +38,18 @@ function LeftFitContainer({ setErrorCode, showAlert }) {
     }
     fetchData()
   }, [])
+
+  const defaultImageUrl = image
+
   return (
     <div>
       <ButtonBar setErrorCode={setErrorCode} showAlert={showAlert} />
       <div className={styles.imageContainer}>
-        {image && (
-          <img
-            className={styles.fittingImage}
-            src={image}
-            alt="after-fitting"
-          />
-        )}
+        <img
+          className={styles.mainImage}
+          src={isDefaultPage ? defaultImageUrl : fittingImage}
+          alt="userImage"
+        />
       </div>
     </div>
   )

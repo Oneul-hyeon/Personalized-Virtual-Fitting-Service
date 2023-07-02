@@ -73,6 +73,9 @@ app.use('/users', logoutRouter)
 const infoRouter = require('./routes/UserInfo')
 app.use('/userInfo', infoRouter)
 
+const fittingRouter = require('./routes/FittingImage')
+app.use('/api', fittingRouter)
+
 const clothRouter = require('./routes/Clothes')
 app.use('/cloth', clothRouter)
 

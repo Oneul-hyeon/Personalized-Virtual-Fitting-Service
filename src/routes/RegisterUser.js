@@ -63,23 +63,33 @@ router.post(
       }
 
       // 사이즈 받아오기
-      const responseFromAIApi = await axios.post(
-        aiApiEndpoint,
-        {
-          imageUrl: file,
-          height,
-          weight,
-          userId: newUser._id,
-          callbackUrl: `${webAPI}/api/size`,
-        },
-        { timeout: 15000 }
-      )
+      const responseFromAIApi = await axios.post(aiApiEndpoint, {
+        height,
+        weight,
+      })
 
       if (responseFromAIApi.data.error) {
         console.error('Error from AI API:', responseFromAIApi.data.error)
         res.status(500).json({ success: false, error: 'AI API failed.' })
         return
       }
+
+      const { length, shoulderWidth, chestWidth } = responseFromAIApi.data.size
+
+      // 사이즈 프로필 생성 및 저장
+      const newSizeProfile = new SizeProfile({
+        userId: newUser._id,
+        length,
+        shoulderWidth,
+        chestWidth,
+      })
+
+      await newSizeProfile.save()
+
+      // 사용자 정보 업데이트
+      await User.findByIdAndUpdate(newUser._id, {
+        sizeProfile: newSizeProfile._id,
+      })
 
       // 자동로그인
       const { _id, email } = newUser
