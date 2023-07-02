@@ -25,6 +25,7 @@ function ButtonBar({ setErrorCode, showAlert }) {
   const uploadmodelBg = useRef()
   const mouseDownEvent = useRef()
   const mouseUpEvent = useRef()
+  const closeModalBtn = useRef()
 
   const handleInputUrl = (e) => {
     setInputUrl(e.target.value)
@@ -59,10 +60,17 @@ function ButtonBar({ setErrorCode, showAlert }) {
   }
 
   const handleModalClose = (event) => {
-    // 모달창 바깥부분 클릭하면 모달창 닫히게 만들어줌
+    // close 버튼 누른 경우 창 닫기
+    if (
+      mouseDownEvent.current === closeModalBtn.current &&
+      mouseUpEvent.current === closeModalBtn.current
+    ) {
+      setIsModalOpen(false)
+    }
+    // 모달창 바깥 클릭 시 창 닫기
     // 바깥 -(드래그)-> 안, 안 -(드래그)-> 밖도 꺼지지 않게 함
     // 위 경우도 꺼지게 하는 조건 (event.current === uploadmodelBg.current)
-    if (
+    else if (
       mouseDownEvent.current === uploadmodelBg.current &&
       mouseUpEvent.current === uploadmodelBg.current
     ) {
@@ -145,7 +153,9 @@ function ButtonBar({ setErrorCode, showAlert }) {
             </div>
             <div className={styles.modalButtonContainer}>
               <button onClick={handleImgUploadClick}>Upload</button>
-              <button onClick={handleModalClose}>Close</button>
+              <button onClick={handleModalClose} ref={closeModalBtn}>
+                Close
+              </button>
             </div>
           </div>
         </div>
