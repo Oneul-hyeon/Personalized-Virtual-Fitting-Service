@@ -46,7 +46,7 @@ function LeftSubMyPage({ page, onClickHandler }) {
         page={page}
         onClick={onClickHandler}
       />
-      <TransButton
+      {/* <TransButton
         context={'옷장'}
         option={'closet'}
         page={page}
@@ -57,7 +57,7 @@ function LeftSubMyPage({ page, onClickHandler }) {
         option={'style'}
         page={page}
         onClick={onClickHandler}
-      />
+      /> */}
     </div>
   )
 }

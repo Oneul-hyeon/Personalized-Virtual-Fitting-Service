@@ -1,5 +1,5 @@
 import ClassMerger from '../tools/ClassNameGenerater'
-import Proptypes from 'prop-types'
+// import Proptypes from 'prop-types'
 import { Form } from 'react-bootstrap'
 import styles from './MyPage.module.css'
 
@@ -11,8 +11,9 @@ function FormBox({
   max,
   pattern,
   setState,
-  inputHandler,
   value,
+  isInvalid,
+  invalidTest,
   disabled = false,
 }) {
   return (
@@ -28,29 +29,30 @@ function FormBox({
         max={max}
         pattern={pattern}
         disabled={disabled}
-        isInvalid={true}
+        isInvalid={isInvalid}
         value={value}
+        formNoValidate
         onChange={(event) => {
-          console.log(event)
-          inputHandler(event, setState)
+          const input = event.target.value
+          setState(input)
         }}
       />
-      <Form.Control.Feedback type="invalid" isInvalid={true}>
-        패턴에 맞지 않는 값입니다.
+      <Form.Control.Feedback type="invalid">
+        {invalidTest}
       </Form.Control.Feedback>
     </Form.Group>
   )
 }
 
-FormBox.propTypes = {
-  id: Proptypes.string.isRequired,
-  label: Proptypes.string.isRequired,
-  type: Proptypes.string.isRequired,
-  data: Proptypes.string.isRequired,
-  min: Proptypes.string,
-  max: Proptypes.string,
-  pattern: Proptypes.string,
-  disabled: Proptypes.bool,
-}
+// FormBox.propTypes = {
+//   id: Proptypes.string.isRequired,
+//   label: Proptypes.string.isRequired,
+//   type: Proptypes.string.isRequired,
+//   min: Proptypes.string,
+//   max: Proptypes.string,
+//   pattern: Proptypes.string,
+//   setState: Proptypes.func,
+//   disabled: Proptypes.bool,
+// }
 
 export default FormBox
