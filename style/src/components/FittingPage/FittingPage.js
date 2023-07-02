@@ -2,31 +2,54 @@ import Navigation from '../Navigationbar/Nav'
 
 import LeftFitContainer from './LeftFitContainer'
 import RightFitContainer from './RightFitContainer'
+import AlertMessage from '../common/AlertMessage'
 
 import styles from './FittingPage.module.css'
 
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState } from 'react'
 
 import shoppingImage from '../../images/shopping-mall.png'
+import { Navigate } from 'react-router-dom'
+import FittingPageAlert from './FittingPageAlert'
 
 function FittingPage() {
-  const user = useSelector((state) => state.auth.user)
+  // const user = useSelector((state) => state.auth.user)
+  const [isShowAlert, setIsShowAlert] = useState(false)
+  const [errorCode, setErrorCode] = useState(null)
 
-  return (
-    <>
-      <Navigation />
-      <div
-        className={styles.mainContainer}
-        style={{ backgroundImage: `url(${shoppingImage})` }}
-      >
-        <div className="empty-space" />
-        <LeftFitContainer />
-        <div className="empty-space" />
-        <RightFitContainer />
-        <div className="empty-space" />
-      </div>
-    </>
-  )
+  const lsUser = JSON.parse(localStorage.getItem('user'))
+  const lsToken = localStorage.getItem('token')
+
+  const showAlert = (time = 3000) => {
+    setIsShowAlert(true)
+    setTimeout(() => {
+      setIsShowAlert(false)
+    }, 3000)
+  }
+
+  if (lsUser && lsToken) {
+    return (
+      <>
+        <Navigation />
+        <div
+          className={styles.mainContainer}
+          style={{ backgroundImage: `url(${shoppingImage})` }}
+        >
+          <div className="empty-space" />
+          <LeftFitContainer setErrorCode={setErrorCode} showAlert={showAlert} />
+          <div className="empty-space" />
+          <RightFitContainer />
+          <div className="empty-space" />
+        </div>
+        <FittingPageAlert
+          errorCode={errorCode}
+          isShowAlert={isShowAlert}
+          setIsShowAlert={setIsShowAlert}
+        />
+      </>
+    )
+  } else {
+    return <Navigate to={'/'} />
+  }
 }
 export default FittingPage

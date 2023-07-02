@@ -1,4 +1,4 @@
-import ClassMerger from '../tools/ClassNameGenerater'
+import ClassMerger from '../common/ClassNameGenerater'
 import styles from './MyPage.module.css'
 import FormBox from './SizeFormBox'
 import { useState, useEffect } from 'react'

@@ -9,7 +9,7 @@ import { API_URL } from '../../api/apiConfig'
 
 // import peopleTest from '../../images/people-test.png'
 
-function LeftFitContainer() {
+function LeftFitContainer({ setErrorCode, showAlert }) {
   const [image, setImage] = useState('')
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function LeftFitContainer() {
   }, [])
   return (
     <div>
-      <ButtonBar />
+      <ButtonBar setErrorCode={setErrorCode} showAlert={showAlert} />
       <div className={styles.imageContainer}>
         {image && (
           <img

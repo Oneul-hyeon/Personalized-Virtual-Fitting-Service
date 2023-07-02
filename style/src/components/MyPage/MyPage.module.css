@@ -94,23 +94,6 @@
     position: absolute;
 
 }
-/* .alert { 
-    position: none;
-} */
-/* #alertMessageBox {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-} */
-.alertMessageBox {
-    /* all: unset; */
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-}
 
 .formGroup {
     padding-right: var(--rightContainer-padding-left);
