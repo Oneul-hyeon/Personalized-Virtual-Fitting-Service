@@ -7,9 +7,7 @@ import styles from './FittingPage.module.css'
 import axios from 'axios'
 import { API_URL } from '../../api/apiConfig'
 
-// import peopleTest from '../../images/people-test.png'
-
-function LeftFitContainer() {
+function LeftFitContainer({ fittingImage, isDefaultPage }) {
   const [image, setImage] = useState('')
 
   useEffect(() => {
@@ -33,17 +31,18 @@ function LeftFitContainer() {
     }
     fetchData()
   }, [])
+
+  const defaultImageUrl = image
+
   return (
     <div>
       <ButtonBar />
       <div className={styles.imageContainer}>
-        {image && (
-          <img
-            className={styles.fittingImage}
-            src={image}
-            alt="after-fitting"
-          />
-        )}
+        <img
+          className={styles.mainImage}
+          src={isDefaultPage ? defaultImageUrl : fittingImage}
+          alt="userImage"
+        />
       </div>
     </div>
   )

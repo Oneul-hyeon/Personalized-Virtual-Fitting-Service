@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const ImageUploader = require('./ImageUploader')
-const { sendFittingRequest } = require('./FittingImage')
+const Closet = require('../models/Closet')
 
 router.post(
-  '/api/upload',
+  '/api/cloth-upload',
   (req, res, next) => {
     req.query.type = 'clothing'
     ImageUploader.single('clothingImage')(req, res, (error) => {
@@ -32,32 +32,29 @@ router.post(
       })
     }
 
-    // 이미지 URL을 생성합니다.
+    // 이미지 URL을 생성
     const clothingImageUrl = req.file.location
-
-    // 이미지 업로드 후 sendFittingRequest 함수 호출
+    // 새 Closet 생성 및 저장
     try {
-      const fittingImageUrl = await sendFittingRequest(userId, clothingImageUrl)
+      const newCloset = new Closet({
+        userId: userId,
+        clothesUrl: req.query.clothesUrl,
+        clothesImageLink: clothingImageUrl,
+      })
 
-      // sendFittingRequest 실패
-      if (!fittingImageUrl) {
-        return res.status(500).json({
-          success: false,
-          error: 'Fitting image generation failed.',
-        })
-      }
+      const savedCloset = await newCloset.save()
 
-      // sendFittingRequest 성공
-      res.status(201).json({
+      // 성공적으로 저장된 경우 응답
+      res.status(200).json({
         success: true,
-        message: 'Image uploaded and fitted successfully.',
-        imageUrl: clothingImageUrl,
-        fittingImageUrl: fittingImageUrl,
+        message: 'Closet entry created successfully.',
+        savedCloset,
       })
     } catch (error) {
+      console.error('Error saving to Closet:', error)
       res.status(500).json({
         success: false,
-        error: 'Image upload or fitting failed.',
+        error: 'Error saving to Closet.',
       })
     }
   }

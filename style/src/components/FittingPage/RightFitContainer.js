@@ -10,10 +10,7 @@ import { API_URL } from '../../api/apiConfig'
 import searchImage from '../../images/search.png'
 import axios from 'axios'
 
-// import clothes1 from '../../images/test_clothes1.png'
-// import clothes2 from '../../images/test_clothes2.png'
-
-function RightFitContainer() {
+function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
   const [mainMenu, setMainMenu] = useState('closet')
   const [subMenu1, setSubMenu1] = useState('all')
   const [subMenu2, setSubMenu2] = useState('all')
@@ -49,6 +46,37 @@ function RightFitContainer() {
         index === indexToToggle ? { ...item, favorite: !item.favorite } : item
       )
     )
+  }
+
+  //피팅
+  const handleFittingCloth = async (clothUrl) => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user || !user._id) {
+      console.error('User ID not found')
+      return
+    }
+    const userId = user._id
+    try {
+      const response = await fetch('/api/fitting', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, clothUrl }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        console.log(data.fittingImageLink)
+
+        setFittingImage(data.fittingImageLink)
+        setIsDefaultPage(false)
+      } else {
+        console.error('Error loading fitting image')
+      }
+    } catch (error) {
+      console.error('Fitting Request Error:', error)
+    }
   }
 
   return (
@@ -210,6 +238,7 @@ function RightFitContainer() {
               favorite={item.favorite}
               onHeartClick={toggleFavorite}
               consolea={clothes}
+              handleFittingCloth={handleFittingCloth}
             />
           ))}
         </div>
@@ -219,7 +248,14 @@ function RightFitContainer() {
 }
 export default RightFitContainer
 
-function ClothesElement({ index, src, favorite, onHeartClick, consolea }) {
+function ClothesElement({
+  index,
+  src,
+  favorite,
+  onHeartClick,
+  consolea,
+  handleFittingCloth,
+}) {
   return (
     <div className={styles.clothesElement}>
       <div className={styles.clothesInner}>
@@ -236,7 +272,12 @@ function ClothesElement({ index, src, favorite, onHeartClick, consolea }) {
             <FontAwesomeIcon icon={regular('heart')} />
           )}
         </button>
-        <button className={styles.wearingBtn}>
+        <button
+          className={styles.wearingBtn}
+          onClick={() => {
+            handleFittingCloth(src)
+          }}
+        >
           <FontAwesomeIcon icon={solid('shirt')} />
         </button>
         <button className={styles.removeBtn}>
@@ -247,4 +288,5 @@ function ClothesElement({ index, src, favorite, onHeartClick, consolea }) {
     </div>
   )
 }
+
 const MemoClothesElement = memo(ClothesElement)
