@@ -39,7 +39,6 @@ router.get('/api/info', async (req, res) => {
         .status(404)
         .json({ success: false, message: 'The user was not found.' })
     }
-
     res.status(201).json({ success: true, user })
   } catch (error) {
     console.error('User lookup errors :', error)

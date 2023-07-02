@@ -6,7 +6,7 @@ const fittingApiUrl = process.env.AI_FITTING_API_URL
 
 // 피팅 이미지 요청을 보내는 함수
 async function sendFittingRequest(userId, clothingImageUrl) {
-  const callbackUrl = `${webApiUrl}/api/fitting-image`
+  const callbackUrl = `${webApiUrl}/api/fitting`
 
   try {
     const response = await axios.post(fittingApiUrl, {

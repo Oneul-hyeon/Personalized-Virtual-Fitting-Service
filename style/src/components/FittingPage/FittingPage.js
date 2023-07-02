@@ -10,13 +10,6 @@ import { useSelector } from 'react-redux'
 
 import shoppingImage from '../../images/shopping-mall.png'
 
-{
-  /* {user && (
-  <div>
-    <h2>환영합니다, {user.email}님!</h2>
-  </div>
-)} */
-}
 function FittingPage() {
   const user = useSelector((state) => state.auth.user)
 

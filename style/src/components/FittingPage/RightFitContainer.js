@@ -5,21 +5,43 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 import styles from './FittingPage.module.css'
+import { API_URL } from '../../api/apiConfig'
 
 import searchImage from '../../images/search.png'
-import clothes1 from '../../images/test_clothes1.png'
-import clothes2 from '../../images/test_clothes2.png'
+import axios from 'axios'
+
+// import clothes1 from '../../images/test_clothes1.png'
+// import clothes2 from '../../images/test_clothes2.png'
 
 function RightFitContainer() {
   const [mainMenu, setMainMenu] = useState('closet')
   const [subMenu1, setSubMenu1] = useState('all')
   const [subMenu2, setSubMenu2] = useState('all')
-  const [clothes, setClothes] = useState([
-    { src: clothes1, favorite: false },
-    { src: clothes2, favorite: false },
-    { src: clothes1, favorite: false },
-  ])
+  const [clothes, setClothes] = useState([])
   const list_subMenu1 = ['all', 'top', 'bottom']
+
+  //서버에서 clothes 이미지 데이터를 가져오는 함수
+  const fetchClothesImages = async () => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user || !user._id) {
+      console.error('User ID not found')
+      return
+    }
+    const userId = user._id
+    try {
+      const response = await axios.get(`${API_URL}/cloth/api/clothes`, {
+        params: {
+          userId: userId,
+        },
+      })
+      setClothes(response.data.map((image) => ({ src: image })))
+    } catch (err) {
+      console.error('Error fetching clothes images:', err)
+    }
+  }
+  useEffect(() => {
+    fetchClothesImages()
+  }, [])
 
   const toggleFavorite = (indexToToggle) => {
     setClothes(
