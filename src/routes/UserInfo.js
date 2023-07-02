@@ -20,12 +20,8 @@ const SizeProfile = mongoose.model('sizeProfiles', sizeProfileSchema)
 // 사이즈 : backend -> frontend
 router.get('/api/size', async (req, res) => {
   const { userId } = req.query
-  console.log(`get /userInfo/api/size ${userId}`)
-
   try {
     const sizeProfile = await SizeProfile.findOne({ userId: userId })
-    console.log(sizeProfile)
-
     res.status(201).json({ success: true, message: sizeProfile })
   } catch (error) {
     console.error('Error finding size :', error)
@@ -43,7 +39,7 @@ router.get('/api/info', async (req, res) => {
         .status(404)
         .json({ success: false, message: 'The user was not found.' })
     }
-    console.log(user)
+
     res.status(201).json({ success: true, user })
   } catch (error) {
     console.error('User lookup errors :', error)
@@ -54,11 +50,10 @@ router.get('/api/info', async (req, res) => {
   }
 })
 
+// 사용자 정보 업데이트
 router.put('/api/privacy', async (req, res) => {
-  //   const user = JSON.parse(req.body)
   const user = req.body
   const userId = user.userId
-  console.log(user)
 
   const update = {
     $set: user,
@@ -67,18 +62,33 @@ router.put('/api/privacy', async (req, res) => {
   try {
     const result = await User.findByIdAndUpdate({ _id: userId }, update)
 
-    // if (result) {}
     res.status(201).json({ success: true, code: 0, user: result })
   } catch (error) {
-    // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-    // console.log(error.code)
-    // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-    // console.error(error.code, error.message)
     res.status(500).json({
       success: false,
       code: error.code,
-      // message: 'An error occurred while updating the document.',
-      message: 'An',
+      message: 'An error occurred while updating the document.',
+    })
+  }
+})
+
+// 사용자 신체 이미지 경로 전송
+router.get('/api/userimage', async (req, res) => {
+  const { userId } = req.query
+
+  try {
+    const user = await User.findById(userId)
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'The user was not found.' })
+    }
+    res.status(200).json({ success: true, image: user.file })
+  } catch (error) {
+    console.error('User lookup errors :', error)
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred during user lookup.',
     })
   }
 })
