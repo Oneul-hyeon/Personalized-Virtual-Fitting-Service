@@ -7,6 +7,10 @@
 
 @import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
 
+.myPageRoot {
+    position: relative;
+}
+
 .mainContainer {
     --nav-height : 95px;
     --max-width : 1920px;
@@ -86,12 +90,34 @@
     padding-left: var(--rightContainer-padding-left);
 }
 
+.alertContainer {
+    position: absolute;
+
+}
+/* .alert { 
+    position: none;
+} */
+/* #alertMessageBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+} */
+.alertMessageBox {
+    /* all: unset; */
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
 .formGroup {
     padding-right: var(--rightContainer-padding-left);
 }
 
 .formLabel {
-    margin: 0px;
+    margin: 0px 0px 8px 0px;
     padding: 0px;
 }
 
@@ -105,6 +131,48 @@
     font-family: 'NanumSquare';
     font-size: 18px;
     font-weight: 600;
+}
+
+.maleButton {
+    width: 250px;
+    height: 46px;
+    border: 2px solid #d7d7d7;
+    border-radius: 14px;
+    background-color: white;
+    margin-right: 18px;
+
+    color: #6d6d6d;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.2s ease-out;
+}
+
+.maleSelected,
+.maleButton:hover {
+    background-color: #c0dfff;
+    color: black;
+}
+
+.femaleButton {
+    width: 250px;
+    height: 46px;
+    border: 2px solid #d7d7d7;
+    border-radius: 14px;
+    background-color: white;
+    margin-left: 18px;
+
+    color: #6d6d6d;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.2s ease-out;
+}
+
+.femaleSelected,
+.femaleButton:hover {
+    background-color: #fca8a5;
+    color: black;
 }
 
 .submitWarpper {

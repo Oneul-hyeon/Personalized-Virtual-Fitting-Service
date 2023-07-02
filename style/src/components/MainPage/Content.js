@@ -8,11 +8,8 @@ import sizeListIcon1 from '../../images/sizeListIcon1.png'
 import sizeListIcon2 from '../../images/sizeListIcon2.png'
 import GrayButton from './GrayButton'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
 function Content() {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
-  console.log(`auth1 : ${isAuthenticated}`)
   return (
     <div className="mainPageContent">
       <section className="homeMainSection">
