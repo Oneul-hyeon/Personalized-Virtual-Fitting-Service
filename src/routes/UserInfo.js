@@ -20,12 +20,8 @@ const SizeProfile = mongoose.model('sizeProfiles', sizeProfileSchema)
 // 사이즈 : backend -> frontend
 router.get('/api/size', async (req, res) => {
   const { userId } = req.query
-  console.log(`get /userInfo/api/size ${userId}`)
-
   try {
     const sizeProfile = await SizeProfile.findOne({ userId: userId })
-    console.log(sizeProfile)
-
     res.status(201).json({ success: true, message: sizeProfile })
   } catch (error) {
     console.error('Error finding size :', error)
@@ -37,7 +33,7 @@ router.get('/api/info', async (req, res) => {
   const { userId } = req.query
 
   try {
-    const user = await User.findById(userId)
+    const user = await User.findById({ _id: userId })
     if (!user) {
       return res
         .status(404)
@@ -49,6 +45,28 @@ router.get('/api/info', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'An error occurred during user lookup.',
+    })
+  }
+})
+
+// 사용자 정보 업데이트
+router.put('/api/privacy', async (req, res) => {
+  const user = req.body
+  const userId = user.userId
+
+  const update = {
+    $set: user,
+  }
+
+  try {
+    const result = await User.findByIdAndUpdate({ _id: userId }, update)
+
+    res.status(201).json({ success: true, code: 0, user: result })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      code: error.code,
+      message: 'An error occurred while updating the document.',
     })
   }
 })
