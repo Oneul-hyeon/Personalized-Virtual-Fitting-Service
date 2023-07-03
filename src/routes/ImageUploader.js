@@ -2,6 +2,7 @@ const aws = require('@aws-sdk/client-s3')
 const multer = require('multer')
 const multers3 = require('multer-s3')
 const path = require('path')
+const { ObjectId } = require('mongodb')
 
 const { S3Client, PutObjectCommand } = aws
 
@@ -26,7 +27,14 @@ const ImageUploader = multer({
     s3: s3,
     bucket: 'bigprogect-bucket',
     key: (req, file, callback) => {
-      const userId = req.body.userId || req.query.userId
+      /*
+      회원가입 시 신체 이미지 업로드 하면 아직 DB에 컬럼이 없음.
+        => userId 필드는 무조건 undefined가 됨.
+        => s3/undefined/에 이미지가 저장 됨
+        => id를 생성할 수 있게 [ ?? new ObjectId().toString() ] 추가
+      */
+      const userId =
+        (req.body.userId || req.query.userId) ?? new ObjectId().toString()
       const uploadDirectory = req.query.directory ?? userId
       const extension = path.extname(file.originalname)
       if (!allowedExtensions.includes(extension)) {

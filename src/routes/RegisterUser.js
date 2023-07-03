@@ -27,6 +27,8 @@ router.post(
       favoriteStyle,
     } = req.body
     const file = req.file ? req.file.location : undefined
+    // 저장한 파일 경로에서 userID 추출
+    const userId = req.file.key.split('/')[0]
 
     try {
       const userExists = await User.findOne({ email: userEmail })
@@ -40,6 +42,7 @@ router.post(
 
       // 새로운 사용자 생성 및 저장
       const newUser = new User({
+        _id: userId,
         email: userEmail,
         name,
         phoneNumber,
@@ -63,9 +66,8 @@ router.post(
       }
 
       // 사이즈 받아오기
-      const responseFromAIApi = await axios.post(aiApiEndpoint, {
-        height,
-        weight,
+      const responseFromAIApi = await axios.get(aiApiEndpoint, {
+        params: { height: height, weight: weight },
       })
 
       if (responseFromAIApi.data.error) {
