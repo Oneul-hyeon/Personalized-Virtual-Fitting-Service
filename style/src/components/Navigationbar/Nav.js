@@ -52,13 +52,13 @@ function Navigation() {
             <Nav.Link as={NavLink} to="/fitting" activeClassName="active-link">
               피팅
             </Nav.Link>
-            <Nav.Link
+            {/* <Nav.Link
               as={NavLink}
               to="/recommend"
               activeClassName="active-link"
             >
               코디 추천
-            </Nav.Link>
+            </Nav.Link> */}
             <DropdownMenu />
           </Nav>
           <AuthenticationNav
