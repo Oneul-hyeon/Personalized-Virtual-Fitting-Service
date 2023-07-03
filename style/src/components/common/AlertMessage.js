@@ -4,7 +4,6 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 import styles from './AlertMessage.module.css'
 
 function AlertMessage({ variant, message, show, setShow }) {
-  console.log('up alert')
   return (
     <Alert
       className={styles.alertMessageBox}

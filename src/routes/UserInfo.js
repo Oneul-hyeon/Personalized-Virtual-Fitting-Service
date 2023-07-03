@@ -5,20 +5,16 @@ const router = express.Router()
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 
+const axios = require('axios')
+
 const User = require('../models/User')
+const SizeProfile = require('../models/SizeProfile')
 
-// size api가 없어서, 테스트용으로 임시로 만듦
-const sizeProfileSchema = new Schema({
-  userId: { type: String },
-  length: { type: String },
-  shoulderWidth: { type: String },
-  chestWidth: { type: String },
-})
-
-const SizeProfile = mongoose.model('sizeProfiles', sizeProfileSchema)
+const sizeAPI = process.env.AI_SIZE_API_URL
 
 // 사이즈 : backend -> frontend
 router.get('/api/size', async (req, res) => {
+  console.log('get /userInfo/api/size')
   const { userId } = req.query
   try {
     const sizeProfile = await SizeProfile.findOne({ userId: userId })
@@ -30,6 +26,8 @@ router.get('/api/size', async (req, res) => {
 })
 
 router.get('/api/info', async (req, res) => {
+  console.log('get /userInfo/api/info')
+
   const { userId } = req.query
 
   try {
@@ -51,6 +49,7 @@ router.get('/api/info', async (req, res) => {
 
 // 사용자 정보 업데이트
 router.put('/api/privacy', async (req, res) => {
+  console.log('put /userInfo/api/privacy')
   const user = req.body
   const userId = user.userId
 
@@ -61,12 +60,82 @@ router.put('/api/privacy', async (req, res) => {
   try {
     const result = await User.findByIdAndUpdate({ _id: userId }, update)
 
-    res.status(201).json({ success: true, code: 0, user: result })
+    res.status(201).json({ success: true, code: 'UPDATE_DONE', errno: 0 })
   } catch (error) {
     res.status(500).json({
       success: false,
-      code: error.code,
-      message: 'An error occurred while updating the document.',
+      code: error.codeName,
+      errno: error.code,
+      /* message: 'An error occurred while updating the document.', */
+    })
+  }
+})
+
+// 사이즈 정보 업데이트
+router.put('/api/size', async (req, res) => {
+  console.log('put /userInfo/api/size')
+  const reqSize = req.body
+  const userId = reqSize.userId
+
+  let isShoulderWidthNull = reqSize.shoulderWidth ? false : true
+  let isChestWidthNull = reqSize.chestWidth ? false : true
+  let isLengthNull = reqSize.length ? false : true
+
+  let sizeData = {
+    shoulderWidth: reqSize.shoulderWidth,
+    chestWidth: reqSize.chestWidth,
+    length: reqSize.length,
+  }
+  let userData = { height: reqSize.height, weight: reqSize.weight }
+  let sizeResponse
+
+  // 하나라도 null인 경우 size api 사용해서 값 가져옴
+  if (isShoulderWidthNull || isChestWidthNull || isLengthNull) {
+    sizeResponse = await axios.get(sizeAPI, {
+      params: userData,
+    })
+    // null인 값 sizeRes로 채워줌
+    if (isShoulderWidthNull)
+      sizeData.shoulderWidth = sizeResponse.data.size.shoulderWidth
+    if (isChestWidthNull)
+      sizeData.chestWidth = sizeResponse.data.size.chestWidth
+    if (isLengthNull) sizeData.length = sizeResponse.data.size.length
+
+    if (sizeResponse.data.error) {
+      console.error('Error from AI API:', sizeResponse.data.error)
+      res
+        .status(500)
+        .json({ success: false, code: 'SIZE_API_FAILED', errno: -1 })
+      return
+    }
+  }
+
+  try {
+    const userUpdateRes = await User.findByIdAndUpdate(
+      { _id: userId },
+      {
+        $set: userData,
+      },
+      { new: true }
+    )
+    console.log(userUpdateRes)
+    const sizeUpdateRes = await SizeProfile.findOneAndUpdate(
+      { userId: userId },
+      {
+        $set: sizeData,
+      },
+      { new: true }
+    )
+    console.log(sizeUpdateRes)
+
+    res.status(201).json({ success: true, code: 'UPDATE_DONE', errno: 0 })
+  } catch (error) {
+    console.log('asdofjh')
+    // console.log(error)
+    res.status(500).json({
+      success: false,
+      code: error.codeName,
+      errno: error.code,
     })
   }
 })

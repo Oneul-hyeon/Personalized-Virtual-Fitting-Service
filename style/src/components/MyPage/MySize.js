@@ -5,29 +5,53 @@ import { useState, useEffect } from 'react'
 
 import authenticatedAxios from '../../api/authenticatedAxios'
 import { API_URL } from '../../api/apiConfig'
+import { updateSize } from '../User/UpdateInfo'
 
-function MySize({ userId, setIsShowAlert, setIsSaveComplete, setErrorCode }) {
+function MySize({ userId, showAlert, setErrorCode }) {
   const [height, setHeight] = useState(0)
   const [weight, setWeight] = useState(0)
   const [shoulderWidth, SetshoulderWidth] = useState(0)
   const [chestWidth, setChestWidth] = useState(0)
   const [length, setLength] = useState(0)
 
+  const [isHeightInvalid, setIsHeightInvalid] = useState(0)
+  const [isWeightInvalid, setIsWeightInvalid] = useState(0)
+
   const onSubmit = async (event) => {
     event.preventDefault()
 
-    // 나중에 키/몸무게만 입력 된 경우 size api 사용해서
-    // 나머지 값 채우게 수정 예정
-    if (height && weight && shoulderWidth && chestWidth && length) {
-      const modifySize = {
-        userId: userId,
-        height: height,
-        weight,
-        shoulderWidth: shoulderWidth,
-        chestWidth: chestWidth,
-        length: length,
-      }
+    let modifySize = {}
+    // 키 체크
+    if (height) {
+      setIsHeightInvalid(false)
+      modifySize.height = height
+    } else {
+      setIsHeightInvalid(true)
     }
+    // 몸무게 체크
+    if (weight) {
+      setIsWeightInvalid(false)
+      modifySize.weight = weight
+    } else {
+      setIsWeightInvalid(true)
+    }
+    // 어깨너비
+    if (shoulderWidth) {
+      modifySize.shoulderWidth = shoulderWidth
+    }
+    // 가슴단면
+    if (chestWidth) {
+      modifySize.chestWidth = chestWidth
+    }
+    // 총장
+    if (length) {
+      modifySize.length = length
+    }
+    modifySize.userId = userId
+    updateSize(modifySize).then((result) => {
+      setErrorCode(result.code)
+      showAlert()
+    })
   }
 
   // 신체 정보 fetch
@@ -36,7 +60,8 @@ function MySize({ userId, setIsShowAlert, setIsSaveComplete, setErrorCode }) {
     const fetchSize1 = async () => {
       try {
         const response = await authenticatedAxios.get(
-          `${API_URL}/userInfo/api/size?userId=${userId}`
+          `${API_URL}/userInfo/api/size`,
+          { params: { userId: userId } }
         )
         if (response.status === 200 || response.status === 201) {
           setLength(response.data.message.length)
@@ -57,7 +82,8 @@ function MySize({ userId, setIsShowAlert, setIsSaveComplete, setErrorCode }) {
     const fetchSize2 = async () => {
       try {
         const response = await authenticatedAxios.get(
-          `${API_URL}/userInfo/api/info?userId=${userId}`
+          `${API_URL}/userInfo/api/info`,
+          { params: { userId: userId } }
         )
         if (response.status === 200 || response.status === 201) {
           setHeight(response.data.user.height)
@@ -87,8 +113,10 @@ function MySize({ userId, setIsShowAlert, setIsSaveComplete, setErrorCode }) {
           placeholder={'키'}
           value={height}
           min={0}
-          max={200}
+          max={300}
           setState={setHeight}
+          isInvalid={isHeightInvalid}
+          invalidTest={'키의 값은 1~300 사이여야 합니다.'}
         />
         <FormBox
           id={'weight'}
@@ -98,11 +126,13 @@ function MySize({ userId, setIsShowAlert, setIsSaveComplete, setErrorCode }) {
           min={0}
           max={200}
           setState={setWeight}
+          isInvalid={isWeightInvalid}
+          invalidTest={'몸무게의 값은 1~200 사이여야 합니다.'}
         />
         <FormBox
           id={'shoulderWidth'}
-          label={'어깨너비(cm)'}
-          placeholder={'어깨너비'}
+          label={'가슴단면(cm)'}
+          placeholder={'가슴단면'}
           value={shoulderWidth}
           min={0}
           max={200}
@@ -110,8 +140,8 @@ function MySize({ userId, setIsShowAlert, setIsSaveComplete, setErrorCode }) {
         />
         <FormBox
           id={'chestWidth'}
-          label={'가슴너비(cm)'}
-          placeholder={'가슴너비'}
+          label={'가슴둘레(cm)'}
+          placeholder={'가슴둘레'}
           value={chestWidth}
           min={0}
           max={200}
@@ -119,8 +149,8 @@ function MySize({ userId, setIsShowAlert, setIsSaveComplete, setErrorCode }) {
         />
         <FormBox
           id={'length'}
-          label={'기장(cm)'}
-          placeholder={'기장'}
+          label={'총장(cm)'}
+          placeholder={'총장'}
           value={length}
           min={0}
           max={200}

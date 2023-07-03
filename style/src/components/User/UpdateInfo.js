@@ -22,18 +22,19 @@ export async function updateUser(userData) {
 export async function updateSize(userData) {
   try {
     const response = await authenticatedAxios.put(
-      `${API_URL}/userInfo/api/privacy`,
+      `${API_URL}/userInfo/api/size`,
       userData
     )
+    console.log('in updatesize ')
 
     if (response.status === 200 || response.status === 201) {
-      return { success: true, result: response.data }
+      return response.data
     }
   } catch (error) {
     if (error.response && error.response.status >= 500) {
-      return { success: false, error: 'Server error occurred.' }
+      return error.response.data
     } else {
-      return { success: false, error: error.message }
+      return error.response.data
     }
   }
 }
