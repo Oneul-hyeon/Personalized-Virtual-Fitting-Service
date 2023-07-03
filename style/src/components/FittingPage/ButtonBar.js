@@ -79,7 +79,8 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
   const handleUrlUploadClick = async (event) => {
     try {
       const response = await authenticatedAxios.get(
-        `${API_URL}/cloth/api/clothesFromUrl?url=${inputUrl}`
+        `${API_URL}/cloth/api/clothesFromUrl`,
+        { params: { url: inputUrl } }
       )
 
       setErrorCode(response.data.code)

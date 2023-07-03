@@ -56,9 +56,11 @@ const extractImgSrc = (html) => {
 
   $('img').each((index, element) => {
     const src = $(element).attr('src')
-    if (!checkImageExtension(src)) {
-      return true
-    }
+    // 이미지 확장자로 사진 걸러주는 부분
+    // => 확장자로 끝나지 않는 이미지도 꽤 많아 제거
+    // if (!checkImageExtension(src)) {
+    //   return true
+    // }
     if (src.startsWith('//')) {
       imageSrcList.push('https:' + src)
     } else if (!src.startsWith(':data')) {
