@@ -3,7 +3,7 @@ const router = express.Router()
 const axios = require('axios')
 const https = require('https')
 const User = require('../models/User')
-const Closet = require('../models/Closet')
+const Clothes = require('../models/Closet')
 const fittingApiUrl = process.env.AI_FITTING_API_URL
 
 async function isImageValid(imageUrl) {
@@ -25,7 +25,7 @@ async function isImageValid(imageUrl) {
 
 router.post('/fitting', async (req, res) => {
   try {
-    const { userId, clothUrl } = req.body
+    const { userId, clothID } = req.body
 
     // 사용자 이미지 가져오기
     const user = await User.findOne({ _id: userId })
@@ -33,32 +33,51 @@ router.post('/fitting', async (req, res) => {
       return res.status(404).json({ error: 'User not found' })
     }
     const userImageUrl = user.file
+    const cloth = await Clothes.findOne({ _id: clothID })
+    if (!cloth) {
+      return res.status(404).json({ error: 'Cloth not found' })
+    }
+    const clothImageUrl = cloth.clothesImageLink
 
     // 이미 피팅이미지가 있으면
-    if (Closet && Closet.fittingImageLink) {
-      const isValid = await isImageValid(Closet.fittingImageLink)
+    if (cloth && cloth.fittingImageLink) {
+      const isValid = await isImageValid(cloth.fittingImageLink)
       if (isValid) {
         return res
           .status(200)
-          .json({ fittingImageLink: Closet.fittingImageLink })
+          .json({ fittingImageLink: cloth.fittingImageLink })
       } else {
         console.warn(
           'Stored fittingImageLink is not valid. Fetching new image.'
         )
       }
     }
-
-    const response = await axios.post(fittingApiUrl, {
-      ID: userId,
-      image_url: userImageUrl,
-      cloth_url: clothUrl,
-    })
+    console.log(userId)
+    console.log(userImageUrl)
+    console.log(clothImageUrl)
+    const response = await axios.post(
+      //
+      //fittingApiUrl,
+      null,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+      {
+        params: {
+          ID: userId,
+          image_url: userImageUrl,
+          cloth_url: clothImageUrl,
+        },
+      }
+    )
 
     if (response.data.success) {
       console.log('Fitting request sent successfully.')
 
       const imageUrl = response.data.file_name
-      await Closet.updateOne(
+      await Clothes.updateOne(
         { userId, clothesImageLink: clothUrl },
         { $set: { fittingImageLink: imageUrl } }
       )

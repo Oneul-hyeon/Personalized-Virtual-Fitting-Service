@@ -4,9 +4,9 @@ const bcrypt = require('bcrypt')
 const User = require('../models/User')
 const SizeProfile = require('../models/SizeProfile')
 const jwt = require('jsonwebtoken')
-const ImageUploader = require('./ImageUploader')
+const { ImageUploader } = require('./ImageUploader')
 const axios = require('axios')
-const aiApiEndpoint = process.env.AI_SIZE_API_URL
+const aiSizeApi = process.env.AI_SIZE_API_URL
 
 router.post(
   '/register',
@@ -65,8 +65,19 @@ router.post(
         webAPI = process.env.WEB_API
       }
 
+      // 사용자이미지 전처리 human parse
+      const aiApiParseResponse = await axios.post(process.env.AI_PARSE_API, {
+        params: { ID: userId, image_url: file },
+      })
+
+      if (aiApiParseResponse.data.error) {
+        console.error('Error from AI API:', aiApiParseResponse.data.error)
+        res.status(500).json({ success: false, error: 'AI API failed.' })
+        return
+      }
+
       // 사이즈 받아오기
-      const responseFromAIApi = await axios.get(aiApiEndpoint, {
+      const responseFromAIApi = await axios.get(aiSizeApi, {
         params: { height: height, weight: weight },
       })
 

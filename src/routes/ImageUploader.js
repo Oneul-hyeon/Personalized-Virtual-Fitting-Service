@@ -3,8 +3,9 @@ const multer = require('multer')
 const multers3 = require('multer-s3')
 const path = require('path')
 const { ObjectId } = require('mongodb')
+const url = require('url')
 
-const { S3Client, PutObjectCommand } = aws
+const { S3Client, PutObjectCommand, DeleteObjectCommand } = aws
 
 const s3 = new S3Client({
   region: 'us-east-2',
@@ -62,4 +63,20 @@ const ImageUploader = multer({
   },
 })
 
-module.exports = ImageUploader
+// 이미지 삭제
+const deleteImageFromS3 = async (imageUrl) => {
+  const imageKey = decodeURIComponent(new URL(imageUrl).pathname.substring(1))
+  const params = {
+    Bucket: 'bigprogect-bucket',
+    Key: imageKey,
+  }
+
+  try {
+    const deleteObject = new DeleteObjectCommand(params)
+    await s3.send(deleteObject)
+  } catch (error) {
+    console.error('Error deleting image from S3:', error)
+  }
+}
+
+module.exports = { ImageUploader, deleteImageFromS3 }

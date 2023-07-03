@@ -10,11 +10,14 @@ import { API_URL } from '../../api/apiConfig'
 import searchImage from '../../images/search.png'
 import axios from 'axios'
 
+import LoadingIndicator from '../LoadingIndicator'
+
 function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
   const [mainMenu, setMainMenu] = useState('closet')
   const [subMenu1, setSubMenu1] = useState('all')
   const [subMenu2, setSubMenu2] = useState('all')
   const [clothes, setClothes] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const list_subMenu1 = ['all', 'top', 'bottom']
 
   //서버에서 clothes 이미지 데이터를 가져오는 함수
@@ -31,7 +34,12 @@ function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
           userId: userId,
         },
       })
-      setClothes(response.data.map((image) => ({ src: image })))
+      setClothes(
+        response.data.map((imageItem) => ({
+          id: imageItem._id,
+          src: imageItem.clothesImageLink,
+        }))
+      )
     } catch (err) {
       console.error('Error fetching clothes images:', err)
     }
@@ -49,7 +57,7 @@ function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
   }
 
   //피팅
-  const handleFittingCloth = async (clothUrl) => {
+  const handleFittingCloth = async (clothID) => {
     const user = JSON.parse(localStorage.getItem('user'))
     if (!user || !user._id) {
       console.error('User ID not found')
@@ -57,12 +65,13 @@ function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
     }
     const userId = user._id
     try {
+      setIsLoading(true)
       const response = await fetch('/api/fitting', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId, clothUrl }),
+        body: JSON.stringify({ userId, clothID }),
       })
 
       if (response.ok) {
@@ -71,11 +80,36 @@ function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
 
         setFittingImage(data.fittingImageLink)
         setIsDefaultPage(false)
+        setIsLoading(false)
       } else {
         console.error('Error loading fitting image')
       }
     } catch (error) {
       console.error('Fitting Request Error:', error)
+      setIsLoading(false)
+    }
+  }
+
+  //옷 제거
+  const handleDeleteCloth = async (clothId) => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user || !user._id) {
+      console.error('User ID not found')
+      return
+    }
+
+    const confirmation = window.confirm('옷을 삭제하시겠습니까?')
+    if (!confirmation) {
+      return
+    }
+    console.log(clothId)
+    try {
+      const response = await axios.delete(
+        `${API_URL}/cloth/api/delete/${clothId}`
+      )
+      fetchClothesImages()
+    } catch (error) {
+      console.error('Error deleting cloth:', error)
     }
   }
 
@@ -230,15 +264,18 @@ function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
           </div>
         </div>
         <div className={styles.closet}>
+          {isLoading && <LoadingIndicator />}
           {clothes.map((item, index) => (
             <MemoClothesElement
               key={index}
+              id={item.id}
               index={index}
               src={item.src}
               favorite={item.favorite}
               onHeartClick={toggleFavorite}
               consolea={clothes}
               handleFittingCloth={handleFittingCloth}
+              handleDeleteCloth={handleDeleteCloth}
             />
           ))}
         </div>
@@ -249,12 +286,14 @@ function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
 export default RightFitContainer
 
 function ClothesElement({
+  id,
   index,
   src,
   favorite,
   onHeartClick,
   consolea,
   handleFittingCloth,
+  handleDeleteCloth,
 }) {
   return (
     <div className={styles.clothesElement}>
@@ -275,15 +314,17 @@ function ClothesElement({
         <button
           className={styles.wearingBtn}
           onClick={() => {
-            handleFittingCloth(src)
+            handleFittingCloth(id)
           }}
         >
           <FontAwesomeIcon icon={solid('shirt')} />
         </button>
-        <button className={styles.removeBtn}>
+        <button
+          className={styles.removeBtn}
+          onClick={() => handleDeleteCloth(id)}
+        >
           <FontAwesomeIcon icon={solid('x')} />
         </button>
-        <p>그냥 옷</p>
       </div>
     </div>
   )
