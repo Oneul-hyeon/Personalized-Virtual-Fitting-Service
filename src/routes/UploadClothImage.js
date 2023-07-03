@@ -4,7 +4,7 @@ const ImageUploader = require('./ImageUploader')
 const Closet = require('../models/Closet')
 
 router.post(
-  '/api/cloth-upload',
+  '/cloth-upload',
   (req, res, next) => {
     req.query.type = 'clothing'
     ImageUploader.single('clothingImage')(req, res, (error) => {
@@ -16,14 +16,14 @@ router.post(
   },
   async (req, res) => {
     // 유효성 검사: 요청 userId 확인
-    if (!req.query.userId) {
+    if (!req.body.userId) {
       return res.status(400).json({
         success: false,
         error: 'Missing userId in request.',
       })
     }
 
-    const userId = req.query.userId
+    const userId = req.body.userId
     // 이미지 업로드 확인
     if (!req.file || !req.file.location) {
       return res.status(500).json({
@@ -34,11 +34,14 @@ router.post(
 
     // 이미지 URL을 생성
     const clothingImageUrl = req.file.location
+    console.log(userId)
+    console.log(clothingImageUrl)
+    console.log(req.body.clothesUrl)
     // 새 Closet 생성 및 저장
     try {
       const newCloset = new Closet({
         userId: userId,
-        clothesUrl: req.query.clothesUrl,
+        clothesUrl: req.body.clothesUrl,
         clothesImageLink: clothingImageUrl,
       })
 

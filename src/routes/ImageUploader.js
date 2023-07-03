@@ -26,7 +26,7 @@ const ImageUploader = multer({
     s3: s3,
     bucket: 'bigprogect-bucket',
     key: (req, file, callback) => {
-      const userId = req.query.userId
+      const userId = req.body.userId || req.query.userId
       const uploadDirectory = req.query.directory ?? userId
       const extension = path.extname(file.originalname)
       if (!allowedExtensions.includes(extension)) {
@@ -39,10 +39,7 @@ const ImageUploader = multer({
       if (imageType === 'body') {
         imageFilename = `userimage${extension}`
       } else if (imageType === 'clothing') {
-        const fileName = file.originalname
-          .substr(-10)
-          .replace(fileExtension, '')
-        imageFilename = `${fileName}${extension}`
+        imageFilename = file.originalname
       } else {
         return callback(new Error('Unknown image type'))
       }
