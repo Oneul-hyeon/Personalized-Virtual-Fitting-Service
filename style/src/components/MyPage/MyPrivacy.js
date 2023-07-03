@@ -6,12 +6,7 @@ import authenticatedAxios from '../../api/authenticatedAxios'
 import { API_URL } from '../../api/apiConfig'
 import { updateUser } from '../User/UpdateInfo.js'
 
-function MyPrivacy({
-  userId,
-  setIsShowAlert,
-  setIsSaveComplete,
-  setErrorCode,
-}) {
+function MyPrivacy({ userId, showAlert, setErrorCode }) {
   const [name, setName] = useState('')
   const [gender, setGender] = useState('')
   const [email, setEmail] = useState('')
@@ -69,12 +64,8 @@ function MyPrivacy({
       modifyUser.userId = userId
       modifyUser.gender = gender
       updateUser(modifyUser).then((result) => {
-        setIsSaveComplete(result.success)
         setErrorCode(result.code)
-        setIsShowAlert(true)
-        setTimeout(() => {
-          setIsShowAlert(false)
-        }, 3000)
+        showAlert()
       })
     }
   }
@@ -84,7 +75,8 @@ function MyPrivacy({
     const fetchSize = async () => {
       try {
         const response = await authenticatedAxios.get(
-          `${API_URL}/userInfo/api/info?userId=${userId}`
+          `${API_URL}/userInfo/api/info`,
+          { params: { userId: userId } }
         )
         if (response.status === 200 || response.status === 201) {
           user.current = response.data.user
@@ -105,7 +97,7 @@ function MyPrivacy({
         }
       }
     }
-    fetchSize()
+    if (userId) fetchSize()
   }, [userId])
   return (
     <form onSubmit={onSubmit} noValidate>

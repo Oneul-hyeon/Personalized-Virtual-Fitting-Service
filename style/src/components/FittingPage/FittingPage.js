@@ -2,13 +2,11 @@ import Navigation from '../Navigationbar/Nav'
 
 import LeftFitContainer from './LeftFitContainer'
 import RightFitContainer from './RightFitContainer'
-import AlertMessage from '../common/AlertMessage'
 
 import styles from './FittingPage.module.css'
 
 import React from 'react'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import shoppingImage from '../../images/shopping-mall.png'
 import { Navigate } from 'react-router-dom'
@@ -28,7 +26,7 @@ function FittingPage() {
     setIsShowAlert(true)
     setTimeout(() => {
       setIsShowAlert(false)
-    }, 3000)
+    }, time)
   }
 
   if (lsUser && lsToken) {
