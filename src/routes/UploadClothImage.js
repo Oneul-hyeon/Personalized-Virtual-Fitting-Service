@@ -34,9 +34,7 @@ router.post(
 
     // 이미지 URL을 생성
     const clothingImageUrl = req.file.location
-    console.log(userId)
-    console.log(clothingImageUrl)
-    console.log(req.body.clothesUrl)
+
     // 새 Closet 생성 및 저장
     try {
       const newCloset = new Closet({

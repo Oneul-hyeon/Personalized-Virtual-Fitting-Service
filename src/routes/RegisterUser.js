@@ -34,7 +34,7 @@ router.post(
       const userExists = await User.findOne({ email: userEmail })
 
       if (userExists) {
-        return res.status(400).json({ msg: '이미 가입된 이메일입니다.' })
+        return res.status(400).json({ error: '이미 가입된 이메일입니다.' })
       }
 
       // 비밀번호 해시화
@@ -69,7 +69,7 @@ router.post(
       // 사용자이미지 전처리 human parse
       const aiApiParseResponse = await axios.post(
         process.env.AI_PARSE_API,
-        {},
+        null,
         {
           params: { ID: userId, image_url: file },
         }
