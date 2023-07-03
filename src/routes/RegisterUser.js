@@ -64,11 +64,18 @@ router.post(
       } else {
         webAPI = process.env.WEB_API
       }
+      console.log('before parse!')
 
       // 사용자이미지 전처리 human parse
-      const aiApiParseResponse = await axios.post(process.env.AI_PARSE_API, {
-        params: { ID: userId, image_url: file },
-      })
+      const aiApiParseResponse = await axios.post(
+        process.env.AI_PARSE_API,
+        {},
+        {
+          params: { ID: userId, image_url: file },
+        }
+      )
+
+      console.log('parse complete!')
 
       if (aiApiParseResponse.data.error) {
         console.error('Error from AI API:', aiApiParseResponse.data.error)
