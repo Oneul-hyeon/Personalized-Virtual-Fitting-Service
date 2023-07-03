@@ -118,7 +118,6 @@ router.put('/api/size', async (req, res) => {
       },
       { new: true }
     )
-    console.log(userUpdateRes)
     const sizeUpdateRes = await SizeProfile.findOneAndUpdate(
       { userId: userId },
       {
@@ -126,12 +125,9 @@ router.put('/api/size', async (req, res) => {
       },
       { new: true }
     )
-    console.log(sizeUpdateRes)
 
     res.status(201).json({ success: true, code: 'UPDATE_DONE', errno: 0 })
   } catch (error) {
-    console.log('asdofjh')
-    // console.log(error)
     res.status(500).json({
       success: false,
       code: error.codeName,

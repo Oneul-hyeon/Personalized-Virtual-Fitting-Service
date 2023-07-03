@@ -103,8 +103,10 @@ function MySize({ userId, showAlert, setErrorCode }) {
         }
       }
     }
-    fetchSize1()
-    fetchSize2()
+    if (userId) {
+      fetchSize1()
+      fetchSize2()
+    }
     console.log('fetch')
   }, [userId, reFetchTrigger])
 

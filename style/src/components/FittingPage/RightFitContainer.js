@@ -34,6 +34,7 @@ function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
           userId: userId,
         },
       })
+      console.log(response)
       setClothes(
         response.data.map((imageItem) => ({
           id: imageItem._id,

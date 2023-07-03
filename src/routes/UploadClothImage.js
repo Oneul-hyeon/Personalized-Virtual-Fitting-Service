@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const ImageUploader = require('./ImageUploader')
 const Closet = require('../models/Closet')
+const { ImageUploader } = require('./ImageUploader')
 
 router.post(
   '/cloth-upload',
