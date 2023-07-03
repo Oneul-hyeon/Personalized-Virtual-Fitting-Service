@@ -69,6 +69,9 @@ app.use('/users', usersRouter)
 app.use('/users', loginRouter)
 app.use('/users', logoutRouter)
 
+const authRouter = require('./routes/MailAuthRouter')
+app.use('/auth', authRouter)
+
 // userInfo 조회
 const infoRouter = require('./routes/UserInfo')
 app.use('/userInfo', infoRouter)
