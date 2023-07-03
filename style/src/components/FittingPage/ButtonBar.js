@@ -10,11 +10,10 @@ import saveImage from '../../images/save.png'
 import uploadImage from '../../images/upload.png'
 import changeBgImage from '../../images/landscape.png'
 import resetImage from '../../images/reset.png'
-import testClothesImage from '../../images/test_clothes1.png'
 import { API_URL } from '../../api/apiConfig'
 import ClassMerger from '../common/ClassNameGenerater'
 
-function ButtonBar({ setErrorCode, showAlert }) {
+function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
   // URL 입력 저장을 위한 state 생성
   const [inputUrl, setInputUrl] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -33,7 +32,46 @@ function ButtonBar({ setErrorCode, showAlert }) {
 
   // URL 업로드 버튼 클릭 이벤트 핸들러
   const handleImgUploadClick = async () => {
-    // URL 크롤링 하는 함수 작성
+    if (selected < 0 || selected >= clothes.length) {
+      // 이미지 선택이 없거나 범위를 벗어난 경우
+      return
+    }
+
+    const file = await fetch(clothes[selected])
+      .then((response) => response.blob())
+      .then(
+        (blob) =>
+          new File([blob], `clothes-${Date.now()}.png`, { type: 'image/png' })
+      )
+
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user || !user._id) {
+      console.error('User ID not found')
+      return
+    }
+    const userId = user._id
+    const urlWithoutQueryString = inputUrl.split('?')[0]
+
+    const formData = new FormData()
+    formData.append('userId', userId)
+    formData.append('clothingImage', file)
+    formData.append('clothesUrl', urlWithoutQueryString)
+    for (let value of formData.values()) {
+      console.log(value)
+    }
+    try {
+      const response = await authenticatedAxios.post(
+        `${API_URL}/api/cloth-upload`,
+        formData
+      )
+      if (response.status === 200) {
+        console.log('업로드에 성공했습니다!', response.data)
+      } else {
+        console.error('이미지 업로드에 실패했습니다.', response)
+      }
+    } catch (error) {
+      console.error('이미지 업로드 중 오류가 발생했습니다.', error)
+    }
   }
 
   // url 업로드 버튼 : url에서 이미지 목록 가져옴
@@ -107,7 +145,7 @@ function ButtonBar({ setErrorCode, showAlert }) {
         src={resetImage}
         alt="reset"
         text="되돌리기"
-        onClick={getUserImage}
+        onClick={() => setIsDefaultPage(true)}
       />
       {isModalOpen && (
         <div
@@ -162,13 +200,6 @@ function ButtonBar({ setErrorCode, showAlert }) {
       )}
     </div>
   )
-
-  async function getUserImage() {
-    // 데이터베이스에서 유저의 이미지를 불러오는 함수를 호출
-    //const userImage = await fetchUserImageFromDB();
-    // 상태를 업데이트하여 이미지가 표시되는 곳에 사용자 이미지를 표시합니다.
-    //setImageUrl(userImage);
-  }
 }
 
 function ClothesImageElement({ src, index, selected, onClick }) {
