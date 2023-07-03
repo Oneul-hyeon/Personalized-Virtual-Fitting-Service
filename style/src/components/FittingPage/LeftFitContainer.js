@@ -46,7 +46,7 @@ function LeftFitContainer({
       <ButtonBar setErrorCode={setErrorCode} showAlert={showAlert} />
       <div className={styles.imageContainer}>
         <img
-          className={styles.mainImage}
+          className={styles.fittingImage}
           src={isDefaultPage ? defaultImageUrl : fittingImage}
           alt="userImage"
         />

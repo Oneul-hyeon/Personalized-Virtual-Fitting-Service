@@ -10,6 +10,7 @@ import saveImage from '../../images/save.png'
 import uploadImage from '../../images/upload.png'
 import changeBgImage from '../../images/landscape.png'
 import resetImage from '../../images/reset.png'
+import helpImage from '../../images/help.png'
 import { API_URL } from '../../api/apiConfig'
 import ClassMerger from '../common/ClassNameGenerater'
 
@@ -147,6 +148,7 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
         text="되돌리기"
         onClick={() => setIsDefaultPage(true)}
       />
+      <CardButton src={helpImage} alt="help" text="도움말" onClick={() => {}} />
       {isModalOpen && (
         <div
           className={styles.modal}
