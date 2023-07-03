@@ -52,26 +52,16 @@ router.post('/fitting', async (req, res) => {
         )
       }
     }
-    console.log(userId)
-    console.log(userImageUrl)
-    console.log(clothImageUrl)
-    const response = await axios.post(
-      //
-      //fittingApiUrl,
-      null,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const response = await axios.post(fittingApiUrl, null, {
+      headers: {
+        'Content-Type': 'application/json',
       },
-      {
-        params: {
-          ID: userId,
-          image_url: userImageUrl,
-          cloth_url: clothImageUrl,
-        },
-      }
-    )
+      params: {
+        ID: userId,
+        image_url: userImageUrl,
+        cloth_url: clothImageUrl,
+      },
+    })
 
     if (response.data.success) {
       console.log('Fitting request sent successfully.')
