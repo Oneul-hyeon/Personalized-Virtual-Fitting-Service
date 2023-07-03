@@ -111,8 +111,11 @@ function MyPrivacy({ userId, showAlert, setErrorCode }) {
           isInvalid={isNameInvalid}
           invalidTest=" * 이름은 한글/영어로만 구성되어야 합니다."
         />
-        <div>
-          <p className={ClassMerger([styles.formLabel, styles.basicFont])}>
+        <div className={styles.genderFormContainer}>
+          <p
+            className={ClassMerger([styles.formLabel, styles.basicFont])}
+            style={{ textAlign: 'left' }}
+          >
             성별
           </p>
           <button
