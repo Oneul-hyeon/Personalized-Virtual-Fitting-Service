@@ -34,7 +34,7 @@ export async function updateSize(userData) {
     if (error.response && error.response.status >= 500) {
       return error.response.data
     } else {
-      return error.response.data
+      return error
     }
   }
 }

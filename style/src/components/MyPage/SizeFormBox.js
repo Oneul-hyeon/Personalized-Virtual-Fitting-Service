@@ -26,11 +26,10 @@ function FormBox({
         isInvalid={isInvalid}
         onChange={(event) => {
           const input = event.target.value
-          // const filteredInput = parseFloat(input.replace(/\D/g, ''))
-          const isValid = /^-?\d+(\.\d{0,1})?$/.test(input)
-          const value = isNaN(input) ? 0 : input
-          if (isValid && min <= value && value < max) {
-            setState(value)
+          const isValid = /^\d+(\.\d{0,1})?$/.test(input) || input === ''
+          if (isValid && min <= input && input < max) {
+            const floatInput = parseFloat(input)
+            setState(isNaN(floatInput) ? 0 : floatInput)
           }
         }}
       />

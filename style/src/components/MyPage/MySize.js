@@ -13,6 +13,8 @@ function MySize({ userId, showAlert, setErrorCode }) {
   const [shoulderWidth, SetshoulderWidth] = useState(0)
   const [chestWidth, setChestWidth] = useState(0)
   const [length, setLength] = useState(0)
+  // 저장한 후 sizeAPI로 변경된 데이터 다시 받아오게 함
+  const [reFetchTrigger, setReFetchTrigger] = useState(0)
 
   const [isHeightInvalid, setIsHeightInvalid] = useState(0)
   const [isWeightInvalid, setIsWeightInvalid] = useState(0)
@@ -51,6 +53,7 @@ function MySize({ userId, showAlert, setErrorCode }) {
     updateSize(modifySize).then((result) => {
       setErrorCode(result.code)
       showAlert()
+      setReFetchTrigger((curr) => curr + 1)
     })
   }
 
@@ -102,7 +105,8 @@ function MySize({ userId, showAlert, setErrorCode }) {
     }
     fetchSize1()
     fetchSize2()
-  }, [userId])
+    console.log('fetch')
+  }, [userId, reFetchTrigger])
 
   return (
     <form onSubmit={onSubmit}>
