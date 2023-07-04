@@ -83,7 +83,9 @@ app.use('/api', fittingRouter)
 app.use('/api', clothUploadRouter)
 
 const clothRouter = require('./routes/Clothes')
+const clothSizeRouter = require('./routes/ClothSize')
 app.use('/cloth', clothRouter)
+app.use('/cloth', clothSizeRouter)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../style/build/index.html'))

@@ -336,6 +336,16 @@
     font-weight: 600;
 }
 
+.sizeBtn {
+    background: transparent;
+    border: 0px;
+
+    color: #aaaaaa;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}
+
 .removeBtn {
     background: transparent;
     border: 0px;

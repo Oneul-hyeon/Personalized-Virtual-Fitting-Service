@@ -22,6 +22,7 @@ function SignupPage({ onClose }) {
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
+  const [emailAuthCode, setEmailAuthCode] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [gender, setGender] = useState('')
@@ -41,6 +42,7 @@ function SignupPage({ onClose }) {
   const [nameError, setNameError] = useState('')
   const [phoneError, setPhoneError] = useState('')
   const [emailError, setEmailError] = useState('')
+  const [emailAuthError, setEmailAuthError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
   const [heightError, setHeightError] = useState('')
@@ -275,6 +277,22 @@ function SignupPage({ onClose }) {
                 onBlur={(e) => onBlurHandler(e, validateEmail, setEmailError)}
                 required
               />
+              <button className="email-send-button" type="button">
+                인증번호 전송
+              </button>
+              <input
+                className={`form-input ${emailError ? 'has-error' : ''}`}
+                type="email"
+                value={email}
+                placeholder="인증번호"
+                onChange={handleEmailChange}
+                onBlur={(e) => onBlurHandler(e, validateEmail, setEmailError)}
+                required
+              />
+
+              <button className="email-check-button" type="button">
+                인증
+              </button>
             </div>
             {emailError && <div className="error-message">{emailError}</div>}
             <div className="form-group">

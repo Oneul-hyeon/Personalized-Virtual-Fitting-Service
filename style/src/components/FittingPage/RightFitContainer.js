@@ -320,6 +320,9 @@ function ClothesElement({
         >
           <FontAwesomeIcon icon={solid('shirt')} />
         </button>
+        <button className={styles.sizeBtn} onClick={() => {}}>
+          <FontAwesomeIcon icon={solid('ruler-combined')} />
+        </button>
         <button
           className={styles.removeBtn}
           onClick={() => handleDeleteCloth(id)}

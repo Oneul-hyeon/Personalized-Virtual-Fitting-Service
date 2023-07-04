@@ -38,6 +38,7 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
       return
     }
 
+    console.log(clothes[selected])
     const file = await fetch(clothes[selected])
       .then((response) => response.blob())
       .then(
