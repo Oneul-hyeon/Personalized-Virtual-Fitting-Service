@@ -1,12 +1,13 @@
 import styles from './MyPage.module.css'
-import profileImage from '../../images/profile.jpg'
+import profileImage from '../../images/profileImageLoading.png'
 import Proptypes from 'prop-types'
 import ClassMerger from '../common/ClassNameGenerater'
 import ImageUploader from './ImageUploader'
 import { API_URL } from '../../api/apiConfig'
 import authenticatedAxios from '../../api/authenticatedAxios'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+import getProfileImage from '../common/getProfileImage'
 
 // 선택된 버튼에 주황색 넣어주는 함수
 function TransButton({ context, option, page, onClick }) {
@@ -31,18 +32,18 @@ TransButton.propTypes = {
 }
 
 function LeftSubMyPage({ page, onClickHandler }) {
-  const [file, setFile] = useState(null)
+  const [file, setFile] = useState(profileImage)
   const uploadFile = useRef(null)
   const user = useSelector((state) => state.auth.user)
+
+  useEffect(() => {
+    getProfileImage(setFile)
+  }, [file])
 
   // 이미지 선택
   const handleImageChange = async (file) => {
     uploadFile.current = file
-    console.log(file)
-    if (!uploadFile.current) {
-      console.log('return')
-      return
-    }
+    if (!uploadFile.current) return
 
     const formData = new FormData()
     formData.append('userId', user._id)
@@ -79,11 +80,7 @@ function LeftSubMyPage({ page, onClickHandler }) {
     <div className={styles.subLeftContiner}>
       <h1 className={styles.title}>마이페이지</h1>
       <div className={styles.profileImageContainer}>
-        <img
-          src={file ?? profileImage}
-          alt="profile"
-          className={styles.profileImage}
-        />
+        <img src={file} alt="profile" className={styles.profileImage} />
         <div className={styles.imageUploadButton}>
           <ImageUploader onChange={handleImageChange} />
         </div>
