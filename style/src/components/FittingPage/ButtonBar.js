@@ -124,17 +124,19 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
     setSelected(index)
   }
 
+  // 이미지 저장
+
   return (
     <div className={styles.buttonContainer}>
       <CardButton
-        src={saveImage}
+        src={uploadImage}
         alt="upload"
         text="옷 링크 업로드"
         onClick={handleModalOpen}
       />
       <CardButton
-        src={uploadImage}
-        alt="upload"
+        src={saveImage}
+        alt="save"
         text="이미지 저장"
         onClick={() => {}}
       />

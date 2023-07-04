@@ -43,12 +43,14 @@ function FittingPage() {
             isDefaultPage={isDefaultPage}
             setErrorCode={setErrorCode}
             showAlert={showAlert}
-                    setIsDefaultPage={setIsDefaultPage}
+            setIsDefaultPage={setIsDefaultPage}
           />
           <div className="empty-space" />
           <RightFitContainer
             setFittingImage={setFittingImage}
             setIsDefaultPage={setIsDefaultPage}
+            setErrorCode={setErrorCode}
+            showAlert={showAlert}
           />
           <div className="empty-space" />
         </div>

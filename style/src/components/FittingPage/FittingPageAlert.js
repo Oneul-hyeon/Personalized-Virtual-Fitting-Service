@@ -35,6 +35,14 @@ function FittingPageAlert({ errorCode, isShowAlert, setIsShowAlert }) {
           setShow={setIsShowAlert}
         />
       )}
+      {errorCode === 'DELETE_DONE' && (
+        <AlertMessage
+          variant={errorCode === 'DELETE_DONE' ? 'success' : 'danger'}
+          message={'삭제를 완료했습니다.'}
+          show={isShowAlert}
+          setShow={setIsShowAlert}
+        />
+      )}
     </>
   )
 }

@@ -12,7 +12,12 @@ import axios from 'axios'
 
 import LoadingIndicator from '../LoadingIndicator'
 
-function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
+function RightFitContainer({
+  setFittingImage,
+  setIsDefaultPage,
+  setErrorCode,
+  showAlert,
+}) {
   const [mainMenu, setMainMenu] = useState('closet')
   const [subMenu1, setSubMenu1] = useState('all')
   const [subMenu2, setSubMenu2] = useState('all')
@@ -109,8 +114,36 @@ function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
         `${API_URL}/cloth/api/delete/${clothId}`
       )
       fetchClothesImages()
+      setErrorCode(response.data.code)
+      showAlert()
     } catch (error) {
       console.error('Error deleting cloth:', error)
+    }
+  }
+
+  //사이즈 추천
+  const handleRecommendSize = async (clothId) => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user || !user._id) {
+      console.error('User ID not found')
+      return
+    }
+    const userId = user._id
+
+    try {
+      const response = await axios.post(`${API_URL}/cloth/cloth_size`, {
+        userId,
+        clothId,
+      })
+
+      if (response.status === 200) {
+        const recommendedSize = response.data.size
+        alert(`Recommended size: ${recommendedSize}`)
+      } else {
+        alert(`Error: ${response.statusText}`)
+      }
+    } catch (error) {
+      console.error('Size Recommendation Error:', error)
     }
   }
 
@@ -277,6 +310,7 @@ function RightFitContainer({ setFittingImage, setIsDefaultPage }) {
               consolea={clothes}
               handleFittingCloth={handleFittingCloth}
               handleDeleteCloth={handleDeleteCloth}
+              handleRecommendSize={handleRecommendSize}
             />
           ))}
         </div>
@@ -295,6 +329,7 @@ function ClothesElement({
   consolea,
   handleFittingCloth,
   handleDeleteCloth,
+  handleRecommendSize,
 }) {
   return (
     <div className={styles.clothesElement}>
@@ -320,9 +355,15 @@ function ClothesElement({
         >
           <FontAwesomeIcon icon={solid('shirt')} />
         </button>
-        <button className={styles.sizeBtn} onClick={() => {}}>
+        <button
+          className={styles.sizeBtn}
+          onClick={() => {
+            handleRecommendSize(id)
+          }}
+        >
           <FontAwesomeIcon icon={solid('ruler-combined')} />
         </button>
+
         <button
           className={styles.removeBtn}
           onClick={() => handleDeleteCloth(id)}

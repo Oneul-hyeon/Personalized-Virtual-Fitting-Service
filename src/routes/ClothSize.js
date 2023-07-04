@@ -34,7 +34,6 @@ router.post('/cloth_size', async (req, res) => {
     )
 
     const recommendedSize = aiApiResponse.data.size
-
     res.json({ size: recommendedSize })
   } catch (error) {
     console.error(error)

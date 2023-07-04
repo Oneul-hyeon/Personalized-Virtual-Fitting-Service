@@ -58,7 +58,9 @@ router.delete('/api/delete/:id', async (req, res) => {
     }
 
     await Clothes.findByIdAndDelete(clothId)
-    res.status(200).json({ message: 'Cloth deleted successfully' })
+    res
+      .status(200)
+      .json({ message: 'Cloth deleted successfully', code: 'DELETE_DONE' })
   } catch (error) {
     res.status(400).json({ error: 'Error while deleting the cloth' })
   }
