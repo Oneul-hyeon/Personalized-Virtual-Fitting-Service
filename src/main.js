@@ -18,8 +18,7 @@ const aiAPI = process.env.AI_API
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://localhost:3001',
-  'http://www.model-fit.kro.kr',
+  'http://model-fit.kro.kr',
   aiAPI,
 ]
 
@@ -82,7 +81,9 @@ app.use('/api', fittingRouter)
 app.use('/api', clothUploadRouter)
 
 const clothRouter = require('./routes/Clothes')
+const clothSizeRouter = require('./routes/ClothSize')
 app.use('/cloth', clothRouter)
+app.use('/cloth', clothSizeRouter)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../style/build/index.html'))

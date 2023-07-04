@@ -12,6 +12,8 @@ const SizeProfile = require('../models/SizeProfile')
 
 const sizeAPI = process.env.AI_SIZE_API_URL
 
+const { ImageUploader } = require('./ImageUploader')
+
 // 사이즈 : backend -> frontend
 router.get('/api/size', async (req, res) => {
   console.log('get /userInfo/api/size')
@@ -156,5 +158,22 @@ router.get('/api/userimage', async (req, res) => {
     })
   }
 })
+
+router.post(
+  '/api/userimage/change',
+  ImageUploader.single('image'),
+  async (req, res) => {
+    try {
+      if (req.file) {
+        res.status(200).json({ imageUrl: req.file.location })
+      } else {
+        res.status(400).send({ error: 'Image upload failed' })
+      }
+    } catch (error) {
+      console.error('Error processing image upload:', error)
+      res.status(500).send({ error: 'Error processing image upload' })
+    }
+  }
+)
 
 module.exports = router

@@ -2,6 +2,9 @@ import styles from './MyPage.module.css'
 import profileImage from '../../images/profile.jpg'
 import Proptypes from 'prop-types'
 import ClassMerger from '../common/ClassNameGenerater'
+import ImageUploader from '../User/ImageUploader'
+import axios from 'axios'
+import { API_URL } from '../../api/apiConfig'
 
 // 선택된 버튼에 주황색 넣어주는 함수
 function TransButton({ context, option, page, onClick }) {
@@ -26,14 +29,36 @@ TransButton.propTypes = {
 }
 
 function LeftSubMyPage({ page, onClickHandler }) {
+  const handleImageChange = async (file) => {
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append('image', file)
+
+    try {
+      await axios.post(`${API_URL}/userinfo/api/userimage/change`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    } catch (error) {
+      console.error('Error fetching images', error)
+    }
+  }
+
   return (
     <div className={styles.subLeftContiner}>
       <h1 className={styles.title}>마이페이지</h1>
-      <img
-        src={profileImage}
-        alt="profile"
-        className={styles.profileImage}
-      ></img>
+      <div className={styles.profileImageContainer}>
+        <img
+          src={profileImage}
+          alt="profile"
+          className={styles.profileImage}
+        ></img>
+        <div className={styles.imageUploadButton}>
+          <ImageUploader onChange={handleImageChange} />
+        </div>
+      </div>
       <TransButton
         context={'개인정보'}
         option={'privacy'}
@@ -61,7 +86,6 @@ function LeftSubMyPage({ page, onClickHandler }) {
     </div>
   )
 }
-
 LeftSubMyPage.propTypes = {
   page: Proptypes.string.isRequired,
   onClickHandler: Proptypes.func.isRequired,
