@@ -18,7 +18,9 @@ const aiAPI = process.env.AI_API
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://model-fit.kro.kr',
+  'http://localhost:3001',
+  process.env.WEB_API,
+  process.env.WEB_IP,
   aiAPI,
 ]
 

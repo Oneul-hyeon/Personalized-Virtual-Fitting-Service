@@ -194,6 +194,7 @@
     background-color: #ff8f4f;
 }
 
+/* 이 아래를 작성한 뒤로 css가 망가짐. */
 .profileImageContainer {
     position: relative;
     display: inline-block;

@@ -14,6 +14,7 @@ function LeftFitContainer({
   showAlert,
   fittingImage,
   isDefaultPage,
+  setIsDefaultPage,
 }) {
   const [image, setImage] = useState('')
 
@@ -43,7 +44,7 @@ function LeftFitContainer({
 
   return (
     <div>
-      <ButtonBar setErrorCode={setErrorCode} showAlert={showAlert} />
+      <ButtonBar setErrorCode={setErrorCode} showAlert={showAlert} setIsDefaultPage={setIsDefaultPage} />
       <div className={styles.imageContainer}>
         <img
           className={styles.fittingImage}
