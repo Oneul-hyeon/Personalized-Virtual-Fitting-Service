@@ -43,6 +43,7 @@ function FittingPage() {
             isDefaultPage={isDefaultPage}
             setErrorCode={setErrorCode}
             showAlert={showAlert}
+                    setIsDefaultPage={setIsDefaultPage}
           />
           <div className="empty-space" />
           <RightFitContainer

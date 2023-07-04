@@ -8,21 +8,27 @@ const fittingApiUrl = process.env.AI_FITTING_API_URL
 
 async function isImageValid(imageUrl) {
   return new Promise((resolve, reject) => {
-    https
-      .head(imageUrl, (res) => {
-        if (res.statusCode === 200) {
-          resolve(true)
-        } else {
-          resolve(false)
-        }
-      })
-      .on('error', (error) => {
-        console.error(`Error checking image URL: ${imageUrl}`, error)
-        resolve(false)
-      })
-  })
-}
+    const options = {
+      method: 'HEAD',
+      url: imageUrl,
+    };
 
+    const req = https.request(imageUrl, options, (res) => {
+      if (res.statusCode === 200) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+
+    req.on('error', (error) => {
+      console.error(`Error checking image URL: ${imageUrl}`, error);
+      resolve(false);
+    });
+
+    req.end();
+  });
+}
 router.post('/fitting', async (req, res) => {
   try {
     const { userId, clothID } = req.body
@@ -62,18 +68,18 @@ router.post('/fitting', async (req, res) => {
         cloth_url: clothImageUrl,
       },
     })
-
     if (response.data.success) {
       console.log('Fitting request sent successfully.')
 
       const imageUrl = response.data.file_name
       await Clothes.updateOne(
-        { userId, clothesImageLink: clothUrl },
+        { userId, clothesImageLink: clothImageUrl },
         { $set: { fittingImageLink: imageUrl } }
       )
 
       res.status(200).json({ fittingImageLink: imageUrl })
     } else {
+      console.log(error.response)
       console.error('Error:', response.data.error)
       res.status(500).json({ error: response.data.error })
     }
