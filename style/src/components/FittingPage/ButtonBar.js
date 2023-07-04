@@ -13,6 +13,14 @@ import resetImage from '../../images/reset.png'
 import helpImage from '../../images/help.png'
 import { API_URL } from '../../api/apiConfig'
 import ClassMerger from '../common/ClassNameGenerater'
+import LoadingIndicator from '../LoadingIndicator'
+
+import { Carousel } from 'react-responsive-carousel'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import fithelp1 from '../../images/fithelp1.png'
+import fithelp2 from '../../images/fithelp2.png'
+import fithelp3 from '../../images/fithelp3.png'
+import fithelp4 from '../../images/fithelp4.png'
 
 function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
   // URL 입력 저장을 위한 state 생성
@@ -20,6 +28,16 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [clothes, setClothes] = useState([])
   const [selected, setSelected] = useState(-1)
+  const [isLoading, setIsLoading] = useState(false)
+
+  // 도움말 팝업
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false)
+  const handleHelpModalOpen = () => {
+    setIsHelpModalOpen(true)
+  }
+  const handleHelpModalClose = () => {
+    setIsHelpModalOpen(false)
+  }
 
   // 모달창 밖 클릭 시 모달 창 종료에 사용
   const uploadmodelBg = useRef()
@@ -31,14 +49,15 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
     setInputUrl(e.target.value)
   }
 
-  // URL 업로드 버튼 클릭 이벤트 핸들러
+  // URL 이미지 업로드 버튼 클릭 이벤트 핸들러
   const handleImgUploadClick = async () => {
     if (selected < 0 || selected >= clothes.length) {
       // 이미지 선택이 없거나 범위를 벗어난 경우
       return
     }
 
-    console.log(clothes[selected])
+    setIsLoading(true)
+
     const file = await fetch(clothes[selected])
       .then((response) => response.blob())
       .then(
@@ -68,11 +87,16 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
       )
       if (response.status === 200) {
         console.log('업로드에 성공했습니다!', response.data)
+        setIsModalOpen(false)
+        // 새로고침
+        window.location.reload()
       } else {
         console.error('이미지 업로드에 실패했습니다.', response)
       }
     } catch (error) {
       console.error('이미지 업로드 중 오류가 발생했습니다.', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -152,7 +176,41 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
         text="되돌리기"
         onClick={() => setIsDefaultPage(true)}
       />
-      <CardButton src={helpImage} alt="help" text="도움말" onClick={() => {}} />
+      <CardButton
+        src={helpImage}
+        alt="help"
+        text="도움말"
+        onClick={handleHelpModalOpen}
+      />
+
+      {isHelpModalOpen && (
+        <div className={styles.modal} onClick={handleHelpModalClose}>
+          <div
+            className={styles.modalContent}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h2>도움말</h2>
+            <Carousel>
+              <div>
+                <img src={fithelp1} alt="도움말1" />
+              </div>
+              <div>
+                <img src={fithelp2} alt="도움말2" />
+              </div>
+              <div>
+                <img src={fithelp3} alt="도움말3" />
+              </div>
+              <div>
+                <img src={fithelp4} alt="도움말4" />
+              </div>
+            </Carousel>
+            <button className="helpCloseButton" onClick={handleHelpModalClose}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       {isModalOpen && (
         <div
           className={styles.modal}
@@ -196,10 +254,16 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
                 ))}
             </div>
             <div className={styles.modalButtonContainer}>
-              <button onClick={handleImgUploadClick}>Upload</button>
-              <button onClick={handleModalClose} ref={closeModalBtn}>
-                Close
-              </button>
+              {isLoading ? (
+                <LoadingIndicator />
+              ) : (
+                <>
+                  <button onClick={handleImgUploadClick}>Upload</button>
+                  <button onClick={handleModalClose} ref={closeModalBtn}>
+                    Close
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -277,7 +277,7 @@ function SignupPage({ onClose }) {
                 onBlur={(e) => onBlurHandler(e, validateEmail, setEmailError)}
                 required
               />
-              <button className="email-send-button" type="button">
+              {/* <button className="email-send-button" type="button">
                 인증번호 전송
               </button>
               <input
@@ -292,7 +292,7 @@ function SignupPage({ onClose }) {
 
               <button className="email-check-button" type="button">
                 인증
-              </button>
+              </button> */}
             </div>
             {emailError && <div className="error-message">{emailError}</div>}
             <div className="form-group">

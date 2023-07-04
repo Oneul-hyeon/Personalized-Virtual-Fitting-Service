@@ -6,11 +6,12 @@ import RightFitContainer from './RightFitContainer'
 import styles from './FittingPage.module.css'
 
 import React from 'react'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 import shoppingImage from '../../images/shopping-mall.png'
 import { Navigate } from 'react-router-dom'
 import FittingPageAlert from './FittingPageAlert'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
 
 function FittingPage() {
   // const user = useSelector((state) => state.auth.user)
@@ -43,7 +44,6 @@ function FittingPage() {
             isDefaultPage={isDefaultPage}
             setErrorCode={setErrorCode}
             showAlert={showAlert}
-            setIsDefaultPage={setIsDefaultPage}
           />
           <div className="empty-space" />
           <RightFitContainer

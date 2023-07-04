@@ -19,19 +19,15 @@ router.post('/cloth_size', async (req, res) => {
     const imageUrl = closet.clothesUrl
     const overfit = user.favoriteStyle.fit
 
-    const aiApiResponse = await axios.post(
-      process.env.AI_CLOTH_SIZE_API_URL,
-      {},
-      {
-        params: {
-          length,
-          shoulderWidth,
-          chestWidth,
-          imageUrl,
-          overfit,
-        },
-      }
-    )
+    const aiApiResponse = await axios.get(process.env.AI_CLOTH_SIZE_API_URL, {
+      params: {
+        length,
+        shoulderWidth,
+        chestWidth,
+        imageUrl,
+        overfit,
+      },
+    })
 
     const recommendedSize = aiApiResponse.data.size
     res.json({ size: recommendedSize })

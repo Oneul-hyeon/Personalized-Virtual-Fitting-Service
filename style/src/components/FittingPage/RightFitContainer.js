@@ -11,6 +11,7 @@ import searchImage from '../../images/search.png'
 import axios from 'axios'
 
 import LoadingIndicator from '../LoadingIndicator'
+import Swal from 'sweetalert2'
 
 function RightFitContainer({
   setFittingImage,
@@ -138,11 +139,24 @@ function RightFitContainer({
 
       if (response.status === 200) {
         const recommendedSize = response.data.size
-        alert(`Recommended size: ${recommendedSize}`)
+        Swal.fire({
+          icon: 'success',
+          title: '추천 사이즈',
+          text: `추천 사이즈는 ${recommendedSize} 입니다.`,
+        })
       } else {
-        alert(`Error: ${response.statusText}`)
+        Swal.fire({
+          icon: 'error',
+          title: '오류 발생',
+          text: `Error: ${response.statusText}`,
+        })
       }
     } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: '사이즈 추천 오류',
+        text: `Error: ${error.response.data.message}`,
+      })
       console.error('Size Recommendation Error:', error)
     }
   }

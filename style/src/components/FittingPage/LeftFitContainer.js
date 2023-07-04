@@ -6,8 +6,7 @@ import ButtonBar from './ButtonBar'
 import styles from './FittingPage.module.css'
 import axios from 'axios'
 import { API_URL } from '../../api/apiConfig'
-
-// import peopleTest from '../../images/people-test.png'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
 
 function LeftFitContainer({
   setErrorCode,
@@ -44,7 +43,11 @@ function LeftFitContainer({
 
   return (
     <div>
-      <ButtonBar setErrorCode={setErrorCode} showAlert={showAlert} setIsDefaultPage={setIsDefaultPage} />
+      <ButtonBar
+        setErrorCode={setErrorCode}
+        showAlert={showAlert}
+        setIsDefaultPage={setIsDefaultPage}
+      />
       <div className={styles.imageContainer}>
         <img
           className={styles.fittingImage}

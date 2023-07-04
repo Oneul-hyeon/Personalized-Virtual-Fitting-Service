@@ -193,18 +193,3 @@
 .submitButton:active {
     background-color: #ff8f4f;
 }
-
-/* 이 아래를 작성한 뒤로 css가 망가짐. */
-.profileImageContainer {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .imageUploadButton {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 32px;
-    height: 32px;
-  }
-  
