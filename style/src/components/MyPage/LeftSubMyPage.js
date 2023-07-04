@@ -2,9 +2,11 @@ import styles from './MyPage.module.css'
 import profileImage from '../../images/profile.jpg'
 import Proptypes from 'prop-types'
 import ClassMerger from '../common/ClassNameGenerater'
-import ImageUploader from '../User/ImageUploader'
-import axios from 'axios'
+import ImageUploader from './ImageUploader'
 import { API_URL } from '../../api/apiConfig'
+import authenticatedAxios from '../../api/authenticatedAxios'
+import { useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 // 선택된 버튼에 주황색 넣어주는 함수
 function TransButton({ context, option, page, onClick }) {
@@ -29,18 +31,45 @@ TransButton.propTypes = {
 }
 
 function LeftSubMyPage({ page, onClickHandler }) {
+  const [file, setFile] = useState(null)
+  const uploadFile = useRef(null)
+  const user = useSelector((state) => state.auth.user)
+
+  // 이미지 선택
   const handleImageChange = async (file) => {
-    if (!file) return
+    uploadFile.current = file
+    console.log(file)
+    if (!uploadFile.current) {
+      console.log('return')
+      return
+    }
 
     const formData = new FormData()
-    formData.append('image', file)
+    formData.append('userId', user._id)
+    formData.append('file', uploadFile.current)
 
     try {
-      await axios.post(`${API_URL}/userinfo/api/userimage/change`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await authenticatedAxios.put(
+        `${API_URL}/userinfo/api/userimage`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
+
+      if (response.status >= 200) {
+        console.log(response.data)
+        setFile(response.data.url)
+        // return { success: true, result: response.data }
+      } else {
+        const errorData = await response.json()
+        return {
+          success: false,
+          error: errorData.error || 'Profile Image Change failed.',
+        }
+      }
     } catch (error) {
       console.error('Error fetching images', error)
     }
@@ -51,10 +80,10 @@ function LeftSubMyPage({ page, onClickHandler }) {
       <h1 className={styles.title}>마이페이지</h1>
       <div className={styles.profileImageContainer}>
         <img
-          src={profileImage}
+          src={file ?? profileImage}
           alt="profile"
           className={styles.profileImage}
-        ></img>
+        />
         <div className={styles.imageUploadButton}>
           <ImageUploader onChange={handleImageChange} />
         </div>

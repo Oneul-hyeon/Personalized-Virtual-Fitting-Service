@@ -159,6 +159,7 @@ router.get('/api/userimage', async (req, res) => {
   }
 })
 
+// kyi : 이거 뭐죠? 제가 만든 건가요? 흠..
 router.post(
   '/api/userimage/change',
   ImageUploader.single('image'),
@@ -172,6 +173,74 @@ router.post(
     } catch (error) {
       console.error('Error processing image upload:', error)
       res.status(500).send({ error: 'Error processing image upload' })
+    }
+  }
+)
+
+// router.post(
+router.put(
+  '/api/userimage',
+  (req, res, next) => {
+    console.log(req)
+    req.query.type = 'body'
+    next()
+  },
+  ImageUploader.single('file'),
+  async (req, res) => {
+    console.log('Step 2: Handling the response')
+    // const file = req.body.file
+    const file = req.file ? req.file.location : undefined
+    // 파라미터에서 이미지 ID 추출하고 없다면, 저장한 파일 경로에서 userID 추출
+    const userId =
+      (req.body.userId || req.query.userId) ?? req.file.key.split('/')[0]
+    console.log(file)
+    try {
+      // 업데이트할 정보
+      const update = {
+        $set: { file: file },
+      }
+      // 업데이트로 수정
+      const result = await User.findByIdAndUpdate({ _id: userId }, update)
+
+      const port = process.env.PORT
+      let webAPI
+
+      if (process.env.NODE_ENV === 'development') {
+        webAPI = `http://localhost:${port}`
+      } else {
+        webAPI = process.env.WEB_API
+      }
+      console.log('before parse!1')
+      console.log({
+        params: { ID: userId, image_url: file },
+      })
+      // 사용자이미지 전처리 human parse
+      const aiApiParseResponse = await axios.post(
+        process.env.AI_PARSE_API,
+        null,
+        {
+          params: { ID: userId, image_url: file },
+        }
+      )
+      console.log('parse complete!')
+
+      console.log(aiApiParseResponse.data)
+      if (aiApiParseResponse.data.error) {
+        console.error('Error from AI API:', aiApiParseResponse.data.error)
+        res
+          .status(500)
+          .json({ success: false, error: 'AI API failed.', errno: -1 })
+      }
+
+      console.log('done!')
+      res
+        .status(200)
+        .json({ success: true, code: 'IMAGE_CHANGE_DONE', errno: 0, url: file })
+    } catch (error) {
+      console.error('Profile Image CHange Error:', error)
+      res
+        .status(500)
+        .json({ success: false, code: 'IMAGE_CHANGE_FAIL', errno: -1 })
     }
   }
 )
