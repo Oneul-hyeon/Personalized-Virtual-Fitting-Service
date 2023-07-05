@@ -12,6 +12,7 @@ function LeftFitContainer({
   fittingImage,
   isDefaultPage,
   setIsDefaultPage,
+  changeBackground,
 }) {
   const [image, setImage] = useState('')
 
@@ -28,6 +29,7 @@ function LeftFitContainer({
         showAlert={showAlert}
         setIsDefaultPage={setIsDefaultPage}
         image={image}
+        changeBackground={changeBackground}
       />
       <div className={styles.imageContainer}>
         <img
