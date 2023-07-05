@@ -41,6 +41,7 @@ function FittingPage() {
           <div className="empty-space" />
           <LeftFitContainer
             fittingImage={fittingImage}
+            setIsDefaultPage={setIsDefaultPage}
             isDefaultPage={isDefaultPage}
             setErrorCode={setErrorCode}
             showAlert={showAlert}
