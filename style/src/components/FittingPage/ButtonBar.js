@@ -22,7 +22,13 @@ import fithelp2 from '../../images/fithelp2.png'
 import fithelp3 from '../../images/fithelp3.png'
 import fithelp4 from '../../images/fithelp4.png'
 
-function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage, image }) {
+function ButtonBar({
+  setErrorCode,
+  showAlert,
+  setIsDefaultPage,
+  image,
+  changeBackground,
+}) {
   // URL 입력 저장을 위한 state 생성
   const [inputUrl, setInputUrl] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -170,7 +176,7 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage, image }) {
         src={changeBgImage}
         alt="changeBackground"
         text="배경 변경"
-        onClick={() => {}}
+        onClick={changeBackground}
       />
       <CardButton
         src={resetImage}
