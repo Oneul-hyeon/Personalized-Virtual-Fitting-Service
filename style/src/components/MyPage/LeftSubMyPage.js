@@ -1,5 +1,6 @@
 import styles from './MyPage.module.css'
 import profileImage from '../../images/profileImageLoading.png'
+// import profileImage from '../../images/profile.jpg'
 import Proptypes from 'prop-types'
 import ClassMerger from '../common/ClassNameGenerater'
 import ImageUploader from './ImageUploader'
@@ -38,7 +39,7 @@ function LeftSubMyPage({ page, onClickHandler }) {
 
   useEffect(() => {
     getProfileImage(setFile)
-  }, [file])
+  }, [])
 
   // 이미지 선택
   const handleImageChange = async (file) => {
@@ -81,9 +82,9 @@ function LeftSubMyPage({ page, onClickHandler }) {
       <h1 className={styles.title}>마이페이지</h1>
       <div className={styles.profileImageContainer}>
         <img src={file} alt="profile" className={styles.profileImage} />
-        <div className={styles.imageUploadButton}>
-          <ImageUploader onChange={handleImageChange} />
-        </div>
+      </div>
+      <div className={styles.imageUploadButton}>
+        <ImageUploader onChange={handleImageChange} />
       </div>
       <TransButton
         context={'개인정보'}

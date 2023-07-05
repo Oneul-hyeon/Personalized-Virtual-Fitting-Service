@@ -54,11 +54,21 @@
     font-size: 48px;
 }
 
-.profileImage {
+.profileImageContainer {
     width: var(--title-width);
     height: var(--title-width);
     border-radius: 50%;
     margin-bottom: 18px;
+    /* border: 1px solid #dcdcdc; */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
 }
 
 .transparentButton {
