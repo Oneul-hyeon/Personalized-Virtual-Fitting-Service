@@ -16,7 +16,6 @@ import bg4 from '../../images/bg4.jpg'
 import { Navigate } from 'react-router-dom'
 import FittingPageAlert from './FittingPageAlert'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
-import { current } from '@reduxjs/toolkit'
 
 function FittingPage() {
   // const user = useSelector((state) => state.auth.user)
@@ -25,6 +24,9 @@ function FittingPage() {
   const [isShowAlert, setIsShowAlert] = useState(false)
   const [errorCode, setErrorCode] = useState(null)
   const [bgIndex, setBgIndex] = useState(0)
+
+  // 이미지 업로드 후 옷장 reload에 사용하는 변수
+  const [closetUpdateTrigger, setClosetUpdateTrigger] = useState(0)
 
   const backgroundList = [bg1, bg2, bg3, bg4]
 
@@ -62,6 +64,7 @@ function FittingPage() {
             setErrorCode={setErrorCode}
             showAlert={showAlert}
             changeBackground={changeBackground}
+            setClosetUpdateTrigger={setClosetUpdateTrigger}
           />
           <div className="empty-space" />
           <RightFitContainer
@@ -69,6 +72,7 @@ function FittingPage() {
             setIsDefaultPage={setIsDefaultPage}
             setErrorCode={setErrorCode}
             showAlert={showAlert}
+            closetUpdateTrigger={closetUpdateTrigger}
           />
           <div className="empty-space" />
         </div>
