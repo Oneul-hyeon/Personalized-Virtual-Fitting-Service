@@ -26,6 +26,9 @@ function FittingPage() {
   const [errorCode, setErrorCode] = useState(null)
   const [bgIndex, setBgIndex] = useState(0)
 
+  // 이미지 업로드 후 옷장 reload에 사용하는 변수
+  const [closetUpdateTrigger, setClosetUpdateTrigger] = useState(0)
+
   const backgroundList = [bg1, bg2, bg3, bg4]
 
   const lsUser = JSON.parse(localStorage.getItem('user'))
@@ -62,6 +65,7 @@ function FittingPage() {
             setErrorCode={setErrorCode}
             showAlert={showAlert}
             changeBackground={changeBackground}
+            setClosetUpdateTrigger={setClosetUpdateTrigger}
           />
           <div className="empty-space" />
           <RightFitContainer
@@ -69,6 +73,7 @@ function FittingPage() {
             setIsDefaultPage={setIsDefaultPage}
             setErrorCode={setErrorCode}
             showAlert={showAlert}
+            closetUpdateTrigger={closetUpdateTrigger}
           />
           <div className="empty-space" />
         </div>

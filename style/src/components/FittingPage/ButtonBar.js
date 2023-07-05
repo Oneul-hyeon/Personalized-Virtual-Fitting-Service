@@ -28,6 +28,7 @@ function ButtonBar({
   setIsDefaultPage,
   image,
   changeBackground,
+  setClosetUpdateTrigger,
 }) {
   // URL 입력 저장을 위한 state 생성
   const [inputUrl, setInputUrl] = useState('')
@@ -95,7 +96,8 @@ function ButtonBar({
         console.log('업로드에 성공했습니다!', response.data)
         setIsModalOpen(false)
         // 새로고침
-        window.location.reload()
+        // window.location.reload()
+        setClosetUpdateTrigger((current) => current + 1)
       } else {
         console.error('이미지 업로드에 실패했습니다.', response)
       }

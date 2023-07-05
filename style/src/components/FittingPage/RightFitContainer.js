@@ -18,6 +18,7 @@ function RightFitContainer({
   setIsDefaultPage,
   setErrorCode,
   showAlert,
+  closetUpdateTrigger,
 }) {
   const [mainMenu, setMainMenu] = useState('closet')
   const [subMenu1, setSubMenu1] = useState('all')
@@ -53,7 +54,7 @@ function RightFitContainer({
   }
   useEffect(() => {
     fetchClothesImages()
-  }, [])
+  }, [closetUpdateTrigger])
 
   const toggleFavorite = (indexToToggle) => {
     setClothes(
