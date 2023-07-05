@@ -210,10 +210,7 @@ router.put(
       } else {
         webAPI = process.env.WEB_API
       }
-      console.log('before parse!1')
-      console.log({
-        params: { ID: userId, image_url: file },
-      })
+
       // 사용자이미지 전처리 human parse
       const aiApiParseResponse = await axios.post(
         process.env.AI_PARSE_API,
@@ -222,17 +219,24 @@ router.put(
           params: { ID: userId, image_url: file },
         }
       )
-      console.log('parse complete!')
-
-      console.log(aiApiParseResponse.data)
       if (aiApiParseResponse.data.error) {
         console.error('Error from AI API:', aiApiParseResponse.data.error)
+        if (
+          aiApiParseResponse.data.message ===
+          'human parse 실행 중 오류가 발생했습니다: cannot write mode RGBA as JPEG'
+        ) {
+          res
+            .status(500)
+            .json({ success: false, code: 'CAN_NOT_WRITE', errno: -1 })
+          return
+        }
         res
           .status(500)
-          .json({ success: false, error: 'AI API failed.', errno: -1 })
+          .json({ success: false, code: 'AI_PARSE_ERROR', errno: -1 })
+        return
       }
 
-      console.log('done!')
+      console.log('Parse done!')
       res
         .status(200)
         .json({ success: true, code: 'IMAGE_CHANGE_DONE', errno: 0, url: file })
