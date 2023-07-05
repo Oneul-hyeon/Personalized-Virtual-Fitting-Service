@@ -210,7 +210,6 @@ function SignupPage({ onClose }) {
         if (registerResult.success) {
           console.log('success')
           const { token, user } = registerResult.result
-          localStorage.setItem('token', token)
           dispatch(login({ token, user }))
           onClose()
         } else {

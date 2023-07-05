@@ -11,23 +11,23 @@ async function isImageValid(imageUrl) {
     const options = {
       method: 'HEAD',
       url: imageUrl,
-    };
+    }
 
     const req = https.request(imageUrl, options, (res) => {
       if (res.statusCode === 200) {
-        resolve(true);
+        resolve(true)
       } else {
-        resolve(false);
+        resolve(false)
       }
-    });
+    })
 
     req.on('error', (error) => {
-      console.error(`Error checking image URL: ${imageUrl}`, error);
-      resolve(false);
-    });
+      console.error(`Error checking image URL: ${imageUrl}`, error)
+      resolve(false)
+    })
 
-    req.end();
-  });
+    req.end()
+  })
 }
 router.post('/fitting', async (req, res) => {
   try {
@@ -79,7 +79,6 @@ router.post('/fitting', async (req, res) => {
 
       res.status(200).json({ fittingImageLink: imageUrl })
     } else {
-      console.log(error.response)
       console.error('Error:', response.data.error)
       res.status(500).json({ error: response.data.error })
     }
