@@ -1,5 +1,6 @@
 import styles from './MyPage.module.css'
 import profileImage from '../../images/profileImageLoading.png'
+// import profileImage from '../../images/profile.jpg'
 import Proptypes from 'prop-types'
 import ClassMerger from '../common/ClassNameGenerater'
 import ImageUploader from './ImageUploader'
@@ -32,13 +33,14 @@ TransButton.propTypes = {
 }
 
 function LeftSubMyPage({ page, onClickHandler }) {
-  const [file, setFile] = useState(profileImage)
+  const [profileUrl, setProfileUrl] = useState(profileImage)
   const uploadFile = useRef(null)
   const user = useSelector((state) => state.auth.user)
 
   useEffect(() => {
-    getProfileImage(setFile)
-  }, [file])
+    console.log('effect')
+    getProfileImage(setProfileUrl)
+  }, [])
 
   // 이미지 선택
   const handleImageChange = async (file) => {
@@ -60,16 +62,11 @@ function LeftSubMyPage({ page, onClickHandler }) {
         }
       )
 
+      console.log('good')
       if (response.status >= 200) {
-        console.log(response.data)
-        setFile(response.data.url)
-        // return { success: true, result: response.data }
+        setProfileUrl(`${response.data.url}?${Date.now()}`)
       } else {
-        const errorData = await response.json()
-        return {
-          success: false,
-          error: errorData.error || 'Profile Image Change failed.',
-        }
+        console.log('Profile Image Change failed.')
       }
     } catch (error) {
       console.error('Error fetching images', error)
@@ -80,10 +77,10 @@ function LeftSubMyPage({ page, onClickHandler }) {
     <div className={styles.subLeftContiner}>
       <h1 className={styles.title}>마이페이지</h1>
       <div className={styles.profileImageContainer}>
-        <img src={file} alt="profile" className={styles.profileImage} />
-        <div className={styles.imageUploadButton}>
-          <ImageUploader onChange={handleImageChange} />
-        </div>
+        <img src={profileUrl} alt="profile" className={styles.profileImage} />
+      </div>
+      <div className={styles.imageUploadButton}>
+        <ImageUploader onChange={handleImageChange} />
       </div>
       <TransButton
         context={'개인정보'}
