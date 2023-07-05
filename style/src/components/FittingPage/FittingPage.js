@@ -16,7 +16,6 @@ import bg4 from '../../images/bg4.jpg'
 import { Navigate } from 'react-router-dom'
 import FittingPageAlert from './FittingPageAlert'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
-import { current } from '@reduxjs/toolkit'
 
 function FittingPage() {
   // const user = useSelector((state) => state.auth.user)
