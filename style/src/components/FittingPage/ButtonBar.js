@@ -22,7 +22,7 @@ import fithelp2 from '../../images/fithelp2.png'
 import fithelp3 from '../../images/fithelp3.png'
 import fithelp4 from '../../images/fithelp4.png'
 
-function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
+function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage, image }) {
   // URL 입력 저장을 위한 state 생성
   const [inputUrl, setInputUrl] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -158,12 +158,14 @@ function ButtonBar({ setErrorCode, showAlert, setIsDefaultPage }) {
         text="옷 링크 업로드"
         onClick={handleModalOpen}
       />
-      <CardButton
-        src={saveImage}
-        alt="save"
-        text="이미지 저장"
-        onClick={() => {}}
-      />
+      <a href={image} download style={{ textDecorationLine: 'none' }}>
+        <CardButton
+          src={saveImage}
+          alt="save"
+          text="이미지 저장"
+          onClick={() => {}}
+        />
+      </a>
       <CardButton
         src={changeBgImage}
         alt="changeBackground"

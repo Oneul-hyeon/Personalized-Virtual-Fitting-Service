@@ -27,6 +27,7 @@ function LeftFitContainer({
         setErrorCode={setErrorCode}
         showAlert={showAlert}
         setIsDefaultPage={setIsDefaultPage}
+        image={image}
       />
       <div className={styles.imageContainer}>
         <img
