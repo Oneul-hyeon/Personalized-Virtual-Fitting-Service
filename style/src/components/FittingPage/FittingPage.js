@@ -6,12 +6,17 @@ import RightFitContainer from './RightFitContainer'
 import styles from './FittingPage.module.css'
 
 import React from 'react'
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 
-import shoppingImage from '../../images/shopping-mall.png'
+import bg1 from '../../images/bg1.png'
+import bg2 from '../../images/bg2.jpg'
+import bg3 from '../../images/bg3.jpg'
+import bg4 from '../../images/bg4.jpg'
+
 import { Navigate } from 'react-router-dom'
 import FittingPageAlert from './FittingPageAlert'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import { current } from '@reduxjs/toolkit'
 
 function FittingPage() {
   // const user = useSelector((state) => state.auth.user)
@@ -19,6 +24,9 @@ function FittingPage() {
   const [isDefaultPage, setIsDefaultPage] = useState(true)
   const [isShowAlert, setIsShowAlert] = useState(false)
   const [errorCode, setErrorCode] = useState(null)
+  const [bgIndex, setBgIndex] = useState(0)
+
+  const backgroundList = [bg1, bg2, bg3, bg4]
 
   const lsUser = JSON.parse(localStorage.getItem('user'))
   const lsToken = localStorage.getItem('token')
@@ -30,13 +38,21 @@ function FittingPage() {
     }, time)
   }
 
+  const changeBackground = () =>
+    setBgIndex((current) => (current + 1) % backgroundList.length)
+
   if (lsUser && lsToken) {
     return (
       <>
         <Navigation />
         <div
           className={styles.mainContainer}
-          style={{ backgroundImage: `url(${shoppingImage})` }}
+          style={{
+            backgroundImage: `url(${backgroundList[bgIndex]})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center center',
+            backgroundSize: 'cover',
+          }}
         >
           <div className="empty-space" />
           <LeftFitContainer
@@ -45,6 +61,7 @@ function FittingPage() {
             isDefaultPage={isDefaultPage}
             setErrorCode={setErrorCode}
             showAlert={showAlert}
+            changeBackground={changeBackground}
           />
           <div className="empty-space" />
           <RightFitContainer
