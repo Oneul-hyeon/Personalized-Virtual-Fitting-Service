@@ -38,7 +38,6 @@ function LeftSubMyPage({ page, onClickHandler }) {
   const user = useSelector((state) => state.auth.user)
 
   useEffect(() => {
-    console.log('effect')
     getProfileImage(setProfileUrl)
   }, [])
 
@@ -62,7 +61,6 @@ function LeftSubMyPage({ page, onClickHandler }) {
         }
       )
 
-      console.log('good')
       if (response.status >= 200) {
         setProfileUrl(`${response.data.url}?${Date.now()}`)
       } else {
