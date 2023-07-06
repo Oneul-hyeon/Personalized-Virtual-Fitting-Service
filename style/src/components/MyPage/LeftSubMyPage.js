@@ -3,7 +3,7 @@ import profileImage from '../../images/profileImageLoading.png'
 // import profileImage from '../../images/profile.jpg'
 import Proptypes from 'prop-types'
 import ClassMerger from '../common/ClassNameGenerater'
-import ImageUploader from './ImageUploader'
+import ImageUploaders from './ImageUploaders'
 import { API_URL } from '../../api/apiConfig'
 import authenticatedAxios from '../../api/authenticatedAxios'
 import { useEffect, useRef, useState } from 'react'
@@ -78,7 +78,7 @@ function LeftSubMyPage({ page, onClickHandler }) {
         <img src={profileUrl} alt="profile" className={styles.profileImage} />
       </div>
       <div className={styles.imageUploadButton}>
-        <ImageUploader onChange={handleImageChange} />
+        <ImageUploaders onChange={handleImageChange} />
       </div>
       <TransButton
         context={'개인정보'}

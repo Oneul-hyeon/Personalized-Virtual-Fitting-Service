@@ -1,11 +1,11 @@
 import { useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular } from '@fortawesome/fontawesome-svg-core/import.macro'
-import './ImageUploader.css'
+import './ImageUploaders.css'
 
 //Single Image Upload
 
-function ImageUploader({ onChange }) {
+function ImageUploaders({ onChange }) {
   const [uploadedImage, setUploadedImage] = useState(null)
   const inputRef = useRef()
   const allowedExtensions = ['png', 'jpg', 'jpeg', 'bmp']
@@ -44,10 +44,10 @@ function ImageUploader({ onChange }) {
   }
 
   return (
-    <div className="ImageUploader">
-      <div className="placeholder-text">
+    <div className="ImageUploaders">
+      <div className="placeholder-texts">
         <div
-          className="image-container"
+          className="image-containers"
           onClick={handleClick}
           onDragOver={handleDragOver}
         >
@@ -67,4 +67,4 @@ function ImageUploader({ onChange }) {
   )
 }
 
-export default ImageUploader
+export default ImageUploaders

@@ -1,10 +1,10 @@
-.ImageUploader {
+.ImageUploaders {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.image-container {
+.image-containers {
   /* position: relative;
   display: flex;
   justify-content: center;
@@ -33,7 +33,7 @@
   object-fit: contain;
 }
 
-.placeholder-text {
+.placeholder-texts {
   text-align: center;
   position: relative;
 }

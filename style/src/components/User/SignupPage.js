@@ -364,7 +364,7 @@ function SignupPage({ onClose }) {
             </div>
             <div>
               <label className="form-label">고객 사진</label>
-              <div className="form-group">
+              <div>
                 <ImageUploader
                   onChange={handleFileChange}
                   onFileChange={handleFileChange}
