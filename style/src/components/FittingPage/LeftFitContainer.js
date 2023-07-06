@@ -26,9 +26,7 @@ function LeftFitContainer({
       <ButtonBar
         setErrorCode={setErrorCode}
         showAlert={showAlert}
-        setIsDefaultPage={()=>{
-          setIsDefaultPage()
-        }}
+        setIsDefaultPage={setIsDefaultPage}
         image={isDefaultPage ? profileImage : fittingImage}
         changeBackground={changeBackground}
         setClosetUpdateTrigger={setClosetUpdateTrigger}
