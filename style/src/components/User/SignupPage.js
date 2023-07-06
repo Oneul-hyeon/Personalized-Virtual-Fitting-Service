@@ -180,16 +180,16 @@ function SignupPage({ onClose }) {
       isHeightValid &&
       isWeightValid
 
-    console.log('Email:', email)
-    console.log('Name:', name)
-    console.log('Phone Number:', phoneNumber)
-    console.log('Password:', password)
-    console.log('Confirm Password:', confirmPassword)
-    console.log('gender', gender)
-    console.log('Height:', height)
-    console.log('Weight:', weight)
-    console.log('File:', file)
-    console.log('Favorite Style:', favoriteStyle)
+    // console.log('Email:', email)
+    // console.log('Name:', name)
+    // console.log('Phone Number:', phoneNumber)
+    // console.log('Password:', password)
+    // console.log('Confirm Password:', confirmPassword)
+    // console.log('gender', gender)
+    // console.log('Height:', height)
+    // console.log('Weight:', weight)
+    // console.log('File:', file)
+    // console.log('Favorite Style:', favoriteStyle)
 
     if (canSubmitted) {
       try {
@@ -364,7 +364,7 @@ function SignupPage({ onClose }) {
             </div>
             <div>
               <label className="form-label">고객 사진</label>
-              <div>
+              <div className="form-group">
                 <ImageUploader
                   onChange={handleFileChange}
                   onFileChange={handleFileChange}
