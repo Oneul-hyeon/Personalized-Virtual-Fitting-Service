@@ -15,10 +15,10 @@ function LeftFitContainer({
   changeBackground,
   setClosetUpdateTrigger,
 }) {
-  const [image, setImage] = useState('')
+  const [profileImage, setProfileImage] = useState('')
 
   useEffect(() => {
-    getProfileImage(setImage)
+    getProfileImage(setProfileImage)
   }, [])
 
   return (
@@ -28,16 +28,15 @@ function LeftFitContainer({
         showAlert={showAlert}
         setIsDefaultPage={()=>{
           setIsDefaultPage()
-          setImage()
         }}
-        image={isDefaultPage ? image : fittingImage}
+        image={isDefaultPage ? profileImage : fittingImage}
         changeBackground={changeBackground}
         setClosetUpdateTrigger={setClosetUpdateTrigger}
       />
       <div className={styles.imageContainer}>
         <img
           className={styles.fittingImage}
-          src={isDefaultPage ? image : fittingImage}
+          src={isDefaultPage ? profileImage : fittingImage}
           alt="userImage"
         />
       </div>
