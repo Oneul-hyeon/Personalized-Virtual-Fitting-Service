@@ -21,22 +21,23 @@ function LeftFitContainer({
     getProfileImage(setImage)
   }, [])
 
-  const defaultImageUrl = image
-
   return (
     <div>
       <ButtonBar
         setErrorCode={setErrorCode}
         showAlert={showAlert}
-        setIsDefaultPage={setIsDefaultPage}
-        image={image}
+        setIsDefaultPage={()=>{
+          setIsDefaultPage()
+          setImage()
+        }}
+        image={isDefaultPage ? image : fittingImage}
         changeBackground={changeBackground}
         setClosetUpdateTrigger={setClosetUpdateTrigger}
       />
       <div className={styles.imageContainer}>
         <img
           className={styles.fittingImage}
-          src={isDefaultPage ? defaultImageUrl : fittingImage}
+          src={isDefaultPage ? image : fittingImage}
           alt="userImage"
         />
       </div>
