@@ -1,0 +1,108 @@
+.forum-list {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* 페이지 제목 */
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+  }
+  
+  .forum-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .forum-search {
+    width: 270px;
+    padding: 8px 12px;
+    border-radius: 25px;
+    outline: none;
+    border: 1.5px solid #ccc;
+    font-size: 0.9rem;
+    transition: border 0.3s ease-out;
+  }
+  
+  .forum-search:focus {
+    border: 1.5px solid #2182BD;
+  }
+  
+  .forum-search-btn,
+  .forum-new-btn {
+    background-color: #2182BD;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-out;
+    outline: none;
+  }
+  
+  .forum-search-btn:hover,
+  .forum-new-btn:hover {
+    background-color: #125D98;
+  }
+  
+  .forum-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .forum-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .forum-card h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .forum-card p {
+    font-size: 16px;
+    line-height: 1.4;
+    margin-bottom: 15px;
+  }
+  
+  .forum-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 15px;
+  }
+  
+  .forum-details-btn {
+    background-color: #2182BD;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-out;
+    outline: none;
+    text-decoration: none;
+  }
+  
+  .forum-details-btn:hover {
+    background-color: #125D98;
+  }
+  
+  .forum-new-btn {
+    text-decoration: none;
+  }
+  

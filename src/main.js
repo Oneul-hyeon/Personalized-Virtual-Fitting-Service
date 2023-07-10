@@ -37,7 +37,7 @@ mongoose
   .catch((err) => console.log(err))
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -51,6 +51,7 @@ app.use(
     credentials: true,
   })
 )
+
 app.use(passport.initialize())
 require('./config/passport')(passport)
 
@@ -86,6 +87,9 @@ const clothRouter = require('./routes/Clothes')
 const clothSizeRouter = require('./routes/ClothSize')
 app.use('/cloth', clothRouter)
 app.use('/cloth', clothSizeRouter)
+
+const forumRouter = require('./routes/OutfitForum')
+app.use('/api/outfitforums', forumRouter)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../style/build/index.html'))

@@ -119,7 +119,7 @@ function Content() {
             <div className="text">
               <p>당신의 멋진 감각을 공유하세요.</p>
             </div>
-            <GrayButton as={Link} to="outfitforum" className="mainButton">
+            <GrayButton as={Link} to="outfitforums" className="mainButton">
               코디 공유
             </GrayButton>
           </div>
