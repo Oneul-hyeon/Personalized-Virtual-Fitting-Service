@@ -8,6 +8,7 @@ function Logout() {
   const dispatch = useDispatch()
   const handleLogout = () => {
     dispatch(logout())
+    localStorage.removeItem('user')
     localStorage.removeItem('token')
     alert('정상적으로 로그아웃 되었습니다.')
   }

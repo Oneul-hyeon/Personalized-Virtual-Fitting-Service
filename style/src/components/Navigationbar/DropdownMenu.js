@@ -10,7 +10,7 @@ function DropdownMenu() {
       </NavDropdown.Item>
       <NavDropdown.Item
         as={Link}
-        to="/outfitforum"
+        to="/outfitforums"
         activeClassName="active-link"
       >
         코디 공유 게시판

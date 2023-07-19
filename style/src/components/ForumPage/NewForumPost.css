@@ -1,0 +1,58 @@
+.new-forum-post {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .new-forum-post h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .new-forum-post form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .new-forum-post-input,
+  .new-forum-post-textarea {
+    margin-bottom: 1rem;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .new-forum-post-input {
+    padding-left: 10px;
+  }
+  
+  .new-forum-post-textarea {
+    resize: none; /* 텍스트영역 크기 변경 비활성화 */
+    padding: 10px;
+    height: 200px;
+  }
+  
+  .new-forum-post-file {
+    margin-bottom: 20px;
+  }
+  
+  .new-forum-post-submit {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 8px;
+    background-color: #2182BD;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    display: block;
+    transition: background-color 0.3s;
+    outline: none;
+  }
+  
+  .new-forum-post-submit:hover {
+    background-color: #255D98;
+  }
+  

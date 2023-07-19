@@ -18,7 +18,9 @@ const aiAPI = process.env.AI_API
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://www.model-fit.kro.kr',
+  'http://localhost:3001',
+  process.env.WEB_API,
+  process.env.WEB_IP,
   aiAPI,
 ]
 
@@ -35,7 +37,7 @@ mongoose
   .catch((err) => console.log(err))
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -49,6 +51,7 @@ app.use(
     credentials: true,
   })
 )
+
 app.use(passport.initialize())
 require('./config/passport')(passport)
 
@@ -60,9 +63,6 @@ app.use(express.static(path.join(__dirname, '../style/build')))
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../style/build/index.html'))
 })
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../style/build/index.html'))
-})
 
 const usersRouter = require('./routes/RegisterUser')
 const loginRouter = require('./routes/LoginUser')
@@ -70,3 +70,27 @@ const logoutRouter = require('./routes/LogoutUser')
 app.use('/users', usersRouter)
 app.use('/users', loginRouter)
 app.use('/users', logoutRouter)
+
+const authRouter = require('./routes/MailAuthRouter')
+app.use('/auth', authRouter)
+
+// userInfo 조회
+const infoRouter = require('./routes/UserInfo')
+app.use('/userInfo', infoRouter)
+
+const fittingRouter = require('./routes/FittingImage')
+const clothUploadRouter = require('./routes/UploadClothImage')
+app.use('/api', fittingRouter)
+app.use('/api', clothUploadRouter)
+
+const clothRouter = require('./routes/Clothes')
+const clothSizeRouter = require('./routes/ClothSize')
+app.use('/cloth', clothRouter)
+app.use('/cloth', clothSizeRouter)
+
+const forumRouter = require('./routes/OutfitForum')
+app.use('/api/outfitforums', forumRouter)
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../style/build/index.html'))
+})
