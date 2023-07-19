@@ -1,0 +1,195 @@
+@font-face {
+    font-family: 'BMJUA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
+
+.myPageRoot {
+    position: relative;
+}
+
+.mainContainer {
+    --nav-height : 95px;
+    /* --max-width : 1920px; */
+    --max-width : 100vw;
+    --max-height : 100vh;
+    --leftContiner-width : 466px;
+    --rightContiner-width : calc( var(--max-width) - var(--leftContiner-width));
+    /* --height : calc(100vh - 56px); */
+    --height : calc(var(--max-height) - var(--nav-height));
+
+
+    display: grid;
+    grid-template-columns: var(--leftContiner-width) var(--rightContiner-width);
+    height: var(--height);
+    /* overflow: hidden; */
+}
+
+.basicFont {
+    color: #8f8f8f;
+    font-family: 'NanumSquare';
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.subLeftContiner {
+    --title-width : 322px;
+
+    height: 100%;
+    background-color: #fbf7f2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-family: 'BMJUA';
+    color: #ff7f3f;
+    width: var(--title-width);
+    margin-top: 44px;
+    margin-bottom: 44px;
+    font-size: 48px;
+}
+
+.profileImage {
+    width: var(--title-width);
+    height: var(--title-width);
+    border-radius: 50%;
+    margin-bottom: 18px;
+}
+
+.transparentButton {
+    background: transparent;
+    border: none;
+    margin-top: 28px;
+    padding: 0px;
+    transition: color 0.2s ease-out;
+}
+
+.transparentButton:hover {
+    color: #ff7f3f;;
+}
+
+.selected {
+    color: #ff7f3f;
+}
+
+.subRightContiner {
+    --rightContainer-padding-left : 80px;
+    --rightContainer-padding-top : 64px;
+    --rightContainer-column-width : calc((var(--rightContiner-width) - var(--rightContainer-padding-left)) / 2);
+
+    display: grid;
+    /* grid-template-columns: var(--rightContainer-column-width) var(--rightContainer-column-width); */
+    grid-template-columns: 45% 45%;
+    grid-template-rows: repeat(4, minmax(160px, 160px));
+    overflow: hidden;
+    padding-top: var(--rightContainer-padding-top);
+    padding-left: var(--rightContainer-padding-left);
+}
+
+.alertContainer {
+    position: absolute;
+
+}
+
+.formGroup {
+    padding-right: var(--rightContainer-padding-left);
+}
+
+.formLabel {
+    margin: 0px 0px 8px 0px;
+    padding: 0px;
+}
+
+.formControl {
+    height: 50px;
+    border-color: #d7d7d7;
+    border-width: 2px;
+    border-radius: 14px;
+
+    color: #6d6d6d;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.genderFormContainer {
+    padding-right: var(--rightContainer-padding-left);
+}
+
+.maleButton {
+    /* width: 250px; */
+    width: 46%;
+
+    height: 46px;
+    border: 2px solid #d7d7d7;
+    border-radius: 14px;
+    background-color: white;
+    /* margin-right: 18px; */
+    margin-right: 4%;
+
+    color: #6d6d6d;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.2s ease-out;
+}
+
+.maleSelected,
+.maleButton:hover {
+    background-color: #c0dfff;
+    color: black;
+}
+
+.femaleButton {
+    /* width: 250px; */
+    width: 46%;
+    height: 46px;
+    border: 2px solid #d7d7d7;
+    border-radius: 14px;
+    background-color: white;
+    /* margin-left: 18px; */
+    margin-left: 4%;
+
+
+    color: #6d6d6d;
+    font-family: 'NanumSquare';
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.2s ease-out;
+}
+
+.femaleSelected,
+.femaleButton:hover {
+    background-color: #fca8a5;
+    color: black;
+}
+
+.submitWarpper {
+    text-align: right;
+    padding-right: var(--rightContainer-padding-left);
+}
+
+.submitButton {
+    height: 60px;
+    width: 128px;
+    color: #606060;
+    font-weight: 800;
+    background-color: #ffa978;
+    background-color: cutom-color;
+    border-radius: 14px;
+    border-width: 0px;
+    transition: all 0.2s ease-out;
+}
+
+.submitButton:hover {
+    background-color: #ff9878;
+}
+
+.submitButton:active {
+    background-color: #ff8f4f;
+}

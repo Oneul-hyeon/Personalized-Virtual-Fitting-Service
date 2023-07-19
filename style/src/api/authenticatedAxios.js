@@ -8,6 +8,11 @@ authenticatedAxios.interceptors.request.use(
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }
+
+    if (config.data instanceof FormData) {
+      config.headers['Content-Type'] = 'multipart/form-data'
+    }
+
     return config
   },
   (error) => {

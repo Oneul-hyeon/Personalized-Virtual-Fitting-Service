@@ -14,6 +14,8 @@ async function registerUser(userData) {
 
   if (userData.file) {
     formData.append('file', userData.file)
+  } else {
+    return { success: false, error: '이미지를 업로드 해주세요.' }
   }
 
   try {
@@ -27,16 +29,22 @@ async function registerUser(userData) {
       }
     )
 
-    if (response.status === 200 || response.status === 201) {
+    if (response.status >= 200 && response.status < 300) {
       return { success: true, result: response.data }
     } else {
-      return { success: false, error: 'Registration failed.' }
+      const errorData = await response.json()
+      return {
+        success: false,
+        error: errorData.error || 'Registration failed.',
+      }
     }
   } catch (error) {
-    if (error.response && error.response.status >= 500) {
-      return { success: false, error: 'Server error occurred.' }
+    if (error.response) {
+      return { success: false, error: error.response.data.error }
+    } else if (error.request) {
+      return { success: false, error: 'Network error occurred.' }
     } else {
-      return { success: false, error: error.message }
+      return { success: false, error: 'An unknown error occurred.' }
     }
   }
 }
