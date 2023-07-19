@@ -28,8 +28,7 @@ function LoginPage({ onClose }) {
         password,
       })
       if (response.status === 200 || response.status === 201) {
-        localStorage.setItem('token', response.data.token)
-        dispatch(login(response.data.user))
+        dispatch(login(response.data))
         onClose()
       }
     } catch (error) {

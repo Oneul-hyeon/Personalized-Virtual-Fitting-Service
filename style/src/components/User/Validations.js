@@ -59,11 +59,12 @@ export const validateConfirmPassword = (
 }
 
 export const validateInteger = (number, setNumberError) => {
-  if (Number.isInteger(Number(number))) {
+  const regex = new RegExp(/^\d+(\.\d)?$/)
+  if (regex.test(number) && number !== '') {
     setNumberError('')
     return true
   } else {
-    setNumberError('정수만 입력 가능합니다.')
+    setNumberError('정수 또는 소수점 한 자리까지 입력 가능합니다.')
     return false
   }
 }

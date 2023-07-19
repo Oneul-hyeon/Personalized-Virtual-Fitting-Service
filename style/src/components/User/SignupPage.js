@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Tooltip } from 'react-tooltip'
 import { Modal, Button } from 'react-bootstrap'
 import ImageUploader from './ImageUploader'
@@ -15,11 +15,14 @@ import {
   validateInteger,
 } from './Validations'
 
+import LoadingIndicator from '../LoadingIndicator'
+
 function SignupPage({ onClose }) {
   const dispatch = useDispatch()
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
+  const [emailAuthCode, setEmailAuthCode] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [gender, setGender] = useState('')
@@ -39,6 +42,7 @@ function SignupPage({ onClose }) {
   const [nameError, setNameError] = useState('')
   const [phoneError, setPhoneError] = useState('')
   const [emailError, setEmailError] = useState('')
+  const [emailAuthError, setEmailAuthError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
   const [heightError, setHeightError] = useState('')
@@ -62,6 +66,10 @@ function SignupPage({ onClose }) {
       formRef.current.style.animation = ''
     }, 500)
   }
+
+  // 이메일 중복 검사
+  const [loading, setLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleNameChange = (e) => {
     setName(e.target.value)
@@ -185,6 +193,7 @@ function SignupPage({ onClose }) {
 
     if (canSubmitted) {
       try {
+        setLoading(true)
         const userData = {
           email,
           name,
@@ -201,13 +210,17 @@ function SignupPage({ onClose }) {
         if (registerResult.success) {
           console.log('success')
           const { token, user } = registerResult.result
-          localStorage.setItem('token', token)
           dispatch(login({ token, user }))
           onClose()
+        } else {
+          setErrorMessage(registerResult.error)
+          alert(registerResult.error)
         }
       } catch (error) {
         console.log('registerfail')
         handleInvalidForm()
+      } finally {
+        setLoading(false)
       }
     } else {
       console.log('submitfail')
@@ -217,283 +230,309 @@ function SignupPage({ onClose }) {
   }
 
   return (
-    <Modal show={true} onHide={onClose} fullscreen>
-      <Modal.Header closeButton>
-        <Modal.Title>회원가입</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <form className="signup-form" onSubmit={handleSubmit} ref={formRef}>
-          <div className="form-group">
-            <label className="form-label">이름</label>
-            <input
-              className={`form-input ${nameError ? 'has-error' : ''}`}
-              type="text"
-              value={name}
-              placeholder="예시 : 홍길동"
-              onChange={handleNameChange}
-              onBlur={(e) => onBlurHandler(e, validateName, setNameError)}
-              required
-            />
-            {nameError && <div className="error-message">{nameError}</div>}
-          </div>
-          <div className="form-group">
-            <label className="form-label">전화번호 ('-' 포함)</label>
-            <input
-              className={`form-input ${phoneError ? 'has-error' : ''}`}
-              type="text"
-              value={phoneNumber}
-              placeholder="예시 : 010-1234-5678"
-              onChange={handlePhoneNumberChange}
-              onBlur={(e) =>
-                onBlurHandler(e, validatePhoneNumber, setPhoneError)
-              }
-              required
-            />
-            {phoneError && <div className="error-message">{phoneError}</div>}
-          </div>
-          <div className="form-group">
-            <label className="form-label">이메일</label>
-            <input
-              className={`form-input ${emailError ? 'has-error' : ''}`}
-              type="email"
-              value={email}
-              placeholder="예시 : modelfit@modelfit.com"
-              onChange={handleEmailChange}
-              onBlur={(e) => onBlurHandler(e, validateEmail, setEmailError)}
-              required
-            />
-          </div>
-          {emailError && <div className="error-message">{emailError}</div>}
-          <div className="form-group">
-            <label className="form-label">비밀번호</label>
-            <input
-              className={`form-input ${passwordError ? 'has-error' : ''}`}
-              type="password"
-              value={password}
-              placeholder="영문과 숫자로 구성된 8자리 이상"
-              onChange={handlePasswordChange}
-              onBlur={(e) =>
-                onBlurHandler(e, validatePassword, setPasswordError)
-              }
-              required
-            />
-            {passwordError && (
-              <div className="error-message">{passwordError}</div>
-            )}
-          </div>
-          <div className="form-group">
-            <label className="form-label">비밀번호 확인</label>
-            <input
-              className={`form-input ${
-                confirmPasswordError ? 'has-error' : ''
-              }`}
-              type="password"
-              value={confirmPassword}
-              placeholder="비밀번호를 한번 더 입력해주세요."
-              onChange={handleConfirmPasswordChange}
-              onBlur={(e) =>
-                onBlurHandler(
-                  e,
-                  (value, setError) =>
-                    validateConfirmPassword(value, password, setError),
-                  setConfirmPasswordError
-                )
-              }
-              required
-            />
-            {confirmPasswordError && (
-              <div className="error-message">{confirmPasswordError}</div>
-            )}
-          </div>
-          <div className="form-group">
-            <label className="form-label">성별</label>
-            <div>
-              <div className="gender-select">
-                <button
-                  type="button"
-                  value="male"
-                  onClick={handleGenderChange}
-                  className={`gender-btn ${
-                    gender === 'male' ? 'selected' : ''
-                  }`}
-                >
-                  남자
-                </button>
-                <button
-                  type="button"
-                  value="female"
-                  onClick={handleGenderChange}
-                  className={`gender-btn ${
-                    gender === 'female' ? 'selected' : ''
-                  }`}
-                >
-                  여자
-                </button>
-              </div>
-            </div>
-          </div>
-          <div>
-            <label className="form-label">고객 사진</label>
-            <div>
-              <ImageUploader
-                onChange={handleFileChange}
-                onFileChange={handleFileChange}
-              />
-              <div data-tooltip-id="tooltipGuidelines">유의사항(보기)</div>
-              <Tooltip
-                id="tooltipGuidelines"
-                place="top"
-                effect="solid"
-                multiline
-              >
-                <p> * 이미지 업로드 가이드라인</p>
-                <p>
-                  (1) 사용자 전신 사진 촬영 시,
-                  <br /> 사용자의 무릎 위 부터 머리 끝까지
-                  <br />
-                  화면에 꽉 찰 수 있도록 촬영해주세요.
-                </p>
-                <p>(2) 상의, 하의 색이 다르게 해주세요.</p>
-                <p>(3) 한 장만 업로드 해주세요.</p>
-              </Tooltip>
-            </div>
-          </div>
-          <div className="form-group size-input-group">
-            <label className="form-label">신체 수치(사이즈)</label>
-            <div className="size-input-container">
-              <label className="form-label">키</label>
+    <>
+      <Modal show={true} onHide={onClose} fullscreen>
+        <Modal.Header closeButton>
+          <Modal.Title>회원가입</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form className="signup-form" onSubmit={handleSubmit} ref={formRef}>
+            <div className="form-group">
+              <label className="form-label">이름</label>
               <input
-                className={`form-input ${heightError ? 'has-error' : ''}`}
+                className={`form-input ${nameError ? 'has-error' : ''}`}
                 type="text"
-                value={height}
-                placeholder="숫자만 입력, 단위 : cm"
-                onChange={handleHeightChange}
+                value={name}
+                placeholder="예시 : 홍길동"
+                onChange={handleNameChange}
+                onBlur={(e) => onBlurHandler(e, validateName, setNameError)}
+                required
+              />
+              {nameError && <div className="error-message">{nameError}</div>}
+            </div>
+            <div className="form-group">
+              <label className="form-label">전화번호 ('-' 포함)</label>
+              <input
+                className={`form-input ${phoneError ? 'has-error' : ''}`}
+                type="text"
+                value={phoneNumber}
+                placeholder="예시 : 010-1234-5678"
+                onChange={handlePhoneNumberChange}
                 onBlur={(e) =>
-                  onBlurHandler(e, validateInteger, setHeightError)
+                  onBlurHandler(e, validatePhoneNumber, setPhoneError)
                 }
                 required
               />
-              {heightError && (
-                <div className="error-message">{heightError}</div>
-              )}
+              {phoneError && <div className="error-message">{phoneError}</div>}
             </div>
-            <div className="size-input-container">
-              <label className="form-label">몸무게</label>
+            <div className="form-group">
+              <label className="form-label">이메일</label>
               <input
-                className={`form-input ${weightError ? 'has-error' : ''}`}
-                type="text"
-                value={weight}
-                placeholder="숫자만 입력, 단위 : kg"
-                onChange={handleWeightChange}
+                className={`form-input ${emailError ? 'has-error' : ''}`}
+                type="email"
+                value={email}
+                placeholder="예시 : modelfit@modelfit.com"
+                onChange={handleEmailChange}
+                onBlur={(e) => onBlurHandler(e, validateEmail, setEmailError)}
+                required
+              />
+              {/* <button className="email-send-button" type="button">
+                인증번호 전송
+              </button>
+              <input
+                className={`form-input ${emailError ? 'has-error' : ''}`}
+                type="email"
+                value={email}
+                placeholder="인증번호"
+                onChange={handleEmailChange}
+                onBlur={(e) => onBlurHandler(e, validateEmail, setEmailError)}
+                required
+              />
+
+              <button className="email-check-button" type="button">
+                인증
+              </button> */}
+            </div>
+            {emailError && <div className="error-message">{emailError}</div>}
+            <div className="form-group">
+              <label className="form-label">비밀번호</label>
+              <input
+                className={`form-input ${passwordError ? 'has-error' : ''}`}
+                type="password"
+                value={password}
+                placeholder="영문과 숫자로 구성된 8자리 이상"
+                onChange={handlePasswordChange}
                 onBlur={(e) =>
-                  onBlurHandler(e, validateInteger, setWeightError)
+                  onBlurHandler(e, validatePassword, setPasswordError)
                 }
                 required
               />
-              {weightError && (
-                <div className="error-message">{weightError}</div>
+              {passwordError && (
+                <div className="error-message">{passwordError}</div>
               )}
             </div>
-          </div>
-          <div className="form-group style-input-group">
-            <div className="style-input-container">
-              <label className="form-label">스타일 (직접입력 가능)</label>
+            <div className="form-group">
+              <label className="form-label">비밀번호 확인</label>
               <input
-                className="form-input style-input"
-                type="text"
-                value={favoriteStyle.style}
-                placeholder="예시 : 스포츠, 캐주얼, 클래식"
-                onChange={handleStyleChange}
+                className={`form-input ${
+                  confirmPasswordError ? 'has-error' : ''
+                }`}
+                type="password"
+                value={confirmPassword}
+                placeholder="비밀번호를 한번 더 입력해주세요."
+                onChange={handleConfirmPasswordChange}
+                onBlur={(e) =>
+                  onBlurHandler(
+                    e,
+                    (value, setError) =>
+                      validateConfirmPassword(value, password, setError),
+                    setConfirmPasswordError
+                  )
+                }
+                required
               />
-              <div
-                className={`style-dropdown ${styleListOpen ? 'open' : ''}`}
-                onClick={handleStyleListToggle}
-              >
-                <span className="dropdown-text">
-                  {favoriteStyle.style || '스타일 선택'}
-                </span>
-                <span className="dropdown-icon">&#9660;</span>
-              </div>
-              {styleListOpen && (
-                <ul className="style-list">
-                  <li onClick={() => handleStyleItemClick('스포츠')}>스포츠</li>
-                  <li onClick={() => handleStyleItemClick('캐주얼')}>캐주얼</li>
-                  <li onClick={() => handleStyleItemClick('클래식')}>클래식</li>
-                </ul>
+              {confirmPasswordError && (
+                <div className="error-message">{confirmPasswordError}</div>
               )}
             </div>
-          </div>
-          <div className="form-group style-input-group">
-            <div className="style-input-container">
-              <label className="form-label">색상</label>
-              <input
-                className="form-input style-input"
-                type="text"
-                placeholder="예시 : 검정, 파랑, 빨강"
-                value={favoriteStyle.color}
-                onChange={handleColorChange}
-              />
-              <div
-                className={`style-dropdown ${colorListOpen ? 'open' : ''}`}
-                onClick={handleColorListToggle}
-              >
-                <span className="dropdown-text">
-                  {favoriteStyle.color || '색상 선택'}
-                </span>
-                <span className="dropdown-icon">&#9660;</span>
+            <div className="form-group">
+              <label className="form-label">성별</label>
+              <div>
+                <div className="gender-select">
+                  <button
+                    type="button"
+                    value="male"
+                    onClick={handleGenderChange}
+                    className={`gender-btn ${
+                      gender === 'male' ? 'selected' : ''
+                    }`}
+                  >
+                    남자
+                  </button>
+                  <button
+                    type="button"
+                    value="female"
+                    onClick={handleGenderChange}
+                    className={`gender-btn ${
+                      gender === 'female' ? 'selected' : ''
+                    }`}
+                  >
+                    여자
+                  </button>
+                </div>
               </div>
-              {colorListOpen && (
-                <ul className="style-list">
-                  <li onClick={() => handleColorItemClick('검정')}>검정</li>
-                  <li onClick={() => handleColorItemClick('파랑')}>파랑</li>
-                  <li onClick={() => handleColorItemClick('빨강')}>빨강</li>
-                  <li onClick={() => handleColorItemClick('노랑')}>노랑</li>
-                  <li onClick={() => handleColorItemClick('하양')}>하양</li>
-                  <li onClick={() => handleColorItemClick('초록')}>초록</li>
-                </ul>
-              )}
             </div>
-          </div>
-          <div className="form-group style-input-group">
-            <div className="style-input-container">
-              <label className="form-label">핏</label>
-              <input
-                className="form-input style-input"
-                type="text"
-                placeholder="예시 : 정핏, 슬림핏, 오버핏"
-                value={favoriteStyle.fit}
-                onChange={handleFitChange}
-              />
-              <div
-                className={`style-dropdown ${fitListOpen ? 'open' : ''}`}
-                onClick={handleFitListToggle}
-              >
-                <span className="dropdown-text">
-                  {favoriteStyle.fit || '핏 선택'}
-                </span>
-                <span className="dropdown-icon">&#9660;</span>
+            <div>
+              <label className="form-label">고객 사진</label>
+              <div>
+                <ImageUploader
+                  onChange={handleFileChange}
+                  onFileChange={handleFileChange}
+                  required
+                />
+                <div data-tooltip-id="tooltipGuidelines">유의사항(보기)</div>
+                <Tooltip
+                  id="tooltipGuidelines"
+                  place="top"
+                  effect="solid"
+                  multiline
+                >
+                  <p> * 이미지 업로드 가이드라인</p>
+                  <p>
+                    (1) 사용자 전신 사진 촬영 시,
+                    <br /> 사용자의 무릎 위 부터 머리 끝까지
+                    <br />
+                    화면에 꽉 찰 수 있도록 촬영해주세요.
+                  </p>
+                  <p>(2) 상의, 하의 색이 다르게 해주세요.</p>
+                  <p>(3) 한 장만 업로드 해주세요.</p>
+                </Tooltip>
               </div>
-              {fitListOpen && (
-                <ul className="style-list">
-                  <li onClick={() => handleFitItemClick('정핏')}>정핏</li>
-                  <li onClick={() => handleFitItemClick('슬림핏')}>슬림핏</li>
-                  <li onClick={() => handleFitItemClick('오버핏')}>오버핏</li>
-                </ul>
-              )}
             </div>
-          </div>
-          <div className="form-group"></div>
-        </form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
-          회원가입
-        </Button>
-        <Button variant="secondary" onClick={onClose}>
-          닫기
-        </Button>
-      </Modal.Footer>
-    </Modal>
+            <div className="form-group size-input-group">
+              <label className="form-label">신체 수치(사이즈)</label>
+              <div className="size-input-container">
+                <label className="form-label">키</label>
+                <input
+                  className={`form-input ${heightError ? 'has-error' : ''}`}
+                  type="text"
+                  value={height}
+                  placeholder="숫자만 입력, 단위 : cm"
+                  onChange={handleHeightChange}
+                  onBlur={(e) =>
+                    onBlurHandler(e, validateInteger, setHeightError)
+                  }
+                  required
+                />
+                {heightError && (
+                  <div className="error-message">{heightError}</div>
+                )}
+              </div>
+              <div className="size-input-container">
+                <label className="form-label">몸무게</label>
+                <input
+                  className={`form-input ${weightError ? 'has-error' : ''}`}
+                  type="text"
+                  value={weight}
+                  placeholder="숫자만 입력, 단위 : kg"
+                  onChange={handleWeightChange}
+                  onBlur={(e) =>
+                    onBlurHandler(e, validateInteger, setWeightError)
+                  }
+                  required
+                />
+                {weightError && (
+                  <div className="error-message">{weightError}</div>
+                )}
+              </div>
+            </div>
+            <div className="form-group style-input-group">
+              <div className="style-input-container">
+                <label className="form-label">스타일 (직접입력 가능)</label>
+                <input
+                  className="form-input style-input"
+                  type="text"
+                  value={favoriteStyle.style}
+                  placeholder="예시 : 스포츠, 캐주얼, 클래식"
+                  onChange={handleStyleChange}
+                />
+                <div
+                  className={`style-dropdown ${styleListOpen ? 'open' : ''}`}
+                  onClick={handleStyleListToggle}
+                >
+                  <span className="dropdown-text">
+                    {favoriteStyle.style || '스타일 선택'}
+                  </span>
+                  <span className="dropdown-icon">&#9660;</span>
+                </div>
+                {styleListOpen && (
+                  <ul className="style-list">
+                    <li onClick={() => handleStyleItemClick('스포츠')}>
+                      스포츠
+                    </li>
+                    <li onClick={() => handleStyleItemClick('캐주얼')}>
+                      캐주얼
+                    </li>
+                    <li onClick={() => handleStyleItemClick('클래식')}>
+                      클래식
+                    </li>
+                  </ul>
+                )}
+              </div>
+            </div>
+            <div className="form-group style-input-group">
+              <div className="style-input-container">
+                <label className="form-label">색상</label>
+                <input
+                  className="form-input style-input"
+                  type="text"
+                  placeholder="예시 : 검정, 파랑, 빨강"
+                  value={favoriteStyle.color}
+                  onChange={handleColorChange}
+                />
+                <div
+                  className={`style-dropdown ${colorListOpen ? 'open' : ''}`}
+                  onClick={handleColorListToggle}
+                >
+                  <span className="dropdown-text">
+                    {favoriteStyle.color || '색상 선택'}
+                  </span>
+                  <span className="dropdown-icon">&#9660;</span>
+                </div>
+                {colorListOpen && (
+                  <ul className="style-list">
+                    <li onClick={() => handleColorItemClick('검정')}>검정</li>
+                    <li onClick={() => handleColorItemClick('파랑')}>파랑</li>
+                    <li onClick={() => handleColorItemClick('빨강')}>빨강</li>
+                    <li onClick={() => handleColorItemClick('노랑')}>노랑</li>
+                    <li onClick={() => handleColorItemClick('하양')}>하양</li>
+                    <li onClick={() => handleColorItemClick('초록')}>초록</li>
+                  </ul>
+                )}
+              </div>
+            </div>
+            <div className="form-group style-input-group">
+              <div className="style-input-container">
+                <label className="form-label">핏</label>
+                <input
+                  className="form-input style-input"
+                  type="text"
+                  placeholder="예시 : 정핏, 슬림핏, 오버핏"
+                  value={favoriteStyle.fit}
+                  onChange={handleFitChange}
+                />
+                <div
+                  className={`style-dropdown ${fitListOpen ? 'open' : ''}`}
+                  onClick={handleFitListToggle}
+                >
+                  <span className="dropdown-text">
+                    {favoriteStyle.fit || '핏 선택'}
+                  </span>
+                  <span className="dropdown-icon">&#9660;</span>
+                </div>
+                {fitListOpen && (
+                  <ul className="style-list">
+                    <li onClick={() => handleFitItemClick('정핏')}>정핏</li>
+                    <li onClick={() => handleFitItemClick('슬림핏')}>슬림핏</li>
+                    <li onClick={() => handleFitItemClick('오버핏')}>오버핏</li>
+                  </ul>
+                )}
+              </div>
+            </div>
+            <div className="form-group"></div>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          {loading && <LoadingIndicator />}
+          <Button variant="primary" type="submit" onClick={handleSubmit}>
+            회원가입
+          </Button>
+          <Button variant="secondary" onClick={onClose}>
+            닫기
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   )
 }
 

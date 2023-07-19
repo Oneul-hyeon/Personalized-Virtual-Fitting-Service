@@ -9,13 +9,14 @@ const userSchema = new Schema({
   gender: { type: String, required: true },
   height: { type: Number, required: true },
   weight: { type: Number, required: true },
-  file: { type: String },
+  file: { type: String, required: true },
   favoriteStyle: {
     style: { type: String, default: '' },
     color: { type: String, default: '' },
     fit: { type: String, default: '정핏' },
   },
   sizeProfile: { type: Schema.Types.ObjectId, ref: 'SizeProfile' },
+  clothes: [{ type: Schema.Types.ObjectId, ref: 'Clothes' }],
 })
 
 module.exports = mongoose.model('User', userSchema)
